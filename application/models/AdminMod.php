@@ -4,12 +4,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class AdminMod extends CI_Model {
 	protected $userType=[];
 
-	//MEMBERS
-	var $tblMembers = 'v_members';
-	var $tblMembersCollumn = array('members_id', 'id_no', 'last_name', 'first_name', 
-																				'middle_name', 'dob', 'address', 'status', 'date_of_effectivity', 
-																				'designation', 'type', 'monthly_salary', 'office_name', 'entry_date', 'is_deleted', 'retired_date', 'type_of_benefit');
-	var $tblMembersOrder = array('members_id' => 'desc');
+	//ASSET
+	var $tblAsset = 'v_asset';
+	var $tblAssetCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
+																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
+	var $tblAssetOrder = array('id' => 'desc');
+
+	//ASSET READY TO DEPLOY
+	var $tblAssetRequest = 'v_asset';
+	var $tblAssetRequestCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
+																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
+	var $tblAssetRequestOrder = array('id' => 'desc');
+
+	// var $tblAssetLogs = 'v_asset_request';
+	// var $tblAssetLogsCollumn = array('asset_name', 'timestamp', 'device', 'os', 'country', 'lng', 'lat', 'user', 'email', 'mobile', 'type', 'is_deleted');
+	// var $tblAssetLogsOrder = array('timestamp' => 'desc');
+	
 
 	//LOAN SETTINGS
 	var $tblLoanSettings = 'v_loan_settings';
@@ -50,30 +60,18 @@ class AdminMod extends CI_Model {
 		return $this->userType[$id];
 	}
 
-	//MEMBERS OBJECT
-	private function _que_tbl_members(){
-		$this->db->from($this->tblMembers);
+	//ASSET OBJECT
+	private function _que_tbl_asset(){
+		$this->db->from($this->tblAsset);
 		$this->db->where('is_deleted', '0');
-		if ($this->input->post('co_makers_mem_id')) {
-			$this->db->where('members_id <>', $this->input->post('co_makers_mem_id'));
-			$this->db->where("members_id NOT IN (SELECT coalesce(co_maker_members_id, '') FROM co_maker)");
-		}
 		$i = 0;
-		foreach ($this->tblMembersCollumn as $item) {
+		foreach ($this->tblAssetCollumn as $item) {
 			if (!empty($_POST['search']['value'])) {
 				if ($i === 0) {
-						$this->db->where('is_deleted', '0');
-					if ($this->input->post('co_makers_mem_id')) {
-						$this->db->where('members_id <>', $this->input->post('co_makers_mem_id'));
-						$this->db->where("members_id NOT IN (SELECT coalesce(co_maker_members_id, '') FROM co_maker)");
-					}
+					$this->db->where('is_deleted', '0');
 					$this->db->like($item, strtolower($_POST['search']['value']));
 				} else {
 					$this->db->where('is_deleted', '0');
-					if ($this->input->post('co_makers_mem_id')) {
-						$this->db->where('members_id <>', $this->input->post('co_makers_mem_id'));
-						$this->db->where("members_id NOT IN (SELECT coalesce(co_maker_members_id, '') FROM co_maker)");
-					}
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
 				}
 			}
@@ -82,65 +80,50 @@ class AdminMod extends CI_Model {
 		}
 		if (isset($_POST['order'])) {
 			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		}elseif($this->tblMembersOrder){
-			$order = $this->tblMembersOrder;
+		}elseif($this->tblAssetOrder){
+			$order = $this->tblAssetOrder;
 			$this->db->order_by(key($order), $order[key($order)]);
 		}
-		$this->db->order_by('members_id', 'DESC');
+		$this->db->order_by('id', 'DESC');
 	}
 
-	public function get_output_members(){
-		$this->_que_tbl_members();
+	public function get_output_asset(){
+		$this->_que_tbl_asset();
 		if (!empty($_POST['length']))
 		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	public function count_all_members(){
+	public function count_all_asset(){
 		$this->db->where('is_deleted', '0');
-		$this->db->from($this->tblMembers);
+		$this->db->from($this->tblAsset);
 		return $this->db->count_all_results();
 	}
 
-	public function count_filter_members(){
-		$this->_que_tbl_members();
+	public function count_filter_asset(){
+		$this->_que_tbl_asset();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
-
-	//REPAYMENT OBJECT
-	private function _que_tbl_repayments(){
-		$office_management_id = $this->input->post('office_management_id');
-		$date_applied 				= date('Y-m', strtotime($this->input->post('date_applied')));
-
-		$this->db->from($this->tblRepayments);
-		// "SELECT ls.* from members m 
-		// 	LEFT JOIN loan_computation lc ON lc.members_id = m.members_id
-		// 	LEFT JOIN loan_schedule ls ON ls.loan_computation_id = lc.loan_computation_id
-		// 	WHERE m.office_management_id = $office_management_id 
-		// 	AND ls.payment_schedule = '$date_applied' 
-		// 	AND ls.loan_schedule_id NOT IN (SELECT lr.loan_schedule_id from loan_receipt lr)"
-		$this->db->join('loan_computation lc', 'm.members_id = lc.members_id', 'left');
-		$this->db->join('loan_schedule ls', 'ls.loan_computation_id = lc.loan_computation_id', 'left');
-		$this->db->where('m.is_deleted', '0');
-		$this->db->where('m.office_management_id', $office_management_id);
-		$this->db->where('ls.payment_schedule', $date_applied);
-		$this->db->where('ls.loan_schedule_id NOT IN (SELECT lr.loan_schedule_id from loan_receipt lr)');
-		
+	
+	//ASSET REQUEST OBJECT
+	private function _que_tbl_asset_request(){
+		$this->db->from($this->tblAssetRequest);
+		$status = $this->input->post('status');
+		$this->db->where('status_id', $status);
+		$this->db->where('is_deleted', '0');
 		$i = 0;
-		foreach ($this->tblRepaymentsCollumn as $item) {
+		foreach ($this->tblAssetRequestCollumn as $item) {
 			if (!empty($_POST['search']['value'])) {
 				if ($i === 0) {
-					$this->db->where('m.is_deleted', '0');
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status_id', $status);
 					$this->db->like($item, strtolower($_POST['search']['value']));
-					$this->db->where('m.office_management_id', $office_management_id);
-					$this->db->where('ls.payment_schedule', $date_applied);
 				} else {
-					$this->db->where('m.is_deleted', '0');
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status_id', $status);
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
-					$this->db->where('m.office_management_id', $office_management_id);
-					$this->db->where('ls.payment_schedule', $date_applied);
 				}
 			}
 			$column[$i] = $item;
@@ -148,36 +131,32 @@ class AdminMod extends CI_Model {
 		}
 		if (isset($_POST['order'])) {
 			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		}elseif($this->tblRepaymentsOrder){
-			$order = $this->tblRepaymentsOrder;
+		}elseif($this->tblAssetRequestOrder){
+			$order = $this->tblAssetRequestOrder;
 			$this->db->order_by(key($order), $order[key($order)]);
 		}
-		$this->db->order_by('m.members_id', 'DESC');
+		$this->db->order_by('id', 'DESC');
 	}
 
-	public function get_output_repayments(){
-		$this->_que_tbl_repayments();
+	public function get_output_asset_request(){
+		$this->_que_tbl_asset_request();
 		if (!empty($_POST['length']))
-		if ($_POST['length'] < 0) {} else {
-			$this->db->limit($_POST['length'], $_POST['start']);
-		}
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	public function count_all_repayments(){
-		$this->db->where('m.is_deleted', '0');
-		$this->db->from($this->tblRepayments);
+	public function count_all_asset_request(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblAssetRequest);
 		return $this->db->count_all_results();
 	}
 
-	public function count_filter_repayments(){
-		$this->_que_tbl_members();
+	public function count_filter_asset_request(){
+		$this->_que_tbl_asset_request();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
-
-
 
 	//LOAN SETTINGS OBJECT
 	private function _que_tbl_loan_settings(){
@@ -518,10 +497,10 @@ class AdminMod extends CI_Model {
     // filename
     $pdf->Output($download_filename.'.pdf', 'I');
   }
-
-  public function getMembersRecord($id){
-  	$q = $this->db->query("SELECT * from v_members vm
-														WHERE vm.members_id = $id");
+	
+	public function getAssetRecord($id){
+  	$q = $this->db->query("SELECT * from v_asset vm
+														WHERE vm.id = $id");
   	return $q->result();
   }
 

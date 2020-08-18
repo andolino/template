@@ -50,12 +50,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] 			 		= 'admin/show_settings';
-$route['member-list'] 						 		= 'Admin/member_list';
+$route['asset-list'] 						 		= 'Admin/asset_list';
+$route['asset-ready-to-deploy'] 					= 'Admin/asset_ready_to_deploy';
+$route['asset-dispatch'] 					= 'Admin/asset_dispatch';
+$route['asset-deployed'] 					= 'Admin/asset_deployed';
 $route['settings'] 								 		= 'Admin/show_settings';
-$route['add-member'] 							= 'Admin/add_member';
-$route['view-member'] 						= 'Admin/view_member';
-$route['edit-member'] 						= 'Admin/edit_member';
-$route['server-tbl-members'] 			= 'Admin/server_tbl_members';
+$route['add-asset'] 							= 'Admin/add_asset';
+$route['view-asset'] 						= 'Admin/view_asset';
+$route['edit-asset'] 						= 'Admin/edit_asset';
+$route['server-tbl-asset'] 			= 'Admin/server_tbl_asset';
+$route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
+$route['upload-dp'] 							= 'Admin/upload_const_dp';
+$route['get-assets/(:any)'] 			= 'Admin/get_data_assets';
+$route['get-enc-key'] 			= 'Admin/encryptKey';
+$route['save-created-qr'] 			= 'Admin/saveCreatedQr';
+$route['save-asset'] 						= 'Admin/save_asset';
+$route['view-companies'] 				= 'Settings/view_companies';
+$route['view-models'] 				= 'Settings/view_models';
+$route['view-supplier'] 				= 'Settings/view_suppliers';
+$route['view-locations'] 				= 'Settings/view_locations';
+$route['server-companies'] 	= 'Settings/server_companies';
+$route['server-models'] 	= 'Settings/server_models';
+$route['server-suppliers'] 	= 'Settings/server_suppliers';
+$route['server-locations'] 	= 'Settings/server_locations';
+$route['get-companies-frm'] 	= 'Settings/getCompaniesFrm';
+$route['get-models-frm'] 	= 'Settings/getModelsFrm';
+$route['get-supplier-frm'] 	= 'Settings/getSupplierFrm';
+$route['get-locations-frm'] 	= 'Settings/getLocationsFrm';
+$route['add-data'] 	= 'Settings/addData';
+$route['tbl-asset'] 						= 'Admin/tbl_asset';
+$route['delete-asset'] 					= 'Admin/deleteAsset';
+$route['get-users-frm'] 	= 'Settings/getUsersFrm';
+$route['get-users-frm-fp'] 	= 'Settings/getUsersFrmFp';
+
+
+
+
+
+
+
 
 
 
@@ -104,7 +137,6 @@ $route['delete-journal'] 		= 'Accounting/deleteJournal';
 
 //CRUD
 $route['delete-data'] 	= 'Settings/deleteData';
-$route['add-data'] 	= 'Settings/addData';
 
 
 $route['view-users'] 						 	= 'Settings/view_users';
@@ -122,7 +154,6 @@ $route['server-beneficiaries'] 	= 'Settings/server_beneficiaries';
 $route['server-members-beneficiaries'] 	= 'Settings/server_members_beneficiaries';
 $route['server-members-immediate-family'] 	= 'Settings/server_members_immediate_family';
 $route['server-immediate-family'] 	= 'Settings/server_immediate_family';
-$route['server-departments'] 	= 'Settings/server_departments';
 $route['server-contribution-rate'] 	= 'Settings/server_contribution_rate';
 
 $route['get-beneficiaries-members'] 	= 'Settings/getBeneficiariesMembers';
@@ -131,8 +162,7 @@ $route['get-immediate-family'] 	= 'Settings/getImmediateFamilyMembers';
 
 $route['save-users-data'] 	= 'Settings/saveUsersData';
 $route['save-contribution-rate'] 			= 'Settings/saveContributionRate';
-$route['get-users-frm'] 	= 'Settings/getUsersFrm';
-$route['get-users-frm-fp'] 	= 'Settings/getUsersFrmFp';
+
 $route['get-signatory-frm'] 	= 'Settings/getSignatoryFrm';
 $route['get-subsidiary-frm'] 	= 'Settings/getSubsidiaryFrm';
 $route['get-office-frm'] 	= 'Settings/getOfficeFrm';
@@ -141,7 +171,6 @@ $route['get-benefit-type-frm'] 	= 'Settings/getBenefiTypesFrm';
 
 $route['get-member-type-frm'] 	= 'Settings/getMemberTypeFrm';
 $route['get-civil-status-frm'] 	= 'Settings/getCivilStatusFrm';
-$route['get-departments-frm'] 	= 'Settings/getDepartmentsFrm';
 $route['get-relationship-type-frm'] 	= 'Settings/getRelationshipTypeFrm';
 $route['get-beneficiaries-frm'] 	= 'Settings/getBeneficiariesFrm';
 $route['get-immediate-family-frm'] 	= 'Settings/getImmediateFamilyFrm';
@@ -158,7 +187,6 @@ $route['view-immediate-family'] 	= 'Settings/view_immediate_family';
 $route['view-contribution-rate'] 	= 'Settings/view_contribution_rate';
 $route['view-loan-ltype'] 				= 'Settings/view_loan_type';
 $route['view-benefit-type'] 			= 'Settings/view_benefit_type';
-$route['view-departments'] 				= 'Settings/view_departments';
 
 $route['view-loan-type'] 					= 'Admin/view_loan_code';
 $route['view-loan-settings'] 			= 'Admin/view_loan_settings';
@@ -182,13 +210,9 @@ $route['save-loans-settings'] 		= 'Admin/save_loans_settings';
 $route['save-cash-gift'] 					= 'Admin/save_cash_gift';
 $route['get-cg-rate-per-member'] 	= 'Admin/getCgAmntPerMember';
 $route['get-cg-rate-per-region'] 	= 'Admin/getCgAmntPerRegion';
-$route['upload-dp'] 							= 'Admin/upload_const_dp';
-$route['tbl-members'] 						= 'Admin/tbl_members';
-$route['save-member'] 						= 'Admin/save_constituent';
 $route['process-claim-benefit'] 				  = 'Admin/process_benefit_claim';
 $route['server-tbl-claim-benefit-members'] 	= 'Admin/server_tbl_claim_benefit_members';
 $route['view-contribution'] 			= 'Admin/view_contribution';
-$route['delete-member'] 					= 'Admin/deleteMember';
 $route['delete-loan-settings'] 		= 'Admin/deleteLoanSettings';
 $route['loans-application'] 			= 'Admin/loanApplication';
 $route['view-loan-app-page'] 			= 'Admin/view_loan_app_page';

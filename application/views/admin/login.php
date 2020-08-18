@@ -57,7 +57,7 @@
         class="m-4" 
         id="icon" 
         alt="User Icon" 
-        style="box-shadow: 1px 3px 17px #f0f0f0;"/>
+        style=""/>
     </div>
 
     <!-- Login Form -->

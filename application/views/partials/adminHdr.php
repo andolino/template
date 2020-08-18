@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CPFI SYSTEM</title>
+	<title>CBAM-ERS SYSTEM</title>
 	<!-- Bootstrap CSS CDN -->
 	<link 
 		rel="stylesheet" 

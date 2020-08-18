@@ -1,4 +1,4 @@
-<div class="cont-view-departments w-100 row none">
+<div class="cont-view-suppliers w-100 row none">
 		<div class="col-7">
    		<div class="row">
    			<div class="col-12">
@@ -10,14 +10,14 @@
 			</div>
    		<div class="row">
 				<div class="col-4 pb-3">
-					<button type="button" class="btn btn-sm font-12 btn-default rounded-0 border" id="loadSidePage" data-link="get-departments-frm" data-title="ADD DEPARTMENTS" data-id=""><i class="fas fa-user-plus"></i> Add Departments</button>
+					<button type="button" class="btn btn-sm font-12 btn-default rounded-0 border" id="loadSidePage" data-link="get-supplier-frm" data-title="ADD SUPPLIER" data-id=""><i class="fas fa-user-plus"></i> Add Supplier</button>
 				</div>
 			</div>
-			<table class="table table-sm font-12" id="tbl-departments-settings">
+			<table class="table table-sm font-12" id="tbl-supplier-settings">
 				<thead>
 					<tr>
-						<th>REGION</th>
-						<th>PLACE</th>
+						<th>NAME</th>
+						<th>CONTACT NO.</th>
 						<th>ACTION</th>
 					</tr>
 				</thead>

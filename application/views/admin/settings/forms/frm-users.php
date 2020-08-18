@@ -35,10 +35,9 @@
 				<select class="custom-select custom-select-sm mb-2 font-12" id="level" name="level">
 				  <option value="" selected hidden>--</option>
 				  <option value="0" <?php echo !empty($data) ? ($data->level == 0 ? 'selected' : '' ) : ''; ?>>Administrator</option>
-				  <option value="1" <?php echo !empty($data) ? ($data->level == 1 ? 'selected' : '' ) : ''; ?>>User - Loans</option>
-				  <option value="2" <?php echo !empty($data) ? ($data->level == 2 ? 'selected' : '' ) : ''; ?>>User - Collections</option>
-				  <option value="3" <?php echo !empty($data) ? ($data->level == 3 ? 'selected' : '' ) : ''; ?>>User - Benefits</option>
-				  <option value="4" <?php echo !empty($data) ? ($data->level == 4 ? 'selected' : '' ) : ''; ?>>Guest</option>
+				  <option value="1" <?php echo !empty($data) ? ($data->level == 1 ? 'selected' : '' ) : ''; ?>>Manager/Supervisor</option>
+				  <option value="2" <?php echo !empty($data) ? ($data->level == 2 ? 'selected' : '' ) : ''; ?>>Tech Support</option>
+				  <option value="3" <?php echo !empty($data) ? ($data->level == 3 ? 'selected' : '' ) : ''; ?>>Requestor</option>
 				</select>
 				<div class="level err-msg"></div>
 		    <label for="designation" class="font-12">DESIGNATION</label>

@@ -89,44 +89,54 @@ $(document).ready(function() {
   
   });
 
- $(document).on('submit', '#frm-contribution-rate', function(e) {
+  $(document).on('submit', '#frm-companies-settings', function(e) {
     e.preventDefault();
-    var frm = $(this).serialize();
+    // var frm = $(this).serializeArray();
+    var frm = new FormData(this);
+    frm.append('tbl', 'tbl_companies');
+    frm.append('pk_key', 'id');
+    frm.append('unique', 'name');
     customSwal(
         'btn btn-success', 
         'btn btn-danger mr-2', 
         'Yes', 
         'Wait', 
-        ['', 'Are you sure you want to update ?', 'question'], 
+        ['', 'Are you sure you want to save ?', 'question'], 
         function(){
-            $.ajax({
-              url       : 'save-contribution-rate',
-              type      : 'POST',
-              dataType  : 'JSON',
-              data      : frm,
-              context   : this,
-              success   : function(res){
-                Swal.fire(
-                  'Success!',
-                  'Users Successfully Updated!',
-                  'success'
-                );
-                animateSingleOut('.cont-card-add', 'fadeOutRight')
-                tbl_contribution_rate.ajax.reload();
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            processData:false,
+            contentType:false,
+            cache:false,
+            async:false,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_companies.ajax.reload();
               }
-            });
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
           }, function(){
             console.log('Fail');
       });
+  });
   
-  });
-
-  $(document).on('submit', '#frm-signatory-settings', function(e) {
+  $(document).on('submit', '#frm-models-settings', function(e) {
     e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'signatory'});
-    frm.push({name: 'pk_key', value: 'signatory_id'});
-    frm.push({name: 'unique', value: 'signatory_name'});
+    // var frm = $(this).serializeArray();
+    var frm = new FormData(this);
+    frm.append('tbl', 'tbl_models');
+    frm.append('pk_key', 'id');
+    frm.append('unique', 'name');
     customSwal(
         'btn btn-success', 
         'btn btn-danger mr-2', 
@@ -139,9 +149,113 @@ $(document).ready(function() {
             type: 'POST',
             dataType: 'JSON',
             data: frm,
+            processData:false,
+            contentType:false,
+            cache:false,
+            async:false,
             success: function(res){
               if (res.param3 == 'success') {
-                tbl_signatory.ajax.reload();
+                tbl_models.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
+  
+  $(document).on('submit', '#frm-supplier-settings', function(e) {
+    e.preventDefault();
+    // var frm = $(this).serializeArray();
+    var frm = new FormData(this);
+    frm.append('tbl', 'tbl_suppliers');
+    frm.append('pk_key', 'id');
+    frm.append('unique', 'name');
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            processData:false,
+            contentType:false,
+            cache:false,
+            async:false,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_suppliers.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
+  
+  $(document).on('change', '.input-address-lat-lng', function(e) {
+    var geocoder = new google.maps.Geocoder();
+    var address = $(this).val();
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        var latitude = results[0].geometry.location.lat();
+        var longitude = results[0].geometry.location.lng();
+        $('input[name="lat"]').val(latitude);
+        $('input[name="lng"]').val(longitude);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Invalid Address!',
+        })
+      }
+    });
+  });
+  $(document).on('submit', '#frm-locations-settings', function(e) {
+    e.preventDefault();
+    // var frm = $(this).serializeArray();
+    var frm = new FormData(this);
+    frm.append('tbl', 'tbl_locations');
+    frm.append('pk_key', 'id');
+    frm.append('unique', 'name');
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            processData:false,
+            contentType:false,
+            cache:false,
+            async:false,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_locations.ajax.reload();
               }
               Swal.fire(
                 res.param1,
@@ -157,366 +271,6 @@ $(document).ready(function() {
       });
   });
 
-
-  $(document).on('submit', '#frm-subsidiary-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'account_subsidiary'});
-    frm.push({name: 'pk_key', value: 'account_subsidiary_id'});
-    frm.push({name: 'unique', value: 'sub_code'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_subsidiary.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-office-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'office_management'});
-    frm.push({name: 'pk_key', value: 'office_management_id'});
-    frm.push({name: 'unique', value: 'office_code'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_office.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-member-type-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'member_type'});
-    frm.push({name: 'pk_key', value: 'member_type_id'});
-    frm.push({name: 'unique', value: 'type'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_member_type.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-civil-status-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'civil_status'});
-    frm.push({name: 'pk_key', value: 'civil_status_id'});
-    frm.push({name: 'unique', value: 'status'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_civil_status.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-departments-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'departments'});
-    frm.push({name: 'pk_key', value: 'departments_id'});
-    frm.push({name: 'unique', value: 'region'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_departments.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-relationship-type-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'relationship_type'});
-    frm.push({name: 'pk_key', value: 'relationship_type_id'});
-    frm.push({name: 'unique', value: 'rel_type'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_relationship_type.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-beneficiaries-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'beneficiaries'});
-    frm.push({name: 'pk_key', value: 'beneficiaries_id'});
-    frm.push({name: 'unique', value: 'name'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_beneficiaries.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-immediate-family-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'immediate_family'});
-    frm.push({name: 'pk_key', value: 'immediate_family_id'});
-    frm.push({name: 'unique', value: 'name'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_immediate_family.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-loan-types', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'loan_code'});
-    frm.push({name: 'pk_key', value: 'loan_code_id'});
-    frm.push({name: 'unique', value: 'loan_code'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_loan_type.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
-
-  $(document).on('submit', '#frm-benefit-type-settings', function(e) {
-    e.preventDefault();
-    var frm = $(this).serializeArray();
-    frm.push({name: 'tbl', value: 'benefit_type'});
-    frm.push({name: 'pk_key', value: 'benefit_type_id'});
-    frm.push({name: 'unique', value: 'type_of_benefit'});
-    customSwal(
-        'btn btn-success', 
-        'btn btn-danger mr-2', 
-        'Yes', 
-        'Wait', 
-        ['', 'Are you sure you want to save ?', 'question'], 
-        function(){
-          $.ajax({
-            url: 'add-data',
-            type: 'POST',
-            dataType: 'JSON',
-            data: frm,
-            success: function(res){
-              if (res.param3 == 'success') {
-                tbl_benefit_type.ajax.reload();
-              }
-              Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
-              );
-              animateSingleOut('.cont-card-add', 'fadeOutRight');
-            }
-          });
-          
-          }, function(){
-            console.log('Fail');
-      });
-  });
 
 
 });
@@ -566,9 +320,9 @@ function initUsersDataTables(){
   });
 }
 
-function initSignatoryDataTables(){
+function initCompaniesDataTables(){
   var myObjKeyLguConst = {};
-  tbl_signatory  = $("#tbl-signatory-settings").DataTable({
+  tbl_companies  = $("#tbl-companies-settings").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -593,7 +347,7 @@ function initSignatoryDataTables(){
     "serverSide"               : true,
     "processing"               : true,
     "ajax"                     : {
-        "url"                  : 'server-signatory',
+        "url"                  : 'server-companies',
         "type"                 : 'POST',
         // "data"                 : { 
         //                         "id" : $("#tbl-loans-by-member").attr('data-id')
@@ -610,9 +364,9 @@ function initSignatoryDataTables(){
   });
 }
 
-function initSubsidiaryDataTables(){
+function initModelsDataTables(){
   var myObjKeyLguConst = {};
-  tbl_subsidiary  = $("#tbl-subsidiary-settings").DataTable({
+  tbl_models  = $("#tbl-models-settings").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -623,11 +377,11 @@ function initSubsidiaryDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4] 
+        targets              : [0,1] 
       },
       { 
         className            : 'text-center', 
-        targets              : [4] 
+        targets              : [1] 
       }
       // { 
       //   className            : 'text-center', 
@@ -637,7 +391,7 @@ function initSubsidiaryDataTables(){
     "serverSide"               : true,
     "processing"               : true,
     "ajax"                     : {
-        "url"                  : 'server-subsidiary',
+        "url"                  : 'server-models',
         "type"                 : 'POST',
         // "data"                 : { 
         //                         "id" : $("#tbl-loans-by-member").attr('data-id')
@@ -654,9 +408,9 @@ function initSubsidiaryDataTables(){
   });
 }
 
-function initOfficeDataTables(){
+function initSupplierDataTables(){
   var myObjKeyLguConst = {};
-  tbl_office  = $("#tbl-office-settings").DataTable({
+  tbl_suppliers  = $("#tbl-supplier-settings").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -671,7 +425,7 @@ function initOfficeDataTables(){
       },
       { 
         className            : 'text-center', 
-        targets              : [2] 
+        targets              : [1] 
       }
       // { 
       //   className            : 'text-center', 
@@ -681,7 +435,7 @@ function initOfficeDataTables(){
     "serverSide"               : true,
     "processing"               : true,
     "ajax"                     : {
-        "url"                  : 'server-office',
+        "url"                  : 'server-suppliers',
         "type"                 : 'POST',
         // "data"                 : { 
         //                         "id" : $("#tbl-loans-by-member").attr('data-id')
@@ -698,9 +452,9 @@ function initOfficeDataTables(){
   });
 }
 
-function initMemberTypeDataTables(){
+function initLocationsDataTables(){
   var myObjKeyLguConst = {};
-  tbl_member_type  = $("#tbl-member-type-settings").DataTable({
+  tbl_locations  = $("#tbl-locations-settings").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -713,10 +467,10 @@ function initMemberTypeDataTables(){
         orderable            : false, 
         targets              : [0,1] 
       },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [1] 
+      // }
       // { 
       //   className            : 'text-center', 
       //   targets              : [6] 
@@ -725,449 +479,7 @@ function initMemberTypeDataTables(){
     "serverSide"               : true,
     "processing"               : true,
     "ajax"                     : {
-        "url"                  : 'server-member-type',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initCivilStatusDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_civil_status  = $("#tbl-civil-status-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-civil-status',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initRelationshipTypeDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_relationship_type  = $("#tbl-relationship-type-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-relationship-type',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initBeneficiariesDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_beneficiaries  = $("#tbl-beneficiaries-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-beneficiaries',
-        "type"                 : 'POST',
-        "data"                 : { 
-                                "id" : $("#tbl-beneficiaries-settings").attr('data-id')
-                              }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initMembersBeneficiariesDataTables(){
-  var myObjKeyLguConst = {};
-  // tbl_member.destroy();
-  tbl_member  = $("#tbl-members-ben").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1,2,3] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [3] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-members-beneficiaries',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initMembersImmediateFamilyDataTables(){
-  var myObjKeyLguConst = {};
-  $('#tbl-members').DataTable().clear().destroy();
-  tbl_member  = $("#tbl-members").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1,2,3] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [3] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-members-immediate-family',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initImmediateFamilyDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_immediate_family  = $("#tbl-immediate-family-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-immediate-family',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initLoanTypeDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_loan_type  = $("#tbl-loan-types-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1,2] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [2] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-loan-type',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initDepartmentsDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_departments  = $("#tbl-departments-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1,2] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [2] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-departments',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initBenefitTypeDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_benefit_type  = $("#tbl-benefit-type-settings").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-benefit-type',
-        "type"                 : 'POST',
-        // "data"                 : { 
-        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
-        //                       }
-    },
-    'createdRow'            : function(row, data, dataIndex) {
-      var dataRowAttrIndex = ['data-loan-settings'];
-      var dataRowAttrValue = [0];
-        for (var i = 0; i < dataRowAttrIndex.length; i++) {
-          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
-        }
-        $(row).attr(myObjKeyLguConst);
-    }
-  });
-}
-
-function initContributionRateDataTables(){
-  var myObjKeyLguConst = {};
-  tbl_contribution_rate  = $("#tbl-contribution-rate").DataTable({
-    searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
-    language: {
-        search                 : '_INPUT_',
-        searchPlaceholder      : 'Search...',
-        lengthMenu             : '_MENU_'       
-    },
-    columnDefs                 : [
-      { 
-        orderable            : false, 
-        targets              : [0,1,2] 
-      },
-      { 
-        className            : 'text-center', 
-        targets              : [1,2] 
-      }
-      // { 
-      //   className            : 'text-center', 
-      //   targets              : [6] 
-      // }
-    ],
-    "serverSide"               : true,
-    "processing"               : true,
-    "ajax"                     : {
-        "url"                  : 'server-contribution-rate',
+        "url"                  : 'server-locations',
         "type"                 : 'POST',
         // "data"                 : { 
         //                         "id" : $("#tbl-loans-by-member").attr('data-id')
@@ -1197,17 +509,10 @@ function removeData(d){
     function(){
         $.post('delete-data', {'tbl' : tbl, 'w': fld, 'v': id}, function(data, textStatus, xhr) {
           tbl_users.ajax.reload();
-          tbl_signatory.ajax.reload();
-          tbl_office.ajax.reload();
-          tbl_member_type.ajax.reload();
-          tbl_civil_status.ajax.reload();
-          tbl_relationship_type.ajax.reload();
-          tbl_beneficiaries.ajax.reload();
-          tbl_immediate_family.ajax.reload();
-          tbl_loan_type.ajax.reload();
-          tbl_benefit_type.ajax.reload();
-          tbl_subsidiary.ajax.reload();
-          tbl_departments.ajax.reload();
+          tbl_companies.ajax.reload();
+          tbl_models.ajax.reload();
+          tbl_suppliers.ajax.reload();
+          tbl_locations.ajax.reload();
         });
       }, function(){
         console.log('Fail');

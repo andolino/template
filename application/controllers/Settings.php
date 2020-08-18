@@ -33,7 +33,7 @@ class Settings extends MY_Controller {
 			$this->form_validation->set_rules($mustUnique, 
 																				strtoupper(str_replace('_', ' ', $mustUnique)),
 																				'trim|required|is_unique['.$tbl.'.'.$mustUnique.']');
-		} 
+		}
 		if ($this->form_validation->run() == FALSE){
 			$errors = $this->form_validation->error_array();
 			if (!empty($errors)) {
@@ -72,6 +72,16 @@ class Settings extends MY_Controller {
 				$res['param3'] = 'warning';
 			}
 		}
+
+		//upload image
+		if ($tbl=='tbl_companies') {
+			if ($this->input->post('has_update')) {
+				$this->uploadImage($this->input->post('has_update'), 'id', 'tbl_companies');
+			} else {
+				$this->uploadImage($this->db->insert_id(), 'id', 'tbl_companies');
+			}
+		}
+
 		echo json_encode($res);
 	}
 
@@ -106,43 +116,18 @@ class Settings extends MY_Controller {
 		echo json_encode($output);
 	}
 
-	public function server_signatory(){
-		$result 	= $this->Table->getOutput('signatory', ['signatory_id', 'signatory_name', 'designation', 'is_deleted'], ['signatory_id' => 'desc']);
+	public function server_companies(){
+		$result 	= $this->Table->getOutput('tbl_companies', ['id', 'name', 'image', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->signatory_name;
-   		$data[] = $row->designation;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-signatory-frm" data-id="'.$row->signatory_id.'" data-title="EDIT - '.strtoupper($row->signatory_name).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="signatory" data-field="signatory_id" data-id="'.$row->signatory_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_subsidiary(){
-		$result 	= $this->Table->getOutput('v_subsidiary', ['account_subsidiary_id', 'sub_code', 'code', 'employee_id', 'name', 'main_desc', 'users_id', 'is_deleted'], ['account_subsidiary_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->sub_code;
-   		$data[] = $row->main_desc;
-   		$data[] = $row->employee_id;
    		$data[] = $row->name;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-subsidiary-frm" data-id="'.$row->account_subsidiary_id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="account_subsidiary" data-field="account_subsidiary_id" data-id="'.$row->account_subsidiary_id.'"><i class="fas fa-trash"></i></a>';
+   		$data[] = $row->image;
+			 $data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-companies-frm" data-id="'.$row->id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | 
+			 						<a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_companies" data-field="id" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
 		}
 
@@ -155,18 +140,18 @@ class Settings extends MY_Controller {
 
 		echo json_encode($output);
 	}
-
-	public function server_office(){
-		$result 	= $this->Table->getOutput('office_management', ['office_management_id', 'office_code', 'office_name', 'entry_date', 'is_deleted'], ['office_management_id' => 'desc']);
+	
+	public function server_models(){
+		$result 	= $this->Table->getOutput('tbl_models', ['id', 'name', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->office_code;
-   		$data[] = $row->office_name;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-office-frm" data-id="'.$row->office_management_id.'" data-title="EDIT - '.strtoupper($row->office_code).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="office_management" data-field="office_management_id" data-id="'.$row->office_management_id.'"><i class="fas fa-trash"></i></a>';
+   		$data[] = $row->name;
+			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-models-frm" data-id="'.$row->id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | 
+			 						<a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_models" data-field="id" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
 		}
 
@@ -179,19 +164,19 @@ class Settings extends MY_Controller {
 
 		echo json_encode($output);
 	}
-
-
-
-	public function server_member_type(){
-		$result 	= $this->Table->getOutput('member_type', ['member_type_id', 'type', 'entry_date', 'is_deleted'], ['member_type_id' => 'desc']);
+	
+	public function server_suppliers(){
+		$result 	= $this->Table->getOutput('tbl_suppliers', ['id', 'name', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->type;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-member-type-frm" data-id="'.$row->member_type_id.'" data-title="EDIT - '.strtoupper($row->type).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="member_type" data-field="member_type_id" data-id="'.$row->member_type_id.'"><i class="fas fa-trash"></i></a>';
+   		$data[] = $row->name;
+   		$data[] = $row->contact_no;
+			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-supplier-frm" data-id="'.$row->id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | 
+			 						<a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_suppliers" data-field="id" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
 		}
 
@@ -204,234 +189,18 @@ class Settings extends MY_Controller {
 
 		echo json_encode($output);
 	}
-
-	public function server_civil_status(){
-		$result 	= $this->Table->getOutput('civil_status', ['civil_status_id', 'status', 'entry_date', 'is_deleted'], ['civil_status_id' => 'desc']);
+	
+	public function server_locations(){
+		$result 	= $this->Table->getOutput('tbl_locations', ['id', 'name', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->status;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-civil-status-frm" data-id="'.$row->civil_status_id.'" data-title="EDIT - '.strtoupper($row->status).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="civil_status" data-field="civil_status_id" data-id="'.$row->civil_status_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_departments(){
-		$result 	= $this->Table->getOutput('departments', ['departments_id', 'region', 'short', 'place', 'entry_date', 'is_deleted'], ['departments_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->region;
-   		$data[] = $row->place;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-departments-frm" data-id="'.$row->departments_id.'" data-title="EDIT - '.strtoupper($row->short).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="departments" data-field="departments_id" data-id="'.$row->departments_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_contribution_rate(){
-		$result 	= $this->Table->getOutput('contribution_rate', ['contribution_rate_id', 'rate', 'entry_date', 'is_deleted'], ['contribution_rate_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->rate;
-   		$data[] = $row->cash_gift;
- 			$data[] = '<a href="javascript:void(0);" id="updateContributionRate" title="Update Rate" data-id="'.$row->contribution_rate_id.'"><i class="fas fa-edit"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_relationship_type(){
-		$result 	= $this->Table->getOutput('relationship_type', ['relationship_type_id', 'rel_type', 'entry_date', 'is_deleted'], ['relationship_type_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->rel_type;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-relationship-type-frm" data-id="'.$row->relationship_type_id.'" data-title="EDIT - '.strtoupper($row->rel_type).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="relationship_type" data-field="relationship_type_id" data-id="'.$row->relationship_type_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_beneficiaries(){
-		$this->db->where('members_id', $this->input->post('id'));
-		$result 	= $this->Table->getOutput('v_beneficiaries', ['beneficiaries_id', 'members_id', 'rel_type', 'last_name', 'first_name', 'entry_date', 'is_deleted', 'relationship_name', 'relationship_type_id'], ['beneficiaries_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = strtoupper($row->relationship_name);
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-fn="edit" data-link="get-beneficiaries-frm" data-id="'.$row->beneficiaries_id.'" data-title="EDIT - '.strtoupper($row->relationship_name).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="beneficiaries" data-field="beneficiaries_id" data-id="'.$row->beneficiaries_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_members_beneficiaries(){
-		$result 	= $this->Table->getOutput('members', ['members_id', 'last_name', 'first_name', 'entry_date', 'is_deleted'], ['members_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->members_id;
-   		$data[] = strtoupper($row->last_name);
-   		$data[] = strtoupper($row->first_name);
- 			$data[] = '<a href="javascript:void(0);" id="loadPage" data-link="get-beneficiaries-members" data-ind="'.$row->members_id.'" 
-   								data-badge-head="BENEFICIARIES - ' . strtoupper($row->last_name . ', ' . $row->first_name).'" data-cls="cont-view-beneficiaries-relationship"><i class="fas fa-edit"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_members_immediate_family(){
-		$result 	= $this->Table->getOutput('members', ['members_id', 'last_name', 'first_name', 'entry_date', 'is_deleted'], ['members_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->members_id;
-   		$data[] = strtoupper($row->last_name);
-   		$data[] = strtoupper($row->first_name);
- 			$data[] = '<a href="javascript:void(0);" id="loadPage" data-link="get-immediate-family" data-ind="'.$row->members_id.'" 
-   								data-badge-head="IMMEDIATE FAMILY - ' . strtoupper($row->last_name . ', ' . $row->first_name).'" data-cls="cont-view-immediate-family-relation"><i class="fas fa-edit"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_immediate_family(){
-		$result 	= $this->Table->getOutput('v_immediate_family', ['immediate_family_id', 'members_id', 'rel_type', 'last_name', 'first_name', 'relationship_name', 'entry_date', 'is_deleted', 'relationship_type_id'], ['immediate_family_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = strtoupper($row->relationship_name);
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-fn="edit" data-link="get-immediate-family-frm" data-id="'.$row->immediate_family_id.'" data-title="EDIT - '.strtoupper($row->relationship_name).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="immediate_family" data-field="immediate_family_id" data-id="'.$row->immediate_family_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_loan_type(){
-		$result 	= $this->Table->getOutput('loan_code', ['loan_code_id', 'loan_code', 'loan_type_name', 'is_deleted', 'entry_date'], ['loan_code_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->loan_code;
-   		$data[] = $row->loan_type_name;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-loan-types-frm" data-id="'.$row->loan_code_id.'" data-title="EDIT - '.strtoupper($row->loan_code).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="loan_code" data-field="loan_code_id" data-id="'.$row->loan_code_id.'"><i class="fas fa-trash"></i></a>';
-			$res[] = $data;
-		}
-
-		$output = array (
-			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->Table->countAllTbl(),
-			'recordsFiltered' => $this->Table->countFilterTbl(),
-			'data' 						=> $res
-		);
-
-		echo json_encode($output);
-	}
-
-	public function server_benefit_type(){
-		$result 	= $this->Table->getOutput('benefit_type', ['benefit_type_id', 'type_of_benefit', 'min_amnt', 'multi_claim', 'is_deleted', 'entry_date'], ['benefit_type_id' => 'desc']);
-		$res 			= array();
-		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
-		foreach ($result as $row) {
-			$data = array();
-			$no++;
-   		$data[] = $row->type_of_benefit;
- 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-benefit-type-frm" data-id="'.$row->benefit_type_id.'" data-title="EDIT - '.strtoupper($row->type_of_benefit).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="benefit_type" data-field="benefit_type_id" data-id="'.$row->benefit_type_id.'"><i class="fas fa-trash"></i></a>';
+   		$data[] = $row->name;
+			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-locations-frm" data-id="'.$row->id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | 
+			 						<a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_locations" data-field="id" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
 		}
 
@@ -456,98 +225,28 @@ class Settings extends MY_Controller {
 		$this->load->view('admin/settings/forms/frm-users-fp', $params);
 	}
 
-	public function getSignatoryFrm(){
+	public function getCompaniesFrm(){
 		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('signatory', array('is_deleted' => 0,'signatory_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-signatory', $params);
+		$params['data'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0,'id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-companies', $params);
 	}
-
-	public function getSubsidiaryFrm(){
+	
+	public function getModelsFrm(){
 		$params['has_update'] = $this->input->post('id');
-		$params['data'] 			= $this->db->get_where('account_subsidiary', array('is_deleted' => 0,'account_subsidiary_id' => $this->input->post('id')))->row();
-		$params['mainAccnt'] 	= $this->db->get_where('account_main', array('is_deleted' => 0))->result();
-		$params['membersData'] 	= $this->db->get_where('members', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/forms/frm-subsidiary', $params);
+		$params['data'] = $this->db->get_where('tbl_models', array('is_deleted' => 0,'id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-models', $params);
 	}
-
-	public function getOfficeFrm(){
+	
+	public function getSupplierFrm(){
 		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('office_management', array('is_deleted' => 0,'office_management_id' => $this->input->post('id')))->row();
-		$params['dataDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/forms/frm-office', $params);
+		$params['data'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0,'id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-supplier', $params);
 	}
-
-	public function getLoanTypesFrm(){
+	
+	public function getLocationsFrm(){
 		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('loan_code', array('is_deleted' => 0,'loan_code_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-loan-types', $params);
-	}
-
-	public function getBenefiTypesFrm(){
-		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('benefit_type', array('is_deleted' => 0,'benefit_type_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-benefit-type', $params);
-	}
-
-	public function getMemberTypeFrm(){
-		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('member_type', array('is_deleted' => 0,'member_type_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-member-type', $params);
-	}
-
-	public function getCivilStatusFrm(){
-		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('civil_status', array('is_deleted' => 0,'civil_status_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-civil-status', $params);
-	}
-
-	public function getDepartmentsFrm(){
-		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('departments', array('is_deleted' => 0,'departments_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-departments', $params);
-	}
-
-	public function getRelationshipTypeFrm(){
-		$params['has_update'] = $this->input->post('id');
-		$params['data'] = $this->db->get_where('relationship_type', array('is_deleted' => 0,'relationship_type_id' => $this->input->post('id')))->row();
-		$this->load->view('admin/settings/forms/frm-relationship-type', $params);
-	}
-
-	public function getBeneficiariesFrm(){
-		$fn 									= $this->input->post('fn');
-		// $params['has_update'] = $this->input->post('id');
-		$params['members_id'] = $this->input->post('id');
-		if ($fn=='edit') {
-			$params['data'] 			= $this->db->get_where('beneficiaries', array('is_deleted'=>0,'beneficiaries_id'=>$this->input->post('id')))->row();
-		}
-		$params['rtype'] 			= $this->db->get_where('relationship_type', array('is_deleted'=>0))->result();
-		$this->load->view('admin/settings/forms/frm-beneficiaries', $params);
-	}
-
-	public function getImmediateFamilyFrm(){
-		$fn 									= $this->input->post('fn');
-		// $params['has_update'] = $this->input->post('id');
-		$params['members_id'] = $this->input->post('id');
-		if ($fn=='edit') {
-			$params['data'] 			= $this->db->get_where('immediate_family', array('is_deleted'=>0,'immediate_family_id'=>$this->input->post('id')))->row();
-		}
-		$params['rtype'] 			= $this->db->get_where('relationship_type', array('is_deleted'=>0))->result();
-		$this->load->view('admin/settings/forms/frm-immediate-family', $params);
-	}
-
-	public function getContributionRate(){
-		$params['cr'] = $this->db->get_where('contribution_rate', array('is_deleted'=>0))->row();
-		$this->load->view('admin/settings/forms/frm-contribution-rate', $params);
-	}
-
-	public function getBeneficiariesMembers(){
-		$params['members_id'] = $this->input->get('data');
-		$this->load->view('admin/settings/view-beneficiaries-relationship', $params);
-	}
-
-	public function getImmediateFamilyMembers(){
-		$params['members_id'] = $this->input->get('data');
-		$this->load->view('admin/settings/view-immediate-family-relation', $params);
+		$params['data'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0,'id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-locations', $params);
 	}
 
 	public function saveUsersData(){
@@ -634,79 +333,24 @@ class Settings extends MY_Controller {
 
 	}
 
-	public function saveContributionRate(){
-		$q = $this->db->update('contribution_rate', array('rate'=>$this->input->post('rate'),'cash_gift'=>$this->input->post('cash_gift')), array('contribution_rate_id'=>$this->input->post('has_update')));
-		$res=array();
-		if ($q) {
-			$res['param1'] = 'Success!';
-			$res['param2'] = 'Successfully Updated!';
-			$res['param3'] = 'success';
-		} else {
-			$res['param1'] = 'Opps!';	
-			$res['param2'] = 'Error Encountered!';
-			$res['param3'] = 'warning';
-		}
-		echo json_encode($res);
+	public function view_companies(){
+		$params['settDepartments'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-companies', $params);
 	}
-
-	public function view_signatory(){
-		$params['settSignatory'] = $this->db->get_where('signatory', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-signatory', $params);
+	
+	public function view_models(){
+		$params['settDepartments'] = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-models', $params);
+	}	
+	
+	public function view_suppliers(){
+		$params['settDepartments'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-suppliers', $params);
 	}
-
-	public function view_subidiary(){
-		$params['settSubsidiary'] = $this->db->get_where('account_subsidiary', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-subsidiary', $params);
-	}
-
-	public function view_office(){
-		$params['settOffcMngmnt'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-office', $params);
-	}
-
-	public function view_member_type(){
-		$params['settMemType'] = $this->db->get_where('member_type', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-member-type', $params);
-	}
-
-	public function view_civil_status(){
-		$params['settCivilStatus'] = $this->db->get_where('civil_status', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-civil-status', $params);
-	}
-
-	public function view_departments(){
-		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-departments', $params);
-	}
-
-	public function view_relationship_type(){
-		$params['settCivilStatus'] = $this->db->get_where('relationship_type', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-relationship-type', $params);
-	}
-
-	public function view_beneficiaries(){
-		$params['settBeneficiaries'] = $this->db->get_where('beneficiaries', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-beneficiaries', $params);
-	}
-
-	public function view_immediate_family(){
-		$params['settImmediteFamily'] = $this->db->get_where('immediate_family', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-immediate-family', $params);
-	}
-
-	public function view_contribution_rate(){
-		$params['settContributionRate'] = $this->db->get_where('contribution_rate', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-contribution-rate', $params);
-	}
-
-	public function view_loan_type(){
-		$params['settLoanTypes'] = $this->db->get_where('loan_types', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-loan-type', $params);
-	}
-
-	public function view_benefit_type(){
-		$params['settBenefitType'] = $this->db->get_where('benefit_type', array('is_deleted' => 0))->result();
-		$this->load->view('admin/settings/view-benefit-type', $params);
+	
+	public function view_locations(){
+		$params['settDepartments'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-locations', $params);
 	}
 
 

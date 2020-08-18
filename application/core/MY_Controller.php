@@ -138,7 +138,71 @@ class MY_Controller extends CI_Controller{
         return ucwords($out);
     }
 
+		
+		public function uploadImage($id, $field_id, $tbl){
+			$config['upload_path'] 		= './assets/image/uploads';
+			$config['allowed_types'] 	= 'gif|jpg|png|jpeg';
+			$config['max_size']  			= 0; // any size
+			$config['remove_spaces']	= true;
+			// $id 											= $this->input->post('asset_id');
+			$this->load->library('upload', $config);
+			$this->load->library('image_lib');
+			if (!$this->upload->do_upload('image')) {
+				$data['error']	 = array('error' => $this->upload->display_errors());
+				$data['success'] = false;
+			} else {
+				$dImg = $this->upload->data();
+	
+				//resize image to fit
+				$configer =  array(
+					'image_library'   => 'gd2',
+					'source_image'    =>  $dImg['full_path'],
+					'maintain_ratio'  =>  TRUE,
+					'width'           =>  1200,
+					'height'          =>  1200,
+					'x_axis'          =>  '0',
+					'y_axis'          =>  '0'
+				);
+	
+				$configer['quality'] = "100%";
+				$configer['width'] = 176;
+				$configer['height'] = 234;
+				$dim = (intval($dImg["image_width"]) / intval($dImg["image_height"])) - ($configer['width'] / $configer['height']);
+				$configer['master_dim'] = ($dim > 0)? "height" : "width";
+	
+				$this->image_lib->clear();
+				$this->image_lib->initialize($configer);
+				$this->image_lib->resize();
+	
+				$chkExisting    = $this->db->get_where($tbl, array($field_id => $id))->result();
+				if ($chkExisting) {
+					$this->db->update($tbl, array('image'=> $dImg['file_name']), array($field_id => $id));
+				} else {
+					$this->db->insert($tbl, array('image'=> $dImg['file_name']));	
+				}
+				$data['file_name'] = $dImg['file_name'];
+				$data['success'] = true;
+			}
+			// echo json_encode($data);
+		}
 
-    
+		public function generateQR($id){
+			$encId 		  = $this->encdec($id, 'e');
+			$apiKey       = "273d88623b2ea85055e3515c0f63af1b";
+			$apiUrl       = "https://mbyongson.qrd.by/api";
+			$action       = "short";
+			$url          = base_url() . "get-assets/" . $encId . '&gps=1';
+
+			$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+			$json         = file_get_contents($jsonurl, 0, null, null);
+			$json_output  = json_decode($json);
+			$json_encoded = json_encode($json_output);
+			$code         = explode('/', $json_output->result->qr);
+			return $this->db->insert('tbl_qrcodes', array(
+																								'asset_id' => $id,
+																								'qr_code'  => $json_encoded,
+																								'code'     => $code[4],
+																							));
+		}
 
 }

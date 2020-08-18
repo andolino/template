@@ -134,10 +134,31 @@ class Admin extends MY_Controller {
 		$this->adminContainer('admin/settings', $params);	
 	}
 
-	public function member_list(){
-		$params['heading'] = 'MEMBER LIST';
-		$params['tblMembers'] = $this->load->view('admin/crud/tbl-members', $params, TRUE);
-		$this->adminContainer('admin/member-list', $params);	
+	public function asset_list(){
+		$params['heading'] = 'ASSETS LIST';
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-asset', $params, TRUE);
+		$this->adminContainer('admin/asset-list', $params);	
+	}
+	
+	public function asset_ready_to_deploy(){
+		$params['heading'] = 'READY TO DEPLOY';
+		$params['status'] = 2;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-asset-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
+	public function asset_dispatch(){
+		$params['heading'] = 'DISPATCH';
+		$params['status'] = 3;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-asset-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
+	public function asset_deployed(){
+		$params['heading'] = 'DEPLOYED';
+		$params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-asset-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
 	}
 
 	public function loanByMember(){
@@ -153,122 +174,176 @@ class Admin extends MY_Controller {
 		$this->load->view('admin/crud/setting-page', $params);	
 	}
 
-	public function getCgAmntPerMember(){
-		$members_id = $this->input->post('m_id');
-		$mData 			= $this->db->query("SELECT m.*, d.cash_gift_rate, d.contribution_rate FROM members m
-																		LEFT JOIN office_management om ON om.office_management_id = m.office_management_id
-																		LEFT JOIN departments d ON d.departments_id = om.departments_id WHERE m.members_id = '$members_id'")->row();
-		// $cgRate 		= $this->db->get('contribution_rate')->row();
-		if(strtotime($mData->date_of_effectivity) < strtotime('-1 year')){
-			$amnt 		= floatval(str_replace(',', '', $mData->monthly_salary)) * (floatval(str_replace(',', '', $mData->cash_gift_rate))/100);
-		} else {
-			$amnt 		= 0;
-		}
-		echo json_encode(array(
-											'amnt'=>str_replace(', ', '', $amnt)
-										));
+	public function tbl_asset(){
+		$this->load->view('admin/crud/tbl-asset');
 	}
 
-	public function tbl_members(){
-		$this->load->view('admin/crud/tbl-members');
+	public function view_asset(){
+		$asset_id 	  	 	 = $this->input->get('data');
+		$params['data'] 	 = $this->AdminMod->getAssetRecord($asset_id); 
+		$params['uploads'] = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$url = $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
+		$jsonQrData = json_decode($url->qr_code);
+		$params['qrcode'] = $jsonQrData->result->qr;
+		$this->load->view('admin/crud/view-asset', $params);
 	}
 
-	public function view_member(){
-		$members_id 	  	 = $this->input->get('data');
-		$params['data'] 	 = $this->AdminMod->getMembersRecord($members_id); 
-		$params['uploads'] = $this->db->get_where('uploads', array('members_id' => $members_id))->row();
-		$this->load->view('admin/crud/view-member', $params);
-	}
-
-	public function server_tbl_members(){
-		$result 	= $this->AdminMod->get_output_members();
+	public function server_tbl_asset(){
+		$result 	= $this->AdminMod->get_output_asset();
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 		$viewPage = $this->input->post('page');
 
 		foreach ($result as $row) {
-			$hashed_id = $this->encdec($row->members_id, 'e');
 			$data = array();
 			$no++;
-   		$data[] = '<input type="checkbox" id="chk-const-list-tbl" value="'.$row->members_id.'" name="chk-const-list-tbl">';
-   		$data[] = $row->id_no;
-   		$data[] = strtoupper($row->last_name);
-   		$data[] = strtoupper($row->first_name);
-   		$data[] = strtoupper($row->middle_name);
-   		$data[] =	date('Y-m-d', strtotime($row->dob));
-   		$data[] = $row->address;
+   		$data[] = '<input type="checkbox" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
+   		$data[] = $row->asset_name;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->model;
    		$data[] = $row->status;
-   		$data[] = date('Y-m-d', strtotime($row->date_of_effectivity));
+   		$data[] =	$row->company;
+   		$data[] = date('Y-m-d', strtotime($row->purchase_date));
+			$data[] = $row->supplier;
+			$data[] = $row->order_number;
+			$data[] = number_format($row->purchase_cost, 2);
+			$data[] = $row->warranty_months;
+			$data[] = $row->default_location;
+			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
    		
 			$data[] = '<a href="javascript:void(0);" 
 										id="loadPage" 
-										data-link="view-member" 
-										data-ind="'.$row->members_id.'" 
-										data-badge-head="'.strtoupper($row->last_name . ', ' . $row->first_name . ' ' . $row->middle_name).'" 
+										data-link="view-asset" 
+										data-ind="'.$row->id.'" 
+										data-badge-head="'.strtoupper($row->asset_name).'" 
 										data-cls="cont-view-member" 
 										data-placement="top" 
 										data-toggle="tooltip" 
 										title="View" 
-										data-id="'.$row->members_id.'"><i class="fas fa-search"></i></a> | 
+										data-id="'.$row->id.'"><i class="fas fa-search"></i></a> | 
 								<a href="javascript:void(0);" 
 										id="loadPage" 
 										data-placement="top" 
 										data-toggle="tooltip" 
 										title="Edit" 
-										data-link="edit-member" 
-										data-ind="'.$row->members_id.'" 
+										data-link="edit-asset" 
+										data-ind="'.$row->id.'" 
 										data-cls="cont-edit-member" 
-										data-badge-head="EDIT '.strtoupper($row->last_name . ', ' . $row->first_name . ' ' . $row->middle_name).'"><i class="fas fa-edit"></i></a> | 
+										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
 								<a href="javascript:void(0);" 
 										id="remove-lgu-const-list" 
 										data-placement="top" 
 										data-toggle="tooltip" 
 										title="Remove" 
-										data-id="'.$row->members_id.'"><i class="fas fa-trash"></i></a>';
+										data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
 		}
 
 		$output = array (
 			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
-			'recordsTotal' 		=> $this->AdminMod->count_all_members(),
-			'recordsFiltered' => $this->AdminMod->count_filter_members(),
+			'recordsTotal' 		=> $this->AdminMod->count_all_asset(),
+			'recordsFiltered' => $this->AdminMod->count_filter_asset(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
+	public function server_tbl_asset_request(){
+		$result 	= $this->AdminMod->get_output_asset_request();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			$data[] = '<input type="checkbox" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
+			$data[] = $row->asset_name;
+			$data[] = $row->asset_tag;
+			$data[] = $row->model;
+			$data[] = $row->status;
+			$data[] =	$row->company;
+			$data[] = date('Y-m-d', strtotime($row->purchase_date));
+		 $data[] = $row->supplier;
+		 $data[] = $row->order_number;
+		 $data[] = number_format($row->purchase_cost, 2);
+		 $data[] = $row->warranty_months;
+		 $data[] = $row->default_location;
+		 $data[] = $row->requestable == 1 ? 'YES' : 'NO';
+			
+		 $data[] = '<a href="javascript:void(0);" 
+									 id="loadPage" 
+									 data-link="view-asset" 
+									 data-ind="'.$row->id.'" 
+									 data-badge-head="'.strtoupper($row->asset_name).'" 
+									 data-cls="cont-view-member" 
+									 data-placement="top" 
+									 data-toggle="tooltip" 
+									 title="View" 
+									 data-id="'.$row->id.'"><i class="fas fa-search"></i></a> | 
+							 <a href="javascript:void(0);" 
+									 id="loadPage" 
+									 data-placement="top" 
+									 data-toggle="tooltip" 
+									 title="Edit" 
+									 data-link="edit-asset" 
+									 data-ind="'.$row->id.'" 
+									 data-cls="cont-edit-member" 
+									 data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
+							 <a href="javascript:void(0);" 
+									 id="remove-lgu-const-list" 
+									 data-placement="top" 
+									 data-toggle="tooltip" 
+									 title="Remove" 
+									 data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_asset_request(),
+			'recordsFiltered' => $this->AdminMod->count_filter_asset_request(),
 			'data' 						=> $res
 		);
 
 		echo json_encode($output);
 	}
 
-
-
-	public function add_member(){
-		$params['civilStatus'] = $this->db->get_where('civil_status', array('is_deleted' => 0))->result();
-		$params['ofcMngmt'] 	 = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
-		$params['memberType']  = $this->db->get_where('member_type', array('is_deleted' => 0))->result();
-		$this->load->view('admin/crud/add-member', $params);	
+	public function add_asset(){
+		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$this->load->view('admin/crud/create-asset', $params);	
 	}
 
 
-	public function edit_member(){
-		$members_id 			 		 = $this->input->get('data');
-		$params['uploads'] 		 = $this->db->get_where('uploads', array('members_id' => $members_id))->row();
-		$params['membersData'] = $this->db->get_where('members', array('members_id' => $members_id))->row();
-		$params['civilStatus'] = $this->db->get_where('civil_status', array('is_deleted'=>0))->result();
-		$params['ofcMngmt'] 	 = $this->db->get_where('office_management', array('is_deleted'=>0))->result();
-		$params['memberType']  = $this->db->get_where('member_type', array('is_deleted'=>0))->result();
-		$this->load->view('admin/crud/edit-member', $params);
+	public function edit_asset(){
+		$asset_id 			 		 = $this->input->get('data');
+		$params['dataAsset'] = $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
+		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['uploads'] = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$this->load->view('admin/crud/edit-asset', $params);
 	}
 
-	public function save_constituent(){
-		$this->form_validation->set_rules('last_name', 'Last Name', 'required');
-		$this->form_validation->set_rules('first_name', 'First Name', 'required');
-		$this->form_validation->set_rules('dob', 'Date of Birth', 'required');
-		$this->form_validation->set_rules('address', 'Address', 'required');
-		$this->form_validation->set_rules('civil_status_id', 'Civil Status', 'required');
-		$this->form_validation->set_rules('monthly_salary', 'Monthly Salary', 'required');
-		$this->form_validation->set_rules('designation', 'Designation', 'required');
-		$this->form_validation->set_rules('office_management_id', 'Office', 'required');
-		$this->form_validation->set_rules('date_of_effectivity', 'Date of Effectivity', 'required');
-		$this->form_validation->set_rules('member_type_id', 'Member', 'required');
+	public function save_asset(){
+		$this->form_validation->set_rules('company_id', 'Company', 'required');
+		$this->form_validation->set_rules('asset_tag', 'Asset Tag', 'required');
+		$this->form_validation->set_rules('model_id', 'Model', 'required');
+		$this->form_validation->set_rules('status_id', 'Status', 'required');
+		$this->form_validation->set_rules('serial', 'Serial', 'required');
+		$this->form_validation->set_rules('name', 'Asset Name', 'required');
+		$this->form_validation->set_rules('purchase_date', 'Purchase Date', 'required');
+		$this->form_validation->set_rules('supplier_id', 'Supplier', 'required');
+		$this->form_validation->set_rules('order_number', 'Order Number', 'required');
+		$this->form_validation->set_rules('purchase_cost', 'Purchase Cost', 'required');
+		$this->form_validation->set_rules('warranty_months', 'Warranty', 'required');
 
 		// if (array_key_exists('pwd_id', $_POST)) {
 		// 	$this->form_validation->set_rules('pwd_id', 'PWD ID', 'trim|required');
@@ -282,75 +357,48 @@ class Admin extends MY_Controller {
 		} else {
 			//save entry
 			$dataField 						 = array();
-			// $childrenNFieldData 	 = array();
-			// $childrenBPFieldData 	 = array();
 			foreach ($this->input->post() as $key => $value) {
 				switch ($key) {
-					case 'social_status':
-						// $dataFieldSocialStatus[] = $value;
-						break;
 					case 'has_update':
 						$isForUpdate = true;
 						$updateID    = $value;
 						break;
+					case 'requestable':
+						$dataField['requestable'] = str_replace(',', '', $value);
+						break;
 					default:
+						$dataField['requestable'] = 0;
 						$dataField[$key] 			 = str_replace(',', '', $value);
 						break;
 				}
 			}
-			$dataField['entry_date'] = date('Y-m-d');
-			// $dataField['social_status'] 	 = implode('|', $dataFieldSocialStatus[0]);
-			$dataField['users_id'] 				 = $this->session->users_id;
-			
+			$dataField['user_id'] 				 = $this->session->users_id;
 			/**
 				Save members table
 			*/
 			if ($isForUpdate) {
-				$this->db->update('members', $dataField, array('members_id'=>$updateID));
-				$errors['members_id'] = $updateID;
+				$dataField['updated_at'] = date('Y-m-d');
+				$this->db->update('tbl_asset', $dataField, array('id'=>$updateID));
+				$errors['id'] = $updateID;
+				$this->upload_const_dp($updateID);
 			} else {
-				$dataField['members_id'] = $this->AdminMod->primaryKey('members_id');
-				$this->db->insert('members', $dataField);
-				$errors['members_id'] 	 = $dataField['members_id'];
+			$dataField['created_at'] = date('Y-m-d');
+				$this->db->insert('tbl_asset', $dataField);
+				$errors['id'] = $this->db->insert_id();
+				$this->upload_const_dp($errors['id']);
+				$this->generateQR($errors['id']);
 			}
 			
-			//last insert id
-			
-			/**
-				For Multiple Forms		
-				Save children Table
-			*/
-			// $dataChildren = array();
-			// if (!empty($childrenNFieldData[0])) {
-			// 	for ($i=0; $i < count($childrenNFieldData[0]); $i++) { 
-			// 		$dataChildren[$i]['lgu_constituent_id'] = ($isForUpdate) ? $updateID : $lguConstituentID;
-			// 		$dataChildren[$i]['name'] 							= $childrenNFieldData[0][$i];
-			// 		$dataChildren[$i]['birthplace'] 				= $childrenBPFieldData[0][$i];
-			// 	}
-
-			// 	if ($isForUpdate) {
-			// 		$this->db->delete('children', array('lgu_constituent_id'=>$updateID));
-			// 		$this->db->insert_batch('children', $dataChildren);	
-			// 	} else {
-			// 		$this->db->insert_batch('children', $dataChildren);
-			// 	}
-			// } else {
-			// 	if ($isForUpdate) {
-			// 		$this->db->delete('children', array('lgu_constituent_id'=>$updateID));
-			// 	}
-			// }
-
 		}
 		echo json_encode($errors);
 	}
 
-
-	public function upload_const_dp(){
+	public function upload_const_dp($id){
 		$config['upload_path'] 		= './assets/image/uploads';
 		$config['allowed_types'] 	= 'gif|jpg|png|jpeg';
 		$config['max_size']  			= 0; // any size
 		$config['remove_spaces']	= true;
-		$id 											= $this->input->post('members_id');
+		// $id 											= $this->input->post('asset_id');
 		$this->load->library('upload', $config);
 		$this->load->library('image_lib');
 		if (!$this->upload->do_upload('upload-file-dp')) {
@@ -380,20 +428,20 @@ class Admin extends MY_Controller {
       $this->image_lib->initialize($configer);
       $this->image_lib->resize();
 
-			$chkExisting    = $this->db->get_where('uploads', array('members_id' => $id))->result();
+			$chkExisting    = $this->db->get_where('tbl_uploads', array('asset_id' => $id))->result();
 			if ($chkExisting) {
-				$this->db->update('uploads', 
+				$this->db->update('tbl_uploads', 
 					array(
 						'image_name' 			 => $dImg['file_name'],
 						'image_path' 			 => $dImg['file_path'],
 						'transaction_date' => date('Y-m-d')
 					), 
-					array('members_id' => $id)
+					array('asset_id' => $id)
 				);
 			} else {
-				$this->db->insert('uploads', 
+				$this->db->insert('tbl_uploads', 
 					array(
-						'members_id' 				 => $id,
+						'asset_id' 					 => $id,
 						'image_name' 				 => $dImg['file_name'],
 						'image_path' 				 => $dImg['file_path'],
 						'transaction_date' 	 => date('Y-m-d')
@@ -403,13 +451,13 @@ class Admin extends MY_Controller {
 			$data['file_name'] = $dImg['file_name'];
 			$data['success'] = true;
 		}
-		echo json_encode($data);
+		// echo json_encode($data);
 	}
 
 
-	public function deleteMember(){
-		$members_id = $this->input->post('id');
-		$this->db->update('members', array('is_deleted' => '1'), array('members_id' => $members_id));
+	public function deleteAsset(){
+		$asset_id = $this->input->post('id');
+		$this->db->update('tbl_asset', array('is_deleted' => '1'), array('id' => $asset_id));
 	}
 
 	public function updateData(){
@@ -439,6 +487,62 @@ class Admin extends MY_Controller {
 		$params['members'] = $this->db->get_where('members', array('is_deleted' => 0))->result();
 		$params['office_management'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/print-members-docs', $params);
+	}
+
+	public function get_data_assets(){
+		// header("Access-Control-Allow-Origin: *");
+		// header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		// header("Content-type: application/json charset=UTF-8");
+		// $request_body = file_get_contents('php://input');
+		// $requestData 	= json_decode($request_body);
+		$d = $this->uri->segment(2);
+		$dec_un = $this->encdec($d, 'd');
+		$res = $this->db->get_where('v_asset', array('id' => $dec_un))->result();
+		echo '<pre>';
+		echo json_encode($res, JSON_PRETTY_PRINT);
+		echo '</pre>';
+	}
+
+	public function encryptKey(){
+		$un     = $this->input->post('key');
+		$enc_un = $this->encdec($un, 'e');
+		echo json_encode(['key' => $enc_un]);
+	}
+
+	public function saveCreatedQr(){
+    // Test WebHook and show post params
+    error_log("Fired WebHook");
+    // show Post Parameter
+    foreach ($_POST as $param_name => $param_val) {
+        error_log("$param_name: $param_val");
+    }
+    // show Get Parameter
+    foreach ($_GET as $param_name => $param_val) {
+        error_log("$param_name: $param_val");
+    }
+    // if JSON is submitted
+		$json = json_decode(file_get_contents('php://input'));
+
+		$qrData = $this->db->get_where('tbl_qrcodes', array('code' => $_POST['code']))->row();
+		$this->db->insert('tbl_gps', array(
+																	'asset_id' 		=> $qrData->asset_id,
+																	'event' 			=> $_POST['event'], 
+																	'timestamp' 	=> $_POST['timestamp'], 
+																	'redirects' 	=> $_POST['redirects'], 
+																	'visitors' 		=> $_POST['visitors'], 
+																	'device' 			=> $_POST['device'], 
+																	'os' 					=> $_POST['os'], 
+																	'country' 		=> $_POST['country'], 
+																	'lng' 				=> $_POST['lng'], 
+																	'lat' 				=> $_POST['lat'], 
+																	'user' 				=> $_POST['user'], 
+																	'email' 			=> $_POST['email'], 
+																	'mobile' 			=> $_POST['mobile'], 
+																	'type' 				=> $_POST['type'], 
+																	'code' 				=> $_POST['code'], 
+																	'secrettoken' => $_POST['secrettoken']
+																	// 'image' 			=> json_encode($_POST)
+																));
 	}
 
 }

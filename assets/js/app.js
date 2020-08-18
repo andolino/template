@@ -5,14 +5,25 @@ $(window).on('load', function(){
 });
 
 //datatable var array
-var tbl_member = [];
+var tbl_asset = [];
+var tbl_asset_r = [];
 var tbl_settings = [];
 var tbl_users = [];
+var tbl_companies = [];
+var tbl_models = [];
+var tbl_suppliers = [];
+var tbl_locations = [];
 
 $(document).ready(function() {
   //init plugin
   $("body").tooltip({ selector: '[data-toggle=tooltip]' });
   initDateDefault();
+
+  setInterval(function(){
+    if (!$('#tbl-asset-request').find('input[type="checkbox"]').is(':checked')) {
+      tbl_asset_r.ajax.reload();
+    } 
+  }, 4000)
 
   //for numeric values input
   $(document).on("focusout", '.isNum', function(e){
@@ -49,6 +60,7 @@ $(document).ready(function() {
         changeYear: true,
         showButtonPanel: true
       });
+      
       $( "div.picture-cont" )
       .mouseenter(function() {
         $('.upload-ctrl').removeClass('none');
@@ -66,7 +78,12 @@ $(document).ready(function() {
       //datatables for single page
       //datatables for page reload
       initMembersDataTables();
+      initAssetRequestDataTables();
       initUsersDataTables();
+      initCompaniesDataTables();
+      initModelsDataTables();
+      initSupplierDataTables();
+      initLocationsDataTables();
 
     });    
   });
@@ -74,24 +91,30 @@ $(document).ready(function() {
   //init datatable list
   initMembersDataTables();
   initUsersDataTables();
+  initAssetRequestDataTables();
+
 
 
 
   //============================> BEGIN
-  $(document).on('submit', '#frm-add-member', function(e) {
+  $(document).on('submit', '#frm-create-asset', function(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
-    var frm = $(this).serialize(); 
+    var frm = new FormData(this);
     $.ajax({
-      url      : 'save-member',
+      url      : 'save-asset',
       type     : 'POST',
       data     : frm,
-      dataType : 'JSON',
+      processData:false,
+      contentType:false,
+      cache:false,
+      async:false,
+      dataType: 'json',
       success  : function(res) {
         // console.log(typeof res.length);
         console.log(res);
         // typeof res.length === 'undefined'
-        if (!res.hasOwnProperty('members_id')) {
+        if (!res.hasOwnProperty('id')) {
           $.each(res, function(index, el) {
             if ($('#'+index).parent('div').find('div.invalid-feedback').length == 0) {
               $('#'+index).parent('div').append('<div class="invalid-feedback">'+el+'</div>').show();
@@ -112,10 +135,27 @@ $(document).ready(function() {
           $('<input>').attr({
               type: 'hidden',
               id: 'has_update',
-              name: 'has_update',
-              value: res.members_id
-          }).appendTo('#frm-add-member');
-          // $('#frm-add-member').trigger('reset');
+              name: ' ',
+              value: res.id
+          }).appendTo('#frm-create-asset');
+          console.log($('#has_update').val());
+          // if ($('#has_update').val() == '') {
+          //   var id = res.id;
+          //   var encRes = getEncKey(id);
+          //   var encId = $.parseJSON(encRes);
+          //   $.ajax({
+          //     type: "GET",
+          //     url: "https://mbyongson.qrd.by/api/short?key=273d88623b2ea85055e3515c0f63af1b&url="+baseURL+"get-assets/"+encId.key,
+          //     data: {},
+          //     dataType: "JSON",
+          //     success: function (res) {
+          //       console.log(res);
+          //       $('.display-qr').attr('src', res.result.qr);
+          //       animateSingleIn('.display-qr', 'fadeIn');
+          //     }
+          //   });
+          // }
+          // $('#frm-create-asset').trigger('reset');
         }
       }
     });
@@ -129,21 +169,67 @@ $(document).ready(function() {
       'btn btn-danger mr-2', 
       'Yes', 
       'Wait', 
-      ['', 'Are you sure you want to delete this member?', 'warning'], 
+      ['', 'Are you sure you want to delete this assets?', 'warning'], 
       function(){
-      $.post('delete-member', {'id': id}, function(data, textStatus, xhr) {
+      $.post('delete-asset', {'id': id}, function(data, textStatus, xhr) {
         Swal.fire(
           'Alright!',
           'Successfully Deleted!',
           'success'
         );
-        tbl_member.ajax.reload();
+        tbl_asset.ajax.reload();
       });
       
     }, function(){
       console.log('Fail');
     });
   });
+
+  $(document).on('change', '#upload-file-dp', function() {
+    $('.spinner-cont').removeClass('none');
+    $('#frm-upload-dp').trigger('submit');
+  });
+
+  $(document).on('submit', '#frm-upload-dp', function(e) {
+    e.preventDefault();
+    var frm = new FormData(this);
+    frm.append('lgu-cons-id', $(this).find('input[type="hidden"]').val());
+    
+    $.ajax({
+      url:'upload-dp',
+      type:"post",
+      data: frm,
+      processData:false,
+      contentType:false,
+      cache:false,
+      async:false,
+      dataType: 'json',
+      success: function(data){
+        if (data.success) {
+          Swal.fire(
+            'Success!',
+            'Picture Successfully Updated!',
+            'success'
+          );
+        } else {
+          Swal.fire(
+            'Oopps!',
+            'Looks like there was an error encountered!',
+            'warning'
+          );
+        }
+        // alert("Upload Image Successful.");
+        $('#lgu-captured-image').attr('src', baseURL + 'assets/image/uploads/' + data.file_name);
+        animateSingleOut('.spinner-cont', 'fadeOut');
+      }
+    });
+  });
+
+
+  $(document).on("change", "#img-asset", function(){
+    readUrlImg(this);
+  });
+
 });//ready
 
 
@@ -210,8 +296,8 @@ function number_format(amount) {
 //init datatables =====================================================>
 function initMembersDataTables(){
   var myObjKeyLguConst = {};
-  $('#tbl-member-list').DataTable().clear().destroy();
-  tbl_member  = $("#tbl-member-list").DataTable({
+  $('#tbl-asset-list').DataTable().clear().destroy();
+  tbl_asset  = $("#tbl-asset-list").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -222,16 +308,53 @@ function initMembersDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4,5,6,7,8] 
+        targets              : [0,1,2,3,4,5,6,7,8,9,10,11,12,13] 
       }
     ],
     "serverSide"               : true,
-    "processing"               : true,
+    // "processing"               : true,
     "ajax"                     : {
-        "url"                  : 'server-tbl-members',
+        "url"                  : 'server-tbl-asset',
         "type"                 : 'POST',
         "data"                 : { 
-                                "page" : $("#tbl-member-list").attr('data-page')
+                                "page" : $("#tbl-asset-list").attr('data-page')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initAssetRequestDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-asset-request').DataTable().clear().destroy();
+  tbl_asset_r  = $("#tbl-asset-request").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4,5,6,7,8,9,10,11] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-asset-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-asset-request").attr('data-status')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -362,3 +485,30 @@ function formatDateOthFormat(date) {
 
   return [month, day, year].join('/');
 }
+
+function getEncKey(key){
+  var jqXHR = $.ajax({
+    type: "POST",
+    url: "get-enc-key",
+    data: {'key' : key},
+    dataType: "json",
+    async: false,
+    success: function (res) {
+      return res.key;
+    }
+  });
+  return jqXHR.responseText;
+}
+
+function readUrlImg(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        $('#src-img-asset').attr('src', e.target.result);
+        $('#src-img-asset').removeClass('none');
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+

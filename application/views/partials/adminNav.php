@@ -2,8 +2,8 @@
 <nav id="sidebar">
   <div class="sidebar-header">
     <div class="row">
-      <div class="col-3"><img src="<?= base_url('assets/image/misc/logo.png') ?>" width="50"></div>
-      <div class="col-9"><h4 style="line-height: 2.1">CPFI SYSTEM </h4></div>
+      <div class="col-3"><img src="<?= base_url('assets/image/misc/pro-logo.png') ?>" width="50"></div>
+      <div class="col-9"><h6 style="line-height: 3">CBAM-ERS SYSTEM </h6></div>
     </div>
     
   </div>
@@ -11,91 +11,36 @@
   <ul class="list-unstyled components">
       <p class="text-center"> WELCOME <?php echo strtoupper($this->session->username); ?></p>
       <li>
-        <a href="<?php echo base_url(); ?>" class="font-12"><i class="fas fa-users"></i> ABOUT US</a>
+        <a href="<?php echo base_url(); ?>" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
       </li>
       <li>
-        <a href="<?php echo base_url(); ?>member-list"><i class="fas fa-tasks"></i> MEMBER LIST</a>
+        <a href="<?php echo base_url(); ?>asset-list"><i class="fas fa-tasks"></i> ALL ASSETS</a>
       </li>
-      <li class="none">
-        <a href="<?php echo base_url(); ?>loans-control"><i class="fas fa-user-cog"></i> LOANS</a>
-      </li>
-      <li class="none">
-        <a href="<?php echo base_url(); ?>control-token"><i class="fas fa-user-cog"></i> ACCESSS CONTROL</a>
-      </li>
-      <li class="active">
-          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-hand-holding-usd"></i> LOANS</a>
-          <ul class="collapse list-unstyled" id="homeSubmenu">
-              <li>
-                  <a href="<?php echo base_url(); ?>loan-by-member">LOAN BY MEMBER</a>
-              </li>
-              <li>
-                  <a href="<?php echo base_url(); ?>loan-list">LOANS LIST</a>
-              </li>
-              <li>
-                  <a href="<?php echo base_url(); ?>loans-application">LOAN APPLICATION</a>
-              </li>
-              <!-- <li>
-                  <a href="#">COLLECTION</a>
-              </li> -->
-              <li>
-                  <a href="<?php echo base_url(); ?>claim-benefit">BENEFIT CLAIMS</a>
-              </li>
-              <li>
-                  <a href="<?php echo base_url(); ?>official-receipt">COLLECTION</a>
-              </li>
-              <li>
-                  <a href="<?php echo base_url(); ?>cash-gift">CASH GIFT</a>
-              </li>
-          </ul>
-      </li>
-      <li>
-        <a href="#acctgSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-book-open"></i> ACCOUNTING</a>
-        <ul class="collapse list-unstyled" id="acctgSubMenu">
-            <li>
-                <a href="<?php echo base_url(); ?>general-journal">GJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>crj-transaction">CRJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>cdj-transaction">CDJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>pacs-transaction">PACS</a>
-            </li>
-            <li>
-                <a href="#">ANNUAL CLOSING</a>
-            </li>
-        </ul>
-      </li>
-      <li>
-        <a href="#acctgRepSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-paste"></i> ACCTG REPORTS</a>
-        <ul class="collapse list-unstyled" id="acctgRepSubMenu">
-            <li>
-                <a href="<?php echo base_url(); ?>gj-posted">GJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>crj-posted">CRJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>cdj-posted">CDJ</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>pacs-posted">PACS</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>general-ledger">GENERAL LEDGER</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>trial-balance">TRIAL BALANCE</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>balance-sheet">BALANCE SHEET</a>
-            </li>
-            <li>
-                <a href="<?php echo base_url(); ?>income-statement">INCOME STATEMENT</a>
-            </li>
-        </ul>
+      <li class="">
+				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-hand-holding-usd"></i> ASSET REQUEST</a>
+				<ul class="collapse list-unstyled" id="homeSubmenu">
+					<li>
+							<a href="<?php echo base_url(); ?>asset-ready-to-deploy">Asset Ready to Deploy</a>
+					</li>
+					<li>
+							<a href="<?php echo base_url(); ?>asset-dispatch">Asset Dispatch</a>
+					</li>
+					<li>
+							<a href="<?php echo base_url(); ?>asset-deployed">Asset Deployed</a>
+					</li>
+					<!-- <li>
+							<a href="<?php //echo base_url(); ?>loans-application">LOAN APPLICATION</a>
+					</li>
+					<li>
+							<a href="<?php //echo base_url(); ?>claim-benefit">BENEFIT CLAIMS</a>
+					</li>
+					<li>
+							<a href="<?php //echo base_url(); ?>official-receipt">COLLECTION</a>
+					</li>
+					<li>
+							<a href="<?php //echo base_url(); ?>cash-gift">CASH GIFT</a>
+					</li> -->
+				</ul>
       </li>
   </ul>
 
