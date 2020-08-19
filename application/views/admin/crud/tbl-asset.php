@@ -14,6 +14,7 @@
       <th scope="col">ASSET TAG</th>
       <th scope="col">MODEL</th>
       <th scope="col">STATUS</th>
+      <th scope="col">CHECKOUT TO</th>
       <th scope="col">COMPANY</th>
       <th scope="col">PURCHASED DATE</th>
       <th scope="col">SUPPLIER</th>
@@ -21,7 +22,6 @@
       <th scope="col">PURCHASED COST</th>
       <th scope="col">WARRANTY</th>
       <th scope="col">DEFAULT LOCATION</th>
-      <th scope="col">REQUESTABLE</th>
       <th scope="col">ACTION</th>
     </tr>
   </thead>

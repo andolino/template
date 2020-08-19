@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] 			 		= 'admin/show_settings';
+$route['default_controller'] 			 		= 'Admin';
 $route['asset-list'] 						 		= 'Admin/asset_list';
 $route['asset-ready-to-deploy'] 					= 'Admin/asset_ready_to_deploy';
 $route['asset-dispatch'] 					= 'Admin/asset_dispatch';

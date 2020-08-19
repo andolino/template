@@ -1,11 +1,99 @@
 <div class="navbar bg-light custom-container none">
-    <h2>WHAT IS AN CPFI?</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-    <div class="line"></div>
+    <div class="row w-100">
+      <div class="col-3">
+        <div class="card text-left bg-info custom-dashboard text-light">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <h5 class="card-title">2</h5>
+                <p class="card-text text-white">Total Asset.</p>
+              </div>
+              <div class="col-3">
+                <i class="fas fa-barcode"></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-white font-12 text-center">
+            More Info <i class="fas fa-arrow-alt-circle-right" style="font-size:12px !important;"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card text-left bg-primary custom-dashboard text-light">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <h5 class="card-title">2</h5>
+                <p class="card-text text-white">Total Ready To Deploy.</p>
+              </div>
+              <div class="col-3">
+                <i class="fas fa-bookmark"></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-white font-12 text-center">
+            More Info <i class="fas fa-arrow-alt-circle-right" style="font-size:12px !important;"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card text-left bg-warning custom-dashboard text-light">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <h5 class="card-title">2</h5>
+                <p class="card-text text-white">Total Dispatch.</p>
+              </div>
+              <div class="col-3">
+                <i class="fas fa-truck pr-3"></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-white font-12 text-center">
+            More Info <i class="fas fa-arrow-alt-circle-right" style="font-size:12px !important;"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card text-left bg-success custom-dashboard text-light">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <h5 class="card-title">2</h5>
+                <p class="card-text text-white">Total Deployed.</p>
+              </div>
+              <div class="col-3">
+                <i class="fas fa-check-circle"></i>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-white font-12 text-center">
+            More Info <i class="fas fa-arrow-alt-circle-right" style="font-size:12px !important;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row">
+          <div class="col-4 pb-2 pt-3">
+            <h5>ACTIVITY LOGS</h5>
+          </div>
+        </div>
+        <table class="table table-sm font-12" id="tbl-activity-logs">
+          <thead>
+            <tr>
+              <th>DATE</th>
+              <th>ADMIN</th>
+              <th>ACTION</th>
+              <th>ITEM</th>
+              <th>TARGET</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </div>
+
 </div>
 

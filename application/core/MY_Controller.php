@@ -205,4 +205,8 @@ class MY_Controller extends CI_Controller{
 																							));
 		}
 
+		public function save_action_logs($data){
+			return $this->db->insert('tbl_action_logs', $data);
+		}
+
 }

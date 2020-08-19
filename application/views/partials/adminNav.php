@@ -5,13 +5,12 @@
       <div class="col-3"><img src="<?= base_url('assets/image/misc/pro-logo.png') ?>" width="50"></div>
       <div class="col-9"><h6 style="line-height: 3">CBAM-ERS SYSTEM </h6></div>
     </div>
-    
   </div>
-
   <ul class="list-unstyled components">
       <p class="text-center"> WELCOME <?php echo strtoupper($this->session->username); ?></p>
       <li>
-        <a href="<?php echo base_url(); ?>" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
+        <a href="<?php echo base_url(); ?>" class="font-12"><i class="fas fa-barcode"></i> DASHBOARD</a>
+        <a href="<?php echo base_url(); ?>settings" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
       </li>
       <li>
         <a href="<?php echo base_url(); ?>asset-list"><i class="fas fa-tasks"></i> ALL ASSETS</a>

@@ -81,7 +81,6 @@
 						<label for="warranty_months" class="font-12">Warranty</label>
 						<input type="text" class="form-control form-control-sm font-12" id="warranty_months" name="warranty_months" placeholder="Months">
 					</div>
-					
 					<div class="col-3 mt-2 pl-0 rel-cont">
 						<label for="location_id" class="font-12">Default Location</label>
 						<select class="custom-select custom-select-sm font-12" id="location_id" name="location_id">
@@ -92,11 +91,21 @@
 						</select> 
 					</div>
 					<div class="col-12 p-0 m-0"></div>
-					<div class="col-3 mt-2">
+					<div class="col-3 mt-2 rel-cont">
+						<label for="checkout_user_id" class="font-12">Checkout To:</label>
+						<select class="custom-select custom-select-sm font-12" id="checkout_user_id" name="checkout_user_id">
+						  <option selected hidden value="">-SELECT-</option>
+						  <?php foreach ($users as $row): ?>
+							<option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
+						  <?php endforeach; ?>
+						</select>
+					</div>
+					<div class="col-6 pl-0 mt-2">
 						<label for="notes" class="font-12">Notes</label>
 						<textarea class="form-control form-control-sm font-12" id="notes" name="notes"></textarea>
 					</div>
-					<div class="col-1 mt-4 pl-0">
+					<div class="col-12 p-0 m-0"></div>
+					<div class="col-1 mt-4">
 						<div class="form-check pt-2">
 							<input class="form-check-input font-12" type="checkbox" value="1" id="requestable" name="requestable">
 							<label class="form-check-label font-12" for="requestable">

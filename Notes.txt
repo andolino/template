@@ -1,4 +1,23 @@
-user: user1
-pw: 123456
+QR
+https://mbyongson.qrd.by/admin/login?r=/admin/help/webhooks
+mbyongson
+Mirmo1234!!
 
-every table has a comment for flagging
+
+CPANEL PSA
+https://sg2plcpnl0094.prod.sin2.secureserver.net:2083/logout/
+psapro-itasset.com
+c0jh0qwz8ppg
+6Pg~P7;o!C4
+
+DB PSA 
+https://sg2plcpnl0094.prod.sin2.secureserver.net:2083/cpsess2092205353/3rdparty/phpMyAdmin/db_sql.php?db=information_schema
+dbpsa
+dondonpentavia
+P5C5W#a]g?0=
+
+FTP PSA 
+dondonpentavia@psapro-itasset.com
+SSAZ$tuVG9jV
+dpentavia@psapro-itasset.com
+@kGxcF96DT$h

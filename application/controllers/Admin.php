@@ -8,7 +8,7 @@ class Admin extends MY_Controller {
 	}
 
 	public function index(){
-		$params['heading'] = 'WELCOME CPFI PANEL';
+		$params['heading'] = 'CBAM-ERS DASHBOARD';
 		$this->adminContainer('admin/index', $params);
 	}
 
@@ -201,7 +201,8 @@ class Admin extends MY_Controller {
    		$data[] = $row->asset_name;
    		$data[] = $row->asset_tag;
    		$data[] = $row->model;
-   		$data[] = $row->status;
+			$data[] = $row->status;
+			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
    		$data[] =	$row->company;
    		$data[] = date('Y-m-d', strtotime($row->purchase_date));
 			$data[] = $row->supplier;
@@ -209,7 +210,6 @@ class Admin extends MY_Controller {
 			$data[] = number_format($row->purchase_cost, 2);
 			$data[] = $row->warranty_months;
 			$data[] = $row->default_location;
-			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
    		
 			$data[] = '<a href="javascript:void(0);" 
 										id="loadPage" 
@@ -263,14 +263,14 @@ class Admin extends MY_Controller {
 			$data[] = $row->asset_tag;
 			$data[] = $row->model;
 			$data[] = $row->status;
+			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
 			$data[] =	$row->company;
 			$data[] = date('Y-m-d', strtotime($row->purchase_date));
-		 $data[] = $row->supplier;
-		 $data[] = $row->order_number;
-		 $data[] = number_format($row->purchase_cost, 2);
-		 $data[] = $row->warranty_months;
-		 $data[] = $row->default_location;
-		 $data[] = $row->requestable == 1 ? 'YES' : 'NO';
+			$data[] = $row->supplier;
+			$data[] = $row->order_number;
+			$data[] = number_format($row->purchase_cost, 2);
+			$data[] = $row->warranty_months;
+			$data[] = $row->default_location;
 			
 		 $data[] = '<a href="javascript:void(0);" 
 									 id="loadPage" 
@@ -312,23 +312,24 @@ class Admin extends MY_Controller {
 
 	public function add_asset(){
 		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
-		$params['models'] = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
-		$params['status'] = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['models'] 	 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
 		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
 		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['users']     = $this->db->get_where('users', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/create-asset', $params);	
 	}
-
 
 	public function edit_asset(){
 		$asset_id 			 		 = $this->input->get('data');
 		$params['dataAsset'] = $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
 		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
-		$params['models'] = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
-		$params['status'] = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['models'] 	 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
 		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
 		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
-		$params['uploads'] = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$params['uploads'] 	 = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$params['users']     = $this->db->get_where('users', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/edit-asset', $params);
 	}
 
@@ -381,13 +382,35 @@ class Admin extends MY_Controller {
 				$this->db->update('tbl_asset', $dataField, array('id'=>$updateID));
 				$errors['id'] = $updateID;
 				$this->upload_const_dp($updateID);
+				//save logs
+				$this->save_action_logs(array(
+					'user_id' => $this->session->users_id,
+					'action_type' => 'update',
+					// 'target_id' => $updateID,
+					'target_type' => 'asset',
+					'item_type' =>  'Asset',
+					'item_id' =>  $updateID,
+					'created_at' => date('Y-m-d')
+				));
 			} else {
-			$dataField['created_at'] = date('Y-m-d');
+				$dataField['created_at'] = date('Y-m-d');
 				$this->db->insert('tbl_asset', $dataField);
 				$errors['id'] = $this->db->insert_id();
 				$this->upload_const_dp($errors['id']);
 				$this->generateQR($errors['id']);
+				//save logs
+				$this->save_action_logs(array(
+					'user_id' => $this->session->users_id,
+					'action_type' => 'create',
+					// 'target_id' => $updateID,
+					'target_type' => 'asset',
+					'item_type' =>  'Asset',
+					'item_id' =>  $updateID,
+					'created_at' => date('Y-m-d')
+				));
 			}
+			
+			
 			
 		}
 		echo json_encode($errors);

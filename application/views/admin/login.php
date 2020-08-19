@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>CPFI | LOGIN</title>
+<title>CBAM-ERS | LOGIN</title>
 <link rel="shortcut icon" href="<?= base_url('assets/image/misc/ico.ico') ?>" type="image/x-icon">
 <link href="<?php echo base_url('assets/css/login.css'); ?>" rel="stylesheet" id="bootstrap-css">
 <link href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>" rel="stylesheet" id="bootstrap-css">
@@ -79,6 +79,25 @@
     </div>
 
   </div>
+  <p class="help-block font-12 text-right d-none" id="upload-file-status">Develop by: TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES <img src="" alt=""><img 
+        src="<?php echo base_url('assets/image/misc/logo4.png'); ?>" 
+        class="m-4" 
+        id="icon" 
+        alt="User Icon" 
+        style="width:9%;"/></p>
 </div>
 </body>
+<script>
+  setTimeout(() => {
+    $('#upload-file-status').removeClass('d-none');
+  }, 1000);
+</script>
+<style>
+  #upload-file-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #939090;
+  }
+</style>
 </html>
