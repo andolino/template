@@ -9,6 +9,10 @@ class Admin extends MY_Controller {
 
 	public function index(){
 		$params['heading'] = 'CBAM-ERS DASHBOARD';
+		$params['allAsset'] = $this->db->query("SELECT count(*) as count from tbl_asset a1")->row();
+		$params['allAsset1'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 2")->row();
+		$params['allAsset2'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 3")->row();
+		$params['allAsset3'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 4")->row();
 		$this->adminContainer('admin/index', $params);
 	}
 
@@ -79,7 +83,7 @@ class Admin extends MY_Controller {
 				$found 			 = 'success';
 				$encUname 	 = $this->encdec($data->username, 'e');
 
-				// $from    		 = "manage_account@cpfi-webapp.com";
+				// $from     	= "manage_account@cpfi-webapp.com";
 				$from    		 = "no-reply@cpfi-webapp.com";
 				$to    	 		 = strtolower($data->email);
 				$title    	 = "CPFI | Forgot Password";
@@ -402,7 +406,7 @@ class Admin extends MY_Controller {
 				$this->save_action_logs(array(
 					'user_id' => $this->session->users_id,
 					'action_type' => 'create',
-					// 'target_id' => $updateID,
+					'target_id' => $errors['id'],
 					'target_type' => 'asset',
 					'item_type' =>  'Asset',
 					'item_id' =>  $updateID,
@@ -566,6 +570,7 @@ class Admin extends MY_Controller {
 																	'secrettoken' => $_POST['secrettoken']
 																	// 'image' 			=> json_encode($_POST)
 																));
+
 	}
 
 }

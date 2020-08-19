@@ -13,6 +13,7 @@ var tbl_companies = [];
 var tbl_models = [];
 var tbl_suppliers = [];
 var tbl_locations = [];
+var tbl_activity_logs = [];
 
 $(document).ready(function() {
   //init plugin
@@ -78,6 +79,7 @@ $(document).ready(function() {
       //datatables for single page
       //datatables for page reload
       initMembersDataTables();
+      initActivityLogsDataTables();
       initAssetRequestDataTables();
       initUsersDataTables();
       initCompaniesDataTables();
@@ -92,6 +94,7 @@ $(document).ready(function() {
   initMembersDataTables();
   initUsersDataTables();
   initAssetRequestDataTables();
+  initActivityLogsDataTables();
 
 
 
@@ -355,6 +358,43 @@ function initAssetRequestDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "status" : $("#tbl-asset-request").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initActivityLogsDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-activity-logs').DataTable().clear().destroy();
+  tbl_activity_logs  = $("#tbl-activity-logs").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-activity-logs',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-activity-logs").attr('data-status')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {

@@ -5,7 +5,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-9">
-                <h5 class="card-title">2</h5>
+                <h5 class="card-title"><?php echo $allAsset->count; ?></h5>
                 <p class="card-text text-white">Total Asset.</p>
               </div>
               <div class="col-3">
@@ -23,7 +23,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-9">
-                <h5 class="card-title">2</h5>
+                <h5 class="card-title"><?php echo $allAsset1->count; ?></h5>
                 <p class="card-text text-white">Total Ready To Deploy.</p>
               </div>
               <div class="col-3">
@@ -41,7 +41,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-9">
-                <h5 class="card-title">2</h5>
+                <h5 class="card-title"><?php echo $allAsset2->count; ?></h5>
                 <p class="card-text text-white">Total Dispatch.</p>
               </div>
               <div class="col-3">
@@ -59,7 +59,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-9">
-                <h5 class="card-title">2</h5>
+                <h5 class="card-title"><?php echo $allAsset3->count; ?></h5>
                 <p class="card-text text-white">Total Deployed.</p>
               </div>
               <div class="col-3">

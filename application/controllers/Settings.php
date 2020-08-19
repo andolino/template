@@ -116,6 +116,32 @@ class Settings extends MY_Controller {
 		echo json_encode($output);
 	}
 
+	public function server_tbl_activity_logs(){
+		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted'], ['created_at' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = date('Y-m-d', strtotime($row->created_at));
+   		$data[] = $row->screen_name;
+   		$data[] = $row->action_type;
+   		$data[] = $row->asset_name;	
+   		$data[] = $row->target;	
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
 	public function server_companies(){
 		$result 	= $this->Table->getOutput('tbl_companies', ['id', 'name', 'image', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();

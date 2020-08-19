@@ -60,6 +60,7 @@ $route['view-asset'] 						= 'Admin/view_asset';
 $route['edit-asset'] 						= 'Admin/edit_asset';
 $route['server-tbl-asset'] 			= 'Admin/server_tbl_asset';
 $route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
+$route['server-tbl-activity-logs'] 			= 'Settings/server_tbl_activity_logs';
 $route['upload-dp'] 							= 'Admin/upload_const_dp';
 $route['get-assets/(:any)'] 			= 'Admin/get_data_assets';
 $route['get-enc-key'] 			= 'Admin/encryptKey';
