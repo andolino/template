@@ -65,6 +65,12 @@ class Admin extends MY_Controller {
 				$found = 'failed';
 			}
 			$errors['msg'] = $found;
+			$errors['redirect'] = base_url();
+			if ($this->session->userdata('redirects_url')) {
+			// 	redirect($this->session->redirects_url);
+				$errors['redirect'] = $this->session->redirects_url;
+			}
+
 		}
 		echo json_encode($errors);
 	}
@@ -525,6 +531,13 @@ class Admin extends MY_Controller {
 		$d = $this->uri->segment(2);
 		$dec_un = $this->encdec($d, 'd');
 		$res = $this->db->get_where('v_asset', array('id' => $dec_un))->result();
+		if(!$this->session->userdata('users_id')){
+			$userdata = array(
+				'redirects_url'  => base_url() . "get-assets/" . $d,
+			);
+			$this->session->set_userdata($userdata);
+		  redirect('login');
+		}
 		echo '<pre>';
 		echo json_encode($res, JSON_PRETTY_PRINT);
 		echo '</pre>';
@@ -571,6 +584,38 @@ class Admin extends MY_Controller {
 																	// 'image' 			=> json_encode($_POST)
 																));
 
+		$this->save_action_logs(array(
+			'user_id' => $this->session->users_id,
+			'action_type' => 'scanned asset',
+			'target_id' => $qrData->asset_id,
+			'target_type' => 'asset',
+			// 'item_type' =>  'Asset',
+			// 'item_id' =>  $updateID,
+			'created_at' => date('Y-m-d')
+		));
+
 	}
+
+	public function test_api(){
+		$this->getaddress('14.56091', '121.0583');
+	}
+
+	function getaddress($lat,$lng){
+    $url  = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY&sensor=false';
+    $json = @file_get_contents($url);
+		$data = json_decode($json);
+		echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+    //  $status = $data->status;
+    //  if($status=="OK")
+    //  {
+    //    return $data->results[0]->formatted_address;
+    //  }
+    //  else
+    //  {
+    //    return false;
+    //  }
+  }
 
 }

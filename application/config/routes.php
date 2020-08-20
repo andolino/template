@@ -83,7 +83,10 @@ $route['tbl-asset'] 						= 'Admin/tbl_asset';
 $route['delete-asset'] 					= 'Admin/deleteAsset';
 $route['get-users-frm'] 	= 'Settings/getUsersFrm';
 $route['get-users-frm-fp'] 	= 'Settings/getUsersFrmFp';
-
+$route['login'] 											= 'Admin/usr_login';
+$route['forgot-password'] 					  = 'Admin/forgot_password';
+$route['submit-login'] 								= 'Admin/proceed_login';
+$route['submit-forgot-pw'] 						= 'Admin/proceed_fg_pw';
 
 
 
@@ -271,10 +274,7 @@ $route['save-official-receipt'] = 'Admin/saveOfficialReceipt';
 
 $route['pdf-vloan-comp/(:any)'] 	= 'Admin/pdfVloanComp';
 
-$route['login'] 											= 'Admin/usr_login';
-$route['forgot-password'] 					  = 'Admin/forgot_password';
-$route['submit-login'] 								= 'Admin/proceed_login';
-$route['submit-forgot-pw'] 						= 'Admin/proceed_fg_pw';
+
 $route['entry-new-password/(:any)']          = 'Admin/entry_new_password';
 $route['submit-new-password']          = 'Admin/submit_new_password';
 $route['logout'] 											= 'Admin/destroy_sess';

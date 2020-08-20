@@ -29,7 +29,7 @@
             ); 
           } 
           else if(res.msg == 'success'){
-            window.location.href = '<?php echo base_url(); ?>';
+            window.location.href = res.redirect;
           } else {
             $.each(res, function(index, el) {
               $('div[ref="'+index+'"]').html(el).show();
@@ -79,12 +79,12 @@
     </div>
 
   </div>
-  <p class="help-block font-12 text-right d-none" id="upload-file-status">Develop by: TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES <img src="" alt=""><img 
+  <p style="font-size:9px;" class="help-block font-8 text-right d-none" id="upload-file-status">Powered by: TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES <img src="" alt=""><img 
         src="<?php echo base_url('assets/image/misc/logo4.png'); ?>" 
         class="m-4" 
         id="icon" 
         alt="User Icon" 
-        style="width:9%;"/></p>
+        style="width:10%;"/></p>
 </div>
 </body>
 <script>

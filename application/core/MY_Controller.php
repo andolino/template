@@ -187,7 +187,7 @@ class MY_Controller extends CI_Controller{
 		}
 
 		public function generateQR($id){
-			$encId 		  = $this->encdec($id, 'e');
+			$encId 		  	= $this->encdec($id, 'e');
 			$apiKey       = "273d88623b2ea85055e3515c0f63af1b";
 			$apiUrl       = "https://mbyongson.qrd.by/api";
 			$action       = "short";

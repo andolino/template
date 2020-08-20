@@ -24,6 +24,7 @@ $(document).ready(function() {
     if (!$('#tbl-asset-request').find('input[type="checkbox"]').is(':checked')) {
       tbl_asset_r.ajax.reload();
     } 
+    tbl_activity_logs.ajax.reload();
   }, 4000)
 
   //for numeric values input
