@@ -20,3 +20,71 @@ dondonpentavia@psapro-itasset.com
 SSAZ$tuVG9jV
 dpentavia@psapro-itasset.com
 @kGxcF96DT$h
+
+
+
+
+public function index()
+	{
+		// $apiKey      = "273d88623b2ea85055e3515c0f63af1b";
+    // $apiUrl      = "https://mbyongson.qrd.by/api";
+    // $action      = "short";
+    // $url         = "http://example.com";
+
+    // $jsonurl     = "$apiUrl/$action?key=$apiKey&url=$url";
+    // $json        = file_get_contents($jsonurl, 0, null, null);
+    // $json_output = json_decode($json);
+
+		// // $url=$_POST['img_url'];
+		// // $data = file_get_contents($url);
+
+		// $new = $_SERVER['DOCUMENT_ROOT'] . '/api/assets/img/sample.png';
+		// file_put_contents($new, $json_output->result->qr);
+		// echo "<img src='".base_url() . 'api/assets/img/sample.png'.">";
+
+		// echo '<pre>';
+    // print_r($json_output);
+		// echo '</pre>';		
+
+		// echo '<img src="https://dondonpentavia.qrd.by/api/short?key=2c8be424e31604f508a6b969d2054b57&url=http://qrd.by&address=MyStreet 37&lng=16.3909&lat=48.2675" alt="QR Code" />';
+
+		// $this->load->view('pages/login');
+		// $distance = $this->getDistance(14.56091, 121.0583, 14.559954, 121.058398);
+		// if ($distance < 100) {
+		// 	echo "Within 100 kilometer radius";
+		// } else {
+		// 	echo "Outside 100 kilometer radius";
+		// }
+		// echo $distance;
+		$res = $this->getaddress('14.56091', '121.0583');
+		var_dump($res);
+	}
+
+	function getDistance($latitude1, $longitude1, $latitude2, $longitude2) {  
+		$earth_radius = 6371;
+	
+		$dLat = deg2rad($latitude2 - $latitude1);  
+		$dLon = deg2rad($longitude2 - $longitude1);  
+	
+		$a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * sin($dLon/2) * sin($dLon/2);  
+		$c = 2 * asin(sqrt($a));  
+		$d = $earth_radius * $c;  
+	
+		return $d;  
+	}
+
+	function getaddress($lat,$lng){
+    $url  = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY&sensor=false';
+    $json = @file_get_contents($url);
+		$data = json_decode($json);
+		return $data;
+    //  $status = $data->status;
+    //  if($status=="OK")
+    //  {
+    //    return $data->results[0]->formatted_address;
+    //  }
+    //  else
+    //  {
+    //    return false;
+    //  }
+  }
