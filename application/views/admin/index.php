@@ -87,6 +87,7 @@
               <th>ACTION</th>
               <th>ITEM</th>
               <th>TARGET</th>
+              <th>TARGET LOCATION</th>
             </tr>
           </thead>
           <tbody></tbody>

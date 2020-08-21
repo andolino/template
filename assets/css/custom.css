@@ -505,3 +505,9 @@ label[id*="-error"] {
 .custom-dashboard .card-title {
   font-size: 40px;
 }
+
+.btn-c-success {
+  color: #fff;
+  background-color: #73a886;
+  border-color: #84af83;
+}

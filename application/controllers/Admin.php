@@ -538,9 +538,19 @@ class Admin extends MY_Controller {
 			$this->session->set_userdata($userdata);
 		  redirect('login');
 		}
-		echo '<pre>';
-		echo json_encode($res, JSON_PRETTY_PRINT);
-		echo '</pre>';
+		$logedUser = $this->db->get_where('users', array('users_id' => $this->session->users_id))->row();
+		// echo '<pre>';
+		// echo json_encode($this->session, JSON_PRETTY_PRINT);
+		// echo '</pre>';
+		$params['data']=$res;
+		$params['uploads']=$this->db->get_where('tbl_uploads', array('asset_id' => $dec_un))->row();
+		$this->load->view('admin/asset-mobile-view', $params);
+	}
+
+	public function printAssetQr(){
+		$params['data'] = $this->db->query('SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id')->result();
+		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
+		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
 	}
 
 	public function encryptKey(){
@@ -564,6 +574,7 @@ class Admin extends MY_Controller {
 		$json = json_decode(file_get_contents('php://input'));
 
 		$qrData = $this->db->get_where('tbl_qrcodes', array('code' => $_POST['code']))->row();
+		$address = $this->getaddress($_POST['lat'], $_POST['lng']);
 		$this->db->insert('tbl_gps', array(
 																	'asset_id' 		=> $qrData->asset_id,
 																	'event' 			=> $_POST['event'], 
@@ -580,42 +591,39 @@ class Admin extends MY_Controller {
 																	'mobile' 			=> $_POST['mobile'], 
 																	'type' 				=> $_POST['type'], 
 																	'code' 				=> $_POST['code'], 
-																	'secrettoken' => $_POST['secrettoken']
-																	// 'image' 			=> json_encode($_POST)
+																	'secrettoken' => $_POST['secrettoken'],
+																	'address' 	  => $address->results[0]->formatted_address//$address->result->formatted_address
 																));
 
 		$this->save_action_logs(array(
-			'user_id' => $this->session->users_id,
-			'action_type' => 'scanned asset',
-			'target_id' => $qrData->asset_id,
-			'target_type' => 'asset',
-			// 'item_type' =>  'Asset',
-			// 'item_id' =>  $updateID,
-			'created_at' => date('Y-m-d')
+			'user_id' 			=> $this->session->users_id,
+			'action_type' 	=> 'scanned asset',
+			'target_id' 		=> $qrData->asset_id,
+			'target_type' 	=> 'asset',
+			// 'item_type' 	=>  'Asset',
+			// 'item_id' 		=>  $updateID,
+			'created_at' 		=> date('Y-m-d')
 		));
 
+	}
+
+	function getaddress($lat, $lng){
+	  $url  = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY&sensor=false';
+	  $json = @file_get_contents($url);
+		$data = json_decode($json);
+		return $data;
+	  //  $status = $data->status;
+	  //  if($status=="OK")
+	  //  {
+	  //    return $data->results[0]->formatted_address;
+	  //  }
+	  //  else
+	  //  {
+	  //    return false;
+	  //  }
 	}
 
 	public function test_api(){
 		$this->getaddress('14.56091', '121.0583');
 	}
-
-	function getaddress($lat,$lng){
-    $url  = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY&sensor=false';
-    $json = @file_get_contents($url);
-		$data = json_decode($json);
-		echo '<pre>';
-		print_r($data);
-		echo '</pre>';
-    //  $status = $data->status;
-    //  if($status=="OK")
-    //  {
-    //    return $data->results[0]->formatted_address;
-    //  }
-    //  else
-    //  {
-    //    return false;
-    //  }
-  }
-
-}
+}	

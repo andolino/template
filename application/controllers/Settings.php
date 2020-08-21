@@ -117,7 +117,7 @@ class Settings extends MY_Controller {
 	}
 
 	public function server_tbl_activity_logs(){
-		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted'], ['created_at' => 'desc']);
+		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted', 'lat', 'lng', 'address'], ['created_at' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
@@ -129,6 +129,7 @@ class Settings extends MY_Controller {
    		$data[] = $row->action_type;
    		$data[] = $row->asset_name;	
    		$data[] = $row->target;	
+   		$data[] = $row->address;	
 			$res[] = $data;
 		}
 

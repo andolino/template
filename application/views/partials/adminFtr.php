@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	var baseURL = '<?php echo base_url(); ?>';
 </script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY"></script>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
 

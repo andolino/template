@@ -20,12 +20,12 @@ $(document).ready(function() {
   $("body").tooltip({ selector: '[data-toggle=tooltip]' });
   initDateDefault();
 
-  setInterval(function(){
-    if (!$('#tbl-asset-request').find('input[type="checkbox"]').is(':checked')) {
-      tbl_asset_r.ajax.reload();
-    } 
-    tbl_activity_logs.ajax.reload();
-  }, 4000)
+  // setInterval(function(){
+  //   if (!$('#tbl-asset-request').find('input[type="checkbox"]').is(':checked')) {
+  //     tbl_asset_r.ajax.reload();
+  //   } 
+  //   tbl_activity_logs.ajax.reload();
+  // }, 4000)
 
   //for numeric values input
   $(document).on("focusout", '.isNum', function(e){
@@ -192,6 +192,10 @@ $(document).ready(function() {
   $(document).on('change', '#upload-file-dp', function() {
     $('.spinner-cont').removeClass('none');
     $('#frm-upload-dp').trigger('submit');
+  });
+
+  $(document).on('click', '#printAssetQr', function() {
+    window.open('print-asset-qr');
   });
 
   $(document).on('submit', '#frm-upload-dp', function(e) {
@@ -377,7 +381,7 @@ function initActivityLogsDataTables(){
   $('#tbl-activity-logs').DataTable().clear().destroy();
   tbl_activity_logs  = $("#tbl-activity-logs").DataTable({
     searchHighlight : true,
-    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
     language: {
         search                 : '_INPUT_',
         searchPlaceholder      : 'Search...',
@@ -386,7 +390,7 @@ function initActivityLogsDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4] 
+        targets              : [0,1,2,3,4,5] 
       }
     ],
     "serverSide"               : true,

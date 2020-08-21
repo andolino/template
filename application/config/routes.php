@@ -87,6 +87,7 @@ $route['login'] 											= 'Admin/usr_login';
 $route['forgot-password'] 					  = 'Admin/forgot_password';
 $route['submit-login'] 								= 'Admin/proceed_login';
 $route['submit-forgot-pw'] 						= 'Admin/proceed_fg_pw';
+$route['print-asset-qr'] 						= 'Admin/printAssetQr';
 
 
 
