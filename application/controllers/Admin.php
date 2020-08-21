@@ -212,7 +212,7 @@ class Admin extends MY_Controller {
    		$data[] = $row->asset_tag;
    		$data[] = $row->model;
 			$data[] = $row->status;
-			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
+			$data[] = $row->screen_name;
    		$data[] =	$row->company;
    		$data[] = date('Y-m-d', strtotime($row->purchase_date));
 			$data[] = $row->supplier;
@@ -273,7 +273,7 @@ class Admin extends MY_Controller {
 			$data[] = $row->asset_tag;
 			$data[] = $row->model;
 			$data[] = $row->status;
-			$data[] = $row->requestable == 1 ? 'YES' : 'NO';
+			$data[] = $row->screen_name;
 			$data[] =	$row->company;
 			$data[] = date('Y-m-d', strtotime($row->purchase_date));
 			$data[] = $row->supplier;
