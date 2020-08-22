@@ -83,7 +83,7 @@
           <thead>
             <tr>
               <th>DATE</th>
-              <th>ADMIN</th>
+              <th>USER ACTION</th>
               <th>ACTION</th>
               <th>ITEM</th>
               <th>CUSTODIAN</th>
