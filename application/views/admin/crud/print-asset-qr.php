@@ -35,13 +35,19 @@
 	</tr>
 </table> -->
 <!-- <h4>OFFICIAL RECEIPT</h4> -->
-<table cellpadding="3">
+<table cellpadding="1">
 <?php foreach ($data as $row): ?>
 	<tr>
 		<td style="border:0.2px solid #000; font-size: 8px;width: 20%;height: 30px;"><img src="<?php echo json_decode($row->qr_code)->result->qr; ?>"></td>
 	</tr>
 	<tr>
-		<td style="border:0.2px solid #000; font-size: 8px;text-align:center;width: 20%;"><?php echo $row->asset_tag; ?></td>
+		<td style="font-size: 8px;text-align:center;width: 20%;"><?php echo $row->asset_tag; ?></td>
+	</tr>
+	<tr>
+		<td style="font-size: 6px;text-align:center;width: 20%;font-weight:600;">DO NOT DETACH OR MUTILATE</td>
+	</tr>
+	<tr>
+		<td></td>
 	</tr>
 <?php endforeach; ?>
 </table>

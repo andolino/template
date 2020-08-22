@@ -70,10 +70,13 @@ $route['view-companies'] 				= 'Settings/view_companies';
 $route['view-models'] 				= 'Settings/view_models';
 $route['view-supplier'] 				= 'Settings/view_suppliers';
 $route['view-locations'] 				= 'Settings/view_locations';
+$route['view-departments'] 				= 'Settings/view_departments';
 $route['server-companies'] 	= 'Settings/server_companies';
 $route['server-models'] 	= 'Settings/server_models';
 $route['server-suppliers'] 	= 'Settings/server_suppliers';
 $route['server-locations'] 	= 'Settings/server_locations';
+$route['server-departments'] 	= 'Settings/server_departments';
+$route['get-departments-frm'] 	= 'Settings/getDepartmentsFrm';
 $route['get-companies-frm'] 	= 'Settings/getCompaniesFrm';
 $route['get-models-frm'] 	= 'Settings/getModelsFrm';
 $route['get-supplier-frm'] 	= 'Settings/getSupplierFrm';
@@ -88,6 +91,10 @@ $route['forgot-password'] 					  = 'Admin/forgot_password';
 $route['submit-login'] 								= 'Admin/proceed_login';
 $route['submit-forgot-pw'] 						= 'Admin/proceed_fg_pw';
 $route['print-asset-qr'] 						= 'Admin/printAssetQr';
+$route['view-office'] 						= 'Settings/view_office';
+$route['server-office'] 	= 'Settings/server_office';
+$route['get-office-frm'] 	= 'Settings/getOfficeFrm';
+
 
 
 
@@ -148,7 +155,6 @@ $route['view-users'] 						 	= 'Settings/view_users';
 $route['server-users'] 	= 'Settings/server_users';
 $route['server-signatory'] 	= 'Settings/server_signatory';
 $route['server-subsidiary'] 	= 'Settings/server_subsidiary';
-$route['server-office'] 	= 'Settings/server_office';
 $route['server-loan-type'] 	= 'Settings/server_loan_type';
 $route['server-benefit-type'] 	= 'Settings/server_benefit_type';
 
@@ -170,7 +176,6 @@ $route['save-contribution-rate'] 			= 'Settings/saveContributionRate';
 
 $route['get-signatory-frm'] 	= 'Settings/getSignatoryFrm';
 $route['get-subsidiary-frm'] 	= 'Settings/getSubsidiaryFrm';
-$route['get-office-frm'] 	= 'Settings/getOfficeFrm';
 $route['get-loan-types-frm'] 	= 'Settings/getLoanTypesFrm';
 $route['get-benefit-type-frm'] 	= 'Settings/getBenefiTypesFrm';
 
@@ -183,7 +188,6 @@ $route['get-frm-contribution-rate'] 	= 'Settings/getContributionRate';
 
 $route['view-signatory'] 					= 'Settings/view_signatory';	
 $route['view-subidiary'] 					= 'Settings/view_subidiary';	
-$route['view-office'] 						= 'Settings/view_office';
 $route['view-member-type'] 				= 'Settings/view_member_type';
 $route['view-civil-status'] 			= 'Settings/view_civil_status';
 $route['view-relationship-type'] 	= 'Settings/view_relationship_type';

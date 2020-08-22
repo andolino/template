@@ -21,12 +21,21 @@
   <div class="p-1">
     <div class="row">
       <div class="border col-12"><img src="<?php echo base_url() . 'assets/image/uploads/' . $uploads->image_name; ?>"></div>
-      <div class="border col-4">Name</div>
-      <div class="border col-8"><?php echo $data[0]->name; ?></div>
       <div class="border col-4">Asset Tag</div>
       <div class="border col-8"><?php echo $data[0]->asset_tag; ?></div>
-      <div class="border col-4">Purchase Cost</div>
-      <div class="border col-8"><?php echo $data[0]->purchase_cost; ?></div>
+      <div class="border col-4">Asset Name</div>
+      <div class="border col-8"><?php echo $data[0]->asset_name; ?></div>      
+      <div class="border col-4">Serial #</div>
+      <div class="border col-8"><?php echo $data[0]->serial; ?></div>
+      <div class="border col-4">Custodian</div>
+      <div class="border col-8"><?php echo $data[0]->screen_name; ?></div>
+      <div class="border col-4">Target</div>
+      <div class="border col-8"><?php echo $data[0]->default_location; ?></div>      
+      
+      
+      
+      
+      
     </div>
   </div>
 </body>

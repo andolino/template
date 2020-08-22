@@ -86,8 +86,9 @@
               <th>ADMIN</th>
               <th>ACTION</th>
               <th>ITEM</th>
-              <th>TARGET</th>
+              <th>CUSTODIAN</th>
               <th>TARGET LOCATION</th>
+              <th>SCANNED LOCATION</th>
             </tr>
           </thead>
           <tbody></tbody>

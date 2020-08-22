@@ -327,19 +327,23 @@ class Admin extends MY_Controller {
 		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
 		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
 		$params['users']     = $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$params['office']     = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['departments']     = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/create-asset', $params);	
 	}
 
 	public function edit_asset(){
-		$asset_id 			 		 = $this->input->get('data');
-		$params['dataAsset'] = $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
-		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
-		$params['models'] 	 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
-		$params['status'] 	 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
-		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
-		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
-		$params['uploads'] 	 = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
-		$params['users']     = $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$asset_id 			 		 		= $this->input->get('data');
+		$params['dataAsset'] 		= $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
+		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] 		= $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] 		= $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['uploads'] 	 		= $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$params['office']     	= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/edit-asset', $params);
 	}
 

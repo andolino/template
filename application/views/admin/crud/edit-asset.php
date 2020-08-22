@@ -104,11 +104,29 @@
 						  <option selected hidden value="">-SELECT-</option>
 						  <?php foreach ($locations as $row): ?>
 						  	<option value="<?php echo $row->id; ?>" <?php echo $dataAsset->location_id == $row->id ? 'selected' : ''; ?>><?php echo $row->name; ?></option>
-						  <?php endforeach; ?>-->
+						  <?php endforeach; ?>
 						</select> 
 					</div>
 					<div class="col-12 p-0 m-0"></div>
 					<div class="col-3 mt-2 rel-cont">
+						<label for="office_management_id" class="font-12">Office</label>
+						<select class="custom-select custom-select-sm font-12" id="office_management_id" name="office_management_id">
+						  <option selected hidden value="">-SELECT-</option>
+						  <?php foreach ($office as $row): ?>
+						  	<option value="<?php echo $row->office_management_id; ?>" <?php echo $dataAsset->office_management_id == $row->office_management_id ? 'selected' : ''; ?>><?php echo $row->office_name; ?></option>
+						  <?php endforeach; ?>
+						</select> 
+					</div>
+					<div class="col-3 mt-2 pl-0 rel-cont">
+						<label for="departments_id" class="font-12">Departments</label>
+						<select class="custom-select custom-select-sm font-12" id="departments_id" name="departments_id">
+						  <option selected hidden value="">-SELECT-</option>
+						  <?php foreach ($departments as $row): ?>
+						  	<option value="<?php echo $row->departments_id; ?>" <?php echo $dataAsset->departments_id == $row->departments_id ? 'selected' : ''; ?>><?php echo $row->region; ?></option>
+						  <?php endforeach; ?>
+						</select> 
+					</div>
+					<div class="col-3 mt-2 pl-0 rel-cont">
 						<label for="checkout_user_id" class="font-12">Checkout To:</label>
 						<select class="custom-select custom-select-sm font-12" id="checkout_user_id" name="checkout_user_id">
 						  <option selected hidden value="">-SELECT-</option>
@@ -117,7 +135,7 @@
 						  <?php endforeach; ?>
 						</select>
 					</div>
-					<div class="col-6 pl-0 mt-2">
+					<div class="col-6 mt-2">
 						<label for="notes" class="font-12">Notes</label>
 						<textarea class="form-control form-control-sm font-12" id="notes" name="notes"><?php echo $dataAsset->notes; ?></textarea>
 					</div>

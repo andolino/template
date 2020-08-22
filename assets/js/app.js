@@ -14,6 +14,8 @@ var tbl_models = [];
 var tbl_suppliers = [];
 var tbl_locations = [];
 var tbl_activity_logs = [];
+var tbl_departments = [];
+var tbl_office = [];
 
 $(document).ready(function() {
   //init plugin
@@ -87,6 +89,8 @@ $(document).ready(function() {
       initModelsDataTables();
       initSupplierDataTables();
       initLocationsDataTables();
+      initDepartmentsDataTables();
+      initOfficeDataTables();
 
     });    
   });
@@ -96,9 +100,8 @@ $(document).ready(function() {
   initUsersDataTables();
   initAssetRequestDataTables();
   initActivityLogsDataTables();
-
-
-
+  initDepartmentsDataTables();
+  initOfficeDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -390,7 +393,7 @@ function initActivityLogsDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4,5] 
+        targets              : [0,1,2,3,4,5,6] 
       }
     ],
     "serverSide"               : true,

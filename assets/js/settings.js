@@ -211,6 +211,42 @@ $(document).ready(function() {
             console.log('Fail');
       });
   });
+
+  $(document).on('submit', '#frm-office-settings', function(e) {
+    e.preventDefault();
+    var frm = $(this).serializeArray();
+    frm.push({name: 'tbl', value: 'office_management'});
+    frm.push({name: 'pk_key', value: 'office_management_id'});
+    frm.push({name: 'unique', value: 'office_code'});
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_office.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
   
   $(document).on('change', '.input-address-lat-lng', function(e) {
     var geocoder = new google.maps.Geocoder();
@@ -256,6 +292,42 @@ $(document).ready(function() {
             success: function(res){
               if (res.param3 == 'success') {
                 tbl_locations.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
+
+  $(document).on('submit', '#frm-departments-settings', function(e) {
+    e.preventDefault();
+    var frm = $(this).serializeArray();
+    frm.push({name: 'tbl', value: 'departments'});
+    frm.push({name: 'pk_key', value: 'departments_id'});
+    frm.push({name: 'unique', value: 'region'});
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_departments.ajax.reload();
               }
               Swal.fire(
                 res.param1,
@@ -496,6 +568,94 @@ function initLocationsDataTables(){
   });
 }
 
+function initDepartmentsDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_departments  = $("#tbl-departments-settings").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2] 
+      },
+      { 
+        className            : 'text-center', 
+        targets              : [2] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-departments',
+        "type"                 : 'POST',
+        // "data"                 : { 
+        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
+        //                       }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initOfficeDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_office  = $("#tbl-office-settings").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2] 
+      },
+      { 
+        className            : 'text-center', 
+        targets              : [2] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-office',
+        "type"                 : 'POST',
+        // "data"                 : { 
+        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
+        //                       }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
 function removeData(d){
   var id  = d.getAttribute('data-id');
   var tbl = d.getAttribute('data-tbl');
@@ -513,6 +673,8 @@ function removeData(d){
           tbl_models.ajax.reload();
           tbl_suppliers.ajax.reload();
           tbl_locations.ajax.reload();
+          tbl_departments.ajax.reload();
+          tbl_office.ajax.reload();
         });
       }, function(){
         console.log('Fail');

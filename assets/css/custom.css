@@ -377,12 +377,11 @@ table.dataTable thead tr th {
 
 .btn-panel-bar .btn {
   box-shadow: 0px 1px 8px 1px #aea6a6;
-  border-radius: 0;
-  border-top: 6px solid #80ad84;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-radius: 7px;
   padding-top: 20px;
   padding-bottom: 20px;
+  background: #6fa787;
+  color: #f0f0f0;
 }
 
 .btn-panel-bar img {

@@ -117,7 +117,7 @@ class Settings extends MY_Controller {
 	}
 
 	public function server_tbl_activity_logs(){
-		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted', 'lat', 'lng', 'address'], ['created_at' => 'desc']);
+		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted', 'lat', 'lng', 'address', 'target', 'default_location'], ['created_at' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
@@ -128,7 +128,8 @@ class Settings extends MY_Controller {
    		$data[] = $row->screen_name;
    		$data[] = $row->action_type;
    		$data[] = $row->asset_name;	
-   		$data[] = $row->target;	
+			$data[] = $row->target;	
+			$data[] = $row->default_location;	
    		$data[] = $row->address;	
 			$res[] = $data;
 		}
@@ -241,6 +242,54 @@ class Settings extends MY_Controller {
 		echo json_encode($output);
 	}
 
+	public function server_departments(){
+		$result 	= $this->Table->getOutput('departments', ['departments_id', 'region', 'short', 'place', 'entry_date', 'is_deleted'], ['departments_id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->region;
+   		$data[] = $row->place;
+ 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-departments-frm" data-id="'.$row->departments_id.'" data-title="EDIT - '.strtoupper($row->short).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="departments" data-field="departments_id" data-id="'.$row->departments_id.'"><i class="fas fa-trash"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
+	public function server_office(){
+		$result 	= $this->Table->getOutput('office_management', ['office_management_id', 'office_code', 'office_name', 'entry_date', 'is_deleted'], ['office_management_id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->office_code;
+   		$data[] = $row->office_name;
+ 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-office-frm" data-id="'.$row->office_management_id.'" data-title="EDIT - '.strtoupper($row->office_code).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="office_management" data-field="office_management_id" data-id="'.$row->office_management_id.'"><i class="fas fa-trash"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
 	public function getUsersFrm(){
 		$params['has_update'] = $this->input->post('id');
 		$params['data'] = $this->db->get_where('users', array('is_deleted' => 0, 'users_id' => $this->input->post('id')))->row();
@@ -274,6 +323,19 @@ class Settings extends MY_Controller {
 		$params['has_update'] = $this->input->post('id');
 		$params['data'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0,'id' => $this->input->post('id')))->row();
 		$this->load->view('admin/settings/forms/frm-locations', $params);
+	}
+
+	public function getDepartmentsFrm(){
+		$params['has_update'] = $this->input->post('id');
+		$params['data'] = $this->db->get_where('departments', array('is_deleted' => 0,'departments_id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-departments', $params);
+	}
+
+	public function getOfficeFrm(){
+		$params['has_update'] = $this->input->post('id');
+		$params['data'] = $this->db->get_where('office_management', array('is_deleted' => 0,'office_management_id' => $this->input->post('id')))->row();
+		$params['dataDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/forms/frm-office', $params);
 	}
 
 	public function saveUsersData(){
@@ -378,6 +440,16 @@ class Settings extends MY_Controller {
 	public function view_locations(){
 		$params['settDepartments'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
 		$this->load->view('admin/settings/view-locations', $params);
+	}
+
+	public function view_departments(){
+		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-departments', $params);
+	}
+
+	public function view_office(){
+		$params['settOffcMngmnt'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-office', $params);
 	}
 
 

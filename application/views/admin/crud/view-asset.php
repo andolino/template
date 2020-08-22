@@ -23,64 +23,76 @@
 										<img src="<?php echo $qrcode; ?>" alt="">
 						      </div>
 					      	<div class="col-12 p-0 m-0"></div>
-									<div class="col-6">
-						      	<label class="card-title font-12">STATUS</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">STATUS</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->status; ?> </p>
 						      </div>
-						      <div class="col-6">
-						      	<label class="card-title font-12">COMPANY</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">COMPANY</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->company; ?></p>
 						      </div>
-									<div class="col-6">
-						      	<label class="card-title font-12">ASSET NAME</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">ASSET NAME</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->asset_name; ?></p>
 						      </div>
-						      <div class="col-6">
-						      	<label class="card-title font-12">ASSET TAG</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">ASSET TAG</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->asset_tag; ?></p>
 						      </div>
-						      <div class="col-6">
-						      	<label class="card-title font-12">MODEL</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">CHECKOUT TO</label>
+						      	<p class="card-text font-12"><?php echo $data[0]->screen_name; ?></p>
+						      </div>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">MODEL</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->model; ?></p>
 						      </div>
-						      <div class="col-6">
-						      	<label class="card-title font-12">SERIAL</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">SERIAL</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->serial; ?></p>
 						      </div>
-						      <div class="col-6 mt-3">
-						      	<label class="card-title font-12">PURCHASED DATE</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">OFFICE</label>
+						      	<p class="card-text font-12"><?php echo $data[0]->office_name ?? '--'; ?></p>
+						      </div>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">DEPARTMENT</label>
+						      	<p class="card-text font-12"><?php echo $data[0]->region ?? '--'; ?></p>
+						      </div>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">PURCHASED DATE</label>
 						      	<p class="card-text font-12"><?php echo date('F j, Y', strtotime($data[0]->purchase_date)); ?></p>
 						      </div>
-						      <div class="col-6 mt-3">
-						      	<label class="card-title font-12">SUPPLIER</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">SUPPLIER</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->supplier; ?></p>
 						      </div>
-						      <div class="col-6 mt-3">
-						      	<label class="card-title font-12">ORDER NUMBER</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">ORDER NUMBER</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->order_number; ?></p>
 						      </div>
-						      <div class="col-6 mt-3">
-						      	<label class="card-title font-12">PURCHASE COST</label>
+						      <div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">PURCHASE COST</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->purchase_cost; ?></p>
 						      </div>
-									<div class="col-6 mt-3">
-						      	<label class="card-title font-12">WARRANTY MONTHS</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">WARRANTY MONTHS</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->warranty_months; ?></p>
 						      </div>
-									<div class="col-6 mt-3">
-						      	<label class="card-title font-12">DEFAULT LOCATION</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">DEFAULT LOCATION</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->default_location; ?></p>
 						      </div>
-									<div class="col-6 mt-3">
-						      	<label class="card-title font-12">NOTES</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">NOTES</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->notes; ?></p>
 						      </div>
-									<div class="col-6 mt-3">
-						      	<label class="card-title font-12">REQUESTED</label>
+									<div class="col-6 mb-2">
+						      	<label class="card-title font-12 mb-0">REQUESTED</label>
 						      	<p class="card-text font-12"><?php echo $data[0]->requestable == 1 ? 'YES' : 'NO'; ?></p>
 						      </div>
-									<div class="col-8 mt-3">
-						      	<label class="card-title font-12">IMAGE</label>
+									<div class="col-8">
+						      	<label class="card-title font-12 mb-0">IMAGE</label>
 						      	<img class="custom-image" src="<?php echo !empty($uploads) ? base_url() . 'assets/image/uploads/' . $uploads->image_name : base_url() . 'assets/image/misc/not-found.png'; ?>" alt="">
 						      </div>
 					      </div>
