@@ -1,14 +1,14 @@
 <div class="navbar bg-light custom-container none">
     <div class="row w-100">
-      <div class="col-3">
+      <div class="col-sm-3 mb-3">
         <div class="card text-left bg-info custom-dashboard text-light">
           <div class="card-body">
             <div class="row">
-              <div class="col-9">
+              <div class="col-8">
                 <h5 class="card-title"><?php echo $allAsset->count; ?></h5>
-                <p class="card-text text-white">Total Asset.</p>
+                <p class="card-text font-12 text-white">Total Asset.</p>
               </div>
-              <div class="col-3">
+              <div class="col-4">
                 <i class="fas fa-barcode"></i>
               </div>
             </div>
@@ -18,15 +18,15 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-3 mb-3">
         <div class="card text-left bg-primary custom-dashboard text-light">
           <div class="card-body">
             <div class="row">
-              <div class="col-9">
+              <div class="col-8">
                 <h5 class="card-title"><?php echo $allAsset1->count; ?></h5>
-                <p class="card-text text-white">Total Ready To Deploy.</p>
+                <p class="card-text font-12 text-white">Total Ready To Deploy.</p>
               </div>
-              <div class="col-3">
+              <div class="col-4">
                 <i class="fas fa-bookmark"></i>
               </div>
             </div>
@@ -36,15 +36,15 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-3 mb-3">
         <div class="card text-left bg-warning custom-dashboard text-light">
           <div class="card-body">
             <div class="row">
-              <div class="col-9">
+              <div class="col-8">
                 <h5 class="card-title"><?php echo $allAsset2->count; ?></h5>
-                <p class="card-text text-white">Total Dispatch.</p>
+                <p class="card-text font-12 text-white">Total Dispatch.</p>
               </div>
-              <div class="col-3">
+              <div class="col-4">
                 <i class="fas fa-truck pr-3"></i>
               </div>
             </div>
@@ -54,15 +54,15 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-3 mb-3">
         <div class="card text-left bg-success custom-dashboard text-light">
           <div class="card-body">
             <div class="row">
-              <div class="col-9">
+              <div class="col-8">
                 <h5 class="card-title"><?php echo $allAsset3->count; ?></h5>
-                <p class="card-text text-white">Total Deployed.</p>
+                <p class="card-text font-12 text-white">Total Deployed.</p>
               </div>
-              <div class="col-3">
+              <div class="col-4">
                 <i class="fas fa-check-circle"></i>
               </div>
             </div>

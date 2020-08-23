@@ -67,7 +67,7 @@ class Admin extends MY_Controller {
 			$errors['msg'] = $found;
 			$errors['redirect'] = base_url();
 			if ($this->session->userdata('redirects_url')) {
-			// 	redirect($this->session->redirects_url);
+				// redirect($this->session->redirects_url);
 				$errors['redirect'] = $this->session->redirects_url;
 			}
 
