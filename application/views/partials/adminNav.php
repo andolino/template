@@ -13,19 +13,22 @@
         <a href="<?php echo base_url(); ?>settings" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
       </li>
       <li>
+        <a href="<?php echo base_url(); ?>view-history"><i class="fas fa-tasks"></i> HISTORY</a>
+      </li>
+      <li>
         <a href="<?php echo base_url(); ?>asset-list"><i class="fas fa-tasks"></i> ALL ASSETS</a>
       </li>
       <li class="">
-				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-hand-holding-usd"></i> ASSET REQUEST</a>
+				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-tasks"></i> ASSET REQUEST</a>
 				<ul class="collapse list-unstyled" id="homeSubmenu">
 					<li>
-							<a href="<?php echo base_url(); ?>asset-ready-to-deploy">Asset Ready to Deploy</a>
+            <a href="<?php echo base_url(); ?>asset-ready-to-deploy">Asset Ready to Deploy</a>
 					</li>
 					<li>
-							<a href="<?php echo base_url(); ?>asset-dispatch">Asset Dispatch</a>
+            <a href="<?php echo base_url(); ?>asset-dispatch">Asset Dispatch</a>
 					</li>
 					<li>
-							<a href="<?php echo base_url(); ?>asset-deployed">Asset Deployed</a>
+            <a href="<?php echo base_url(); ?>asset-deployed">Asset Deployed</a>
 					</li>
 					<!-- <li>
 							<a href="<?php //echo base_url(); ?>loans-application">LOAN APPLICATION</a>

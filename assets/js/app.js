@@ -16,6 +16,7 @@ var tbl_locations = [];
 var tbl_activity_logs = [];
 var tbl_departments = [];
 var tbl_office = [];
+var tbl_history_logs = [];
 
 $(document).ready(function() {
   //init plugin
@@ -102,6 +103,7 @@ $(document).ready(function() {
   initActivityLogsDataTables();
   initDepartmentsDataTables();
   initOfficeDataTables();
+  initHistoryLogsDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -199,6 +201,42 @@ $(document).ready(function() {
 
   $(document).on('click', '#printAssetQr', function() {
     window.open('print-asset-qr');
+  });
+  
+  $(document).on('click', '#showMapGeo', function() {
+    $('#custom-modal').modal('show');
+    var lat = $(this).attr('data-lat');
+    var lng = $(this).attr('data-long');
+    $.ajax({
+      type: "POST",
+      url: "show-map-scanned",
+      data: {
+        'lat' : lat,
+        'lng' : lng
+      },
+      success: function (res) {
+        $('#custom-modal .modal-content').html(res);
+      }
+    });
+  });
+  
+  $(document).on('click', '#showScannedUser', function() {
+    $('#custom-modal').modal('show');
+    var code = $(this).attr('data-code');
+    var lat = $(this).attr('data-lat');
+    var lng = $(this).attr('data-long');
+    $.ajax({
+      type: "POST",
+      url: "show-scanned-user",
+      data: {
+        'code' : code,
+        'lat' : lat,
+        'lng' : lng
+      },
+      success: function (res) {
+        $('#custom-modal .modal-content').html(res);
+      }
+    });
   });
 
   $(document).on('submit', '#frm-upload-dp', function(e) {

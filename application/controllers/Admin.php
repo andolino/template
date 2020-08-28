@@ -92,7 +92,7 @@ class Admin extends MY_Controller {
 				// $from     	= "manage_account@cpfi-webapp.com";
 				$from    		 = "no-reply@cpfi-webapp.com";
 				$to    	 		 = strtolower($data->email);
-				$title    	 = "CPFI | Forgot Password";
+				$title    	 = "CBAM | Forgot Password";
 				$subject  	 = "Forgot Password";
 				$message     = "Dear ".strtoupper($data->screen_name).", <br><br> Your password has been reset. Please provide a new password by clicking on this link within the next 30 minutes: <a href=".base_url().'entry-new-password/'.$encUname.">Click here</a> <br><br> Thank you!";
 				$this->sendEmail($from, $to, $subject, $message, $title);
@@ -192,10 +192,29 @@ class Admin extends MY_Controller {
 		$asset_id 	  	 	 = $this->input->get('data');
 		$params['data'] 	 = $this->AdminMod->getAssetRecord($asset_id); 
 		$params['uploads'] = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
-		$url = $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
-		$jsonQrData = json_decode($url->qr_code);
-		$params['qrcode'] = $jsonQrData->result->qr;
+		$url 							 = $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
+		$jsonQrData 			 = json_decode($url->qr_code);
+		$params['qrcode']  = $jsonQrData->result->qr;
 		$this->load->view('admin/crud/view-asset', $params);
+	}
+	
+	public function view_asset_mobile(){
+		$asset_id 	  	 	  = $this->input->get('data');
+		$params['data'] 	  = $this->AdminMod->getAssetRecord($asset_id); 
+		$params['uploads']  = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$url 							  = $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
+		$jsonQrData 			  = json_decode($url->qr_code);
+		$params['qrcode']   = $jsonQrData->result->qr;
+		// $this->load->view('admin/crud/view-asset', $params);
+		$params['heading']  = "ASSET VIEW"; 
+		$params['is_admin'] = $this->session->users_id; 
+		$this->adminContainer('admin/crud/view-asset', $params);
+	}
+
+	public function view_history(){
+		$asset_id 	  	 	 = $this->input->get('data');
+		$params['heading']  = "HISTORY VIEW"; 
+		$this->adminContainer('admin/crud/view-history', $params);
 	}
 
 	public function server_tbl_asset(){
@@ -393,18 +412,23 @@ class Admin extends MY_Controller {
 			*/
 			if ($isForUpdate) {
 				$dataField['updated_at'] = date('Y-m-d');
+				$prev_history = $this->db->query("SELECT th.id, th.created_at, th.current_custodian_id, th.current_location_id 
+																					FROM tbl_history th 
+																					WHERE th.asset_id = " . $updateID . " ORDER BY th.id desc LIMIT 1")->row();
 				$this->db->update('tbl_asset', $dataField, array('id'=>$updateID));
 				$errors['id'] = $updateID;
 				$this->upload_const_dp($updateID);
-				//save logs
-				$this->save_action_logs(array(
+				//save history logs
+				$this->save_history_logs(array(
+					'asset_id' => $updateID,
+					'current_custodian_id' => $this->input->post('checkout_user_id'),
+					'current_location_id' => $this->input->post('location_id'),
+					'previous_custodian_id' => $prev_history->current_custodian_id,
+					'previous_location_id' => $prev_history->current_location_id,
+					'description' => 'update',
 					'user_id' => $this->session->users_id,
-					'action_type' => 'update',
-					// 'target_id' => $updateID,
-					'target_type' => 'asset',
-					'item_type' =>  'Asset',
-					'item_id' =>  $updateID,
-					'created_at' => date('Y-m-d')
+					'created_at' => $prev_history->created_at,
+					'updated_at' => date('Y-m-d H:i:s')
 				));
 			} else {
 				$dataField['created_at'] = date('Y-m-d');
@@ -412,19 +436,16 @@ class Admin extends MY_Controller {
 				$errors['id'] = $this->db->insert_id();
 				$this->upload_const_dp($errors['id']);
 				$this->generateQR($errors['id']);
-				//save logs
-				$this->save_action_logs(array(
+				//save history logs
+				$this->save_history_logs(array(
+					'asset_id' => $errors['id'],
+					'current_custodian_id' => $this->input->post('checkout_user_id'),
+					'current_location_id' => $this->input->post('location_id'),
+					'description' => 'create',
 					'user_id' => $this->session->users_id,
-					'action_type' => 'create',
-					'target_id' => $errors['id'],
-					'target_type' => 'asset',
-					'item_type' =>  'Asset',
-					'item_id' =>  $updateID,
-					'created_at' => date('Y-m-d')
+					'created_at' => date('Y-m-d H:i:s')
 				));
 			}
-			
-			
 			
 		}
 		echo json_encode($errors);
@@ -543,16 +564,17 @@ class Admin extends MY_Controller {
 		  redirect('login');
 		}
 		$logedUser = $this->db->get_where('users', array('users_id' => $this->session->users_id))->row();
-		// echo '<pre>';
-		// echo json_encode($this->session, JSON_PRETTY_PRINT);
-		// echo '</pre>';
-		$params['data']=$res;
-		$params['uploads']=$this->db->get_where('tbl_uploads', array('asset_id' => $dec_un))->row();
-		$this->load->view('admin/asset-mobile-view', $params);
+		if ($logedUser->level == 0) {
+			redirect(base_url() . 'mobile-view-asset?data=' . $dec_un);
+		} else {
+			$params['data']=$res;
+			$params['uploads']=$this->db->get_where('tbl_uploads', array('asset_id' => $dec_un))->row();
+			$this->load->view('admin/asset-mobile-view', $params);
+		}
 	}
 
 	public function printAssetQr(){
-		$params['data'] = $this->db->query('SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id')->result();
+		$params['data'] = $this->db->query('SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.is_deleted = 0')->result();
 		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
 		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
 	}
@@ -564,50 +586,57 @@ class Admin extends MY_Controller {
 	}
 
 	public function saveCreatedQr(){
-    // Test WebHook and show post params
-    error_log("Fired WebHook");
-    // show Post Parameter
-    foreach ($_POST as $param_name => $param_val) {
-        error_log("$param_name: $param_val");
-    }
-    // show Get Parameter
-    foreach ($_GET as $param_name => $param_val) {
-        error_log("$param_name: $param_val");
-    }
-    // if JSON is submitted
+		// Webhook
+		// if JSON is submitted
 		$json = json_decode(file_get_contents('php://input'));
-
-		$qrData = $this->db->get_where('tbl_qrcodes', array('code' => $_POST['code']))->row();
-		$address = $this->getaddress($_POST['lat'], $_POST['lng']);
+		$qrData = $this->db->get_where('tbl_qrcodes', array('code' => $this->input->post('code')))->row();
+		$address = $this->getaddress($this->input->post('lat'), $this->input->post('lng'));
 		$this->db->insert('tbl_gps', array(
 																	'asset_id' 		=> $qrData->asset_id,
-																	'event' 			=> $_POST['event'], 
-																	'timestamp' 	=> $_POST['timestamp'], 
-																	'redirects' 	=> $_POST['redirects'], 
-																	'visitors' 		=> $_POST['visitors'], 
-																	'device' 			=> $_POST['device'], 
-																	'os' 					=> $_POST['os'], 
-																	'country' 		=> $_POST['country'], 
-																	'lng' 				=> $_POST['lng'], 
-																	'lat' 				=> $_POST['lat'], 
-																	'user' 				=> $_POST['user'], 
-																	'email' 			=> $_POST['email'], 
-																	'mobile' 			=> $_POST['mobile'], 
-																	'type' 				=> $_POST['type'], 
-																	'code' 				=> $_POST['code'], 
-																	'secrettoken' => $_POST['secrettoken'],
-																	'address' 	  => $address->results[0]->formatted_address//$address->result->formatted_address
+																	'event' 			=> $this->input->post('event'), 
+																	'timestamp' 	=> $this->input->post('timestamp'), 
+																	'redirects' 	=> $this->input->post('redirects'), 
+																	'visitors' 		=> $this->input->post('visitors'), 
+																	'device' 			=> $this->input->post('device'), 
+																	'os' 					=> $this->input->post('os'), 
+																	'country' 		=> $this->input->post('country'), 
+																	'lng' 				=> $this->input->post('lng'), 
+																	'lat' 				=> $this->input->post('lat'), 
+																	'user' 				=> $this->input->post('user'), 
+																	'email' 			=> $this->input->post('email'), 
+																	'mobile' 			=> $this->input->post('mobile'), 
+																	'type' 				=> $this->input->post('type'), 
+																	'code' 				=> $this->input->post('code'), 
+																	'secrettoken' => $this->input->post('secrettoken'),
+																	'address' 	  => $address->results[0]->formatted_address //$address->result->formatted_address
 																));
 
-		$this->save_action_logs(array(
-			'user_id' 			=> $this->session->users_id,
-			'action_type' 	=> 'scanned asset',
-			'target_id' 		=> $qrData->asset_id,
-			'target_type' 	=> 'asset',
-			// 'item_type' 	=>  'Asset',
-			// 'item_id' 		=>  $updateID,
-			'created_at' 		=> date('Y-m-d')
-		));
+		$asset_data = $this->db->query("SELECT * FROM tbl_asset ta left join tbl_locations tl on ta.location_id = tl.id WHERE ta.id = ".$qrData->asset_id)->row();																
+		$distance_diff = $this->getDistanceBetweenPoints($_POST['lat'], $_POST['lng'], $asset_data->lat, $asset_data->lng);
+		//if distance from near location is less than 100 meters
+		if ($distance_diff['meters'] <= 100) {	
+			$this->db->update('tbl_asset', array('status_id' => 4), array('id' => $qrData->asset_id));
+			$this->save_action_logs(array(
+				'user_id' 			=> $this->session->users_id,
+				'action_type' 	=> 'scanned asset to deploy',
+				'target_id' 		=> $qrData->asset_id,
+				'target_type' 	=> 'asset',
+				// 'item_type' 	=>  'Asset',
+				// 'item_id' 		=>  $updateID,
+				'created_at' 		=> date('Y-m-d H:i:s')
+			));
+		} else {
+			$this->db->update('tbl_asset', array('status_id' => 3), array('id' => $qrData->asset_id));
+			$this->save_action_logs(array(
+				'user_id' 			=> $this->session->users_id,
+				'action_type' 	=> 'scanned asset to dispatch',
+				'target_id' 		=> $qrData->asset_id,
+				'target_type' 	=> 'asset',
+				// 'item_type' 	=>  'Asset',
+				// 'item_id' 		=>  $updateID,
+				'created_at' 		=> date('Y-m-d H:i:s')
+			));
+		}
 
 	}
 
