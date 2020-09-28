@@ -45,6 +45,7 @@
 </table> -->
 <!-- <h4>OFFICIAL RECEIPT</h4> -->
 <?php foreach ($data as $row): ?>
+<<<<<<< HEAD
 
 
 <div class="container">
@@ -90,6 +91,14 @@
 	</tr>
 	<tr>
 		<td style="line-heigh:-50;"><p style="font-size: 6px;font-weight:600;text-align:center;height: 10px;"><?php echo $row->asset_tag; ?></p></td>
+=======
+<table cellpadding="0">
+	<tr>
+		<td style="font-size: 8px;width: 80.4px;height: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;<img width="60" style="margin-left:20px;" src="<?php echo json_decode($row->qr_code)->result->qr; ?>"></td>
+	</tr>
+	<tr>
+		<td style="line-heigh:-20;"><p style="font-size: 6px;font-weight:600;text-align:center;height: 10px;"><?php echo $row->asset_tag; ?></p></td>
+>>>>>>> cb9196cbe724bf24d7b462ccb259a3704235782a
 	</tr>
 	<tr>
 		<td style="font-size: 4px;font-weight:600;text-align:center;height: 9px;font-weight:600;">DO NOT DETACH OR MUTILATE</td>
@@ -98,10 +107,17 @@
 		<td></td>
 	</tr>
 </table>
+<<<<<<< HEAD
 
 -->
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br>
+=======
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
+>>>>>>> cb9196cbe724bf24d7b462ccb259a3704235782a
 <?php endforeach; ?>
