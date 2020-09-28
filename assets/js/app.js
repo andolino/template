@@ -200,7 +200,22 @@ $(document).ready(function() {
   });
 
   $(document).on('click', '#printAssetQr', function() {
-    window.open('print-asset-qr');
+    var d = [];
+    $.each($('.chk-const-list-tbl'), function (i, el) { 
+      if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    });
+    var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    console.log(myNewD);
+    $.ajax({
+      type: "POST",
+      url: "get-chkd-asset",
+      data: {'data': myNewD},
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-asset-qr/'+res.data);
+      }
+    });
+
   });
   
   $(document).on('click', '#showMapGeo', function() {
@@ -220,6 +235,29 @@ $(document).ready(function() {
     });
   });
   
+  $(document).on('click', '#chk-const-list-tbl-all', function(e) {
+    var rows = tbl_asset.rows({ 'search': 'applied' }).nodes();
+    $('input[type="checkbox"]', rows).prop('checked', this.checked); 
+    if ($(this).is(':checked')) {
+      $('#printAssetQr').removeAttr('disabled');
+    } else {
+      $('#printAssetQr').prop('disabled', true);
+    }
+  });
+  
+  var dTlChkl = []; 
+  $(document).on('click', '#chk-const-list-tbl', function(e) {
+    $.each($('.chk-const-list-tbl'), function(i, el) {
+      dTlChkl[i]=$(el).is(':checked').toString();
+    });
+    if ($.inArray('true', dTlChkl) !== -1) {
+      $('#printAssetQr').removeAttr('disabled');
+    } else {
+      $('#printAssetQr').prop('disabled', true);
+    }
+    console.log(dTlChkl);
+  });
+
   $(document).on('click', '#showScannedUser', function() {
     $('#custom-modal').modal('show');
     var code = $(this).attr('data-code');

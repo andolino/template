@@ -226,7 +226,7 @@ class Admin extends MY_Controller {
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = '<input type="checkbox" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
+   		$data[] = '<input type="checkbox" class="chk-const-list-tbl" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
    		$data[] = $row->asset_name;
    		$data[] = $row->asset_tag;
    		$data[] = $row->model;
@@ -512,10 +512,14 @@ class Admin extends MY_Controller {
 		// echo json_encode($data);
 	}
 
-
 	public function deleteAsset(){
 		$asset_id = $this->input->post('id');
 		$this->db->update('tbl_asset', array('is_deleted' => '1'), array('id' => $asset_id));
+	}	
+	
+	public function getChkdAsset(){
+		$arr_asset_id = $this->input->post('data');
+		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
 	}
 
 	public function updateData(){
@@ -574,7 +578,12 @@ class Admin extends MY_Controller {
 	}
 
 	public function printAssetQr(){
-		$params['data'] = $this->db->query('SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.is_deleted = 0')->result();
+		$arr_asset_id = $this->uri->segment(2);
+		$enc_ai = $this->encdec($arr_asset_id, 'd');
+		$data = json_decode($enc_ai);
+		$data = implode(',',$data);
+		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
+		$this->output->enable_profiler(true);
 		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
 		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
 	}

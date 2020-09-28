@@ -35,19 +35,23 @@
 	</tr>
 </table> -->
 <!-- <h4>OFFICIAL RECEIPT</h4> -->
-<table cellpadding="0">
 <?php foreach ($data as $row): ?>
+<table cellpadding="0">
 	<tr>
-		<td style="border:0.2px solid #000; font-size: 8px;width: 302.4px;height: 170px;"><img width="302.4px" src="<?php echo json_decode($row->qr_code)->result->qr; ?>"></td>
+		<td style="font-size: 8px;width: 80.4px;height: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;<img width="60" style="margin-left:20px;" src="<?php echo json_decode($row->qr_code)->result->qr; ?>"></td>
 	</tr>
 	<tr>
-		<td style="font-size: 8px;text-align:center;height: 10px;"><?php echo $row->asset_tag; ?></td>
+		<td style="line-heigh:-20;"><p style="font-size: 6px;font-weight:600;text-align:center;height: 10px;"><?php echo $row->asset_tag; ?></p></td>
 	</tr>
 	<tr>
-		<td style="font-size: 6px;text-align:center;height: 9px;font-weight:600;">DO NOT DETACH OR MUTILATE</td>
+		<td style="font-size: 4px;font-weight:600;text-align:center;height: 9px;font-weight:600;">DO NOT DETACH OR MUTILATE</td>
 	</tr>
 	<tr>
 		<td></td>
 	</tr>
-<?php endforeach; ?>
 </table>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
+<?php endforeach; ?>
