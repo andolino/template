@@ -82,17 +82,26 @@
         <table class="table table-sm font-12" id="tbl-activity-logs">
           <thead>
             <tr>
-              <th>DATE</th>
-              <th>USER ACTION</th>
+              <th>DATE/TIME</th>
+              <th>USER</th>
               <th>ACTION</th>
               <th>ITEM</th>
               <th>CUSTODIAN</th>
               <th>TARGET LOCATION</th>
-              <th>SCANNED LOCATION</th>
+              <!-- <th>SCANNED LOCATION</th> -->
+              <th>ACTION</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
+
+
+        <br>
+
+        
+
+        <!-- &zoom=12&icon=http://mbyongson.qrd.by/img/littleone.png -->
+
       </div>
 
     </div>

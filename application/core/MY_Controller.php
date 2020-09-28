@@ -208,5 +208,22 @@ class MY_Controller extends CI_Controller{
 		public function save_action_logs($data){
 			return $this->db->insert('tbl_action_logs', $data);
 		}
+		
+		public function save_history_logs($data){
+			return $this->db->insert('tbl_history', $data);
+		}
+        
+		public function getDistanceBetweenPoints($lat1, $lon1, $lat2, $lon2) {
+			$theta 			= $lon1 - $lon2;
+			$miles 			= (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+			$miles 			= acos($miles);
+			$miles 			= rad2deg($miles);
+			$miles 			= $miles * 60 * 1.1515;
+			$feet	 			= $miles * 5280;
+			$yards 			= $feet / 3;
+			$kilometers = $miles * 1.609344;
+			$meters 		= $kilometers * 1000;
+			return compact('miles','feet','yards','kilometers','meters'); 
+		}
 
 }

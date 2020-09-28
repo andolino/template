@@ -16,6 +16,7 @@ var tbl_locations = [];
 var tbl_activity_logs = [];
 var tbl_departments = [];
 var tbl_office = [];
+var tbl_history_logs = [];
 
 $(document).ready(function() {
   //init plugin
@@ -102,6 +103,7 @@ $(document).ready(function() {
   initActivityLogsDataTables();
   initDepartmentsDataTables();
   initOfficeDataTables();
+  initHistoryLogsDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -198,7 +200,81 @@ $(document).ready(function() {
   });
 
   $(document).on('click', '#printAssetQr', function() {
-    window.open('print-asset-qr');
+    var d = [];
+    $.each($('.chk-const-list-tbl'), function (i, el) { 
+      if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    });
+    var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    console.log(myNewD);
+    $.ajax({
+      type: "POST",
+      url: "get-chkd-asset",
+      data: {'data': myNewD},
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-asset-qr/'+res.data);
+      }
+    });
+
+  });
+  
+  $(document).on('click', '#showMapGeo', function() {
+    $('#custom-modal').modal('show');
+    var lat = $(this).attr('data-lat');
+    var lng = $(this).attr('data-long');
+    $.ajax({
+      type: "POST",
+      url: "show-map-scanned",
+      data: {
+        'lat' : lat,
+        'lng' : lng
+      },
+      success: function (res) {
+        $('#custom-modal .modal-content').html(res);
+      }
+    });
+  });
+  
+  $(document).on('click', '#chk-const-list-tbl-all', function(e) {
+    var rows = tbl_asset.rows({ 'search': 'applied' }).nodes();
+    $('input[type="checkbox"]', rows).prop('checked', this.checked); 
+    if ($(this).is(':checked')) {
+      $('#printAssetQr').removeAttr('disabled');
+    } else {
+      $('#printAssetQr').prop('disabled', true);
+    }
+  });
+  
+  var dTlChkl = []; 
+  $(document).on('click', '#chk-const-list-tbl', function(e) {
+    $.each($('.chk-const-list-tbl'), function(i, el) {
+      dTlChkl[i]=$(el).is(':checked').toString();
+    });
+    if ($.inArray('true', dTlChkl) !== -1) {
+      $('#printAssetQr').removeAttr('disabled');
+    } else {
+      $('#printAssetQr').prop('disabled', true);
+    }
+    console.log(dTlChkl);
+  });
+
+  $(document).on('click', '#showScannedUser', function() {
+    $('#custom-modal').modal('show');
+    var code = $(this).attr('data-code');
+    var lat = $(this).attr('data-lat');
+    var lng = $(this).attr('data-long');
+    $.ajax({
+      type: "POST",
+      url: "show-scanned-user",
+      data: {
+        'code' : code,
+        'lat' : lat,
+        'lng' : lng
+      },
+      success: function (res) {
+        $('#custom-modal .modal-content').html(res);
+      }
+    });
   });
 
   $(document).on('submit', '#frm-upload-dp', function(e) {
@@ -316,11 +392,16 @@ function initMembersDataTables(){
         searchPlaceholder      : 'Search...',
         lengthMenu             : '_MENU_'       
     },
+    "order": [[1, 'asc']],
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4,5,6,7,8,9,10,11,12,13] 
-      }
+        targets              : [0,13]
+      },
+      { 
+        visible              : false, 
+        targets              : [3,9]
+      },
     ],
     "serverSide"               : true,
     // "processing"               : true,

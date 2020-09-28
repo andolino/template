@@ -57,6 +57,8 @@ $route['asset-deployed'] 					= 'Admin/asset_deployed';
 $route['settings'] 								 		= 'Admin/show_settings';
 $route['add-asset'] 							= 'Admin/add_asset';
 $route['view-asset'] 						= 'Admin/view_asset';
+$route['view-history'] 						= 'Admin/view_history';
+$route['mobile-view-asset'] 						= 'Admin/view_asset_mobile';
 $route['edit-asset'] 						= 'Admin/edit_asset';
 $route['server-tbl-asset'] 			= 'Admin/server_tbl_asset';
 $route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
@@ -90,10 +92,14 @@ $route['login'] 											= 'Admin/usr_login';
 $route['forgot-password'] 					  = 'Admin/forgot_password';
 $route['submit-login'] 								= 'Admin/proceed_login';
 $route['submit-forgot-pw'] 						= 'Admin/proceed_fg_pw';
-$route['print-asset-qr'] 						= 'Admin/printAssetQr';
+$route['print-asset-qr/(:any)'] 						= 'Admin/printAssetQr';
 $route['view-office'] 						= 'Settings/view_office';
 $route['server-office'] 	= 'Settings/server_office';
+$route['server-history'] 	= 'Settings/server_history';
 $route['get-office-frm'] 	= 'Settings/getOfficeFrm';
+$route['show-map-scanned'] 	= 'Settings/showMapScanned';
+$route['show-scanned-user'] 	= 'Settings/showScannedUser';
+$route['get-chkd-asset'] 	= 'Admin/getChkdAsset';
 
 
 

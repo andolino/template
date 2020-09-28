@@ -117,20 +117,23 @@ class Settings extends MY_Controller {
 	}
 
 	public function server_tbl_activity_logs(){
-		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 'target_type', 'is_deleted', 'lat', 'lng', 'address', 'target', 'default_location'], ['created_at' => 'desc']);
+		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 
+																														'target_type', 'is_deleted', 'lat', 'lng', 'address', 'target', 
+																														'default_location', 'scanned_lat', 'scanned_lng', 'code'], ['created_at' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = date('Y-m-d', strtotime($row->created_at));
+   		$data[] = date('Y-m-d H:m:s A', strtotime($row->created_at));
    		$data[] = $row->screen_name;
    		$data[] = $row->action_type;
    		$data[] = $row->asset_name;	
 			$data[] = $row->target;	
-			$data[] = $row->default_location;	
-   		$data[] = $row->address;	
+			$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->lat.'" data-long="'.$row->lng.'" >'.$row->default_location.'</a>';	
+   		// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
+   		$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showScannedUser" data-code="'.$row->code.'" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'">SCANNED USER</a>';	;	
 			$res[] = $data;
 		}
 
@@ -289,6 +292,39 @@ class Settings extends MY_Controller {
 
 		echo json_encode($output);
 	}
+	
+
+	public function server_history(){
+		$result 	= $this->Table->getOutput('v_history_logs', ['id', 'description', 'asset_tag', 'current_custodian', 
+																													'previous_custodian', 'current_location', 'previous_location', 
+																													'created_at', 'updated_at', 'is_deleted'], ['id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->id;
+   		$data[] = $row->description;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->current_custodian;
+   		$data[] = $row->previous_custodian;
+   		$data[] = $row->current_location;
+   		$data[] = $row->previous_location;
+   		$data[] = $row->created_at;
+   		$data[] = $row->updated_at;
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
 
 	public function getUsersFrm(){
 		$params['has_update'] = $this->input->post('id');
@@ -336,6 +372,19 @@ class Settings extends MY_Controller {
 		$params['data'] = $this->db->get_where('office_management', array('is_deleted' => 0,'office_management_id' => $this->input->post('id')))->row();
 		$params['dataDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/settings/forms/frm-office', $params);
+	}
+	
+	public function showMapScanned(){
+		$params['lat'] = $this->input->post('lat');
+		$params['lng'] = $this->input->post('lng');
+		$this->load->view('admin/crud/show-map', $params);
+	}
+	
+	public function showScannedUser(){
+		$params['code'] = $this->input->post('code');
+		$params['lat'] = $this->input->post('lat');
+		$params['lng'] = $this->input->post('lng');
+		$this->load->view('admin/crud/show-scanned', $params);
 	}
 
 	public function saveUsersData(){

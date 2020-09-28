@@ -387,7 +387,7 @@ class AdminMod extends CI_Model {
     $pdf->pixelsToUnits(8);
     $pdf->setPrintHeader(false);
     // $pdf->setPrintFooter(false);
-    $pdf->SetMargins(10, 5, 10, true);
+    $pdf->SetMargins(17, 5, 10, true);
     $pdf->AddPage($orientation);
     $pdf->SetAutoPageBreak(TRUE, 20);
     $pdf->SetFont($font_fam, '', 12, false);
@@ -1209,6 +1209,8 @@ class AdminMod extends CI_Model {
 	public function getOfficialReceipt($id){
 		return $this->db->query("SELECT * FROM v_official_receipt where official_receipt_id = $id")->row();
 	}
+
+	
 
 
 }
