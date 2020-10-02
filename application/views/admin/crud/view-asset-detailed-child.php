@@ -1,7 +1,8 @@
 <div class="cont-view-member row <?php echo !empty($is_admin) ? "" : "none"; ?>">
 	<div class="offset-6 col-1 pl-5">
-		<a href="javascript:void(0);" class="pr-2 pb-2" id="loadPage" data-link="tbl-asset" data-badge-head="ASSET LIST"
-   								data-cls="cont-tbl-constituent" data-placement="top" data-toggle="tooltip" title="Back to List"><i class="fas fa-times"></i></a>
+		<a href="javascript:void(0);" class="pr-2 pb-2" id="loadPage" data-link="view-child-asset" data-ind="<?php echo !empty($data) ? $data[0]->tbl_asset_id : ''; ?>" 
+										data-badge-head="<?php echo !empty($curr_badge) ? $curr_badge : ''; ?>"
+   								data-cls="cont-view-member" data-placement="top" data-toggle="tooltip" title="Back to List"><i class="fas fa-times"></i></a>
 	</div>
 	<div class="col-sm-10">
 			<div class="row">
@@ -15,12 +16,14 @@
 						<div class="card">
 					    <div class="card-body">
 					      <div class="row">
-					      	<div class="col-12">
-						      	<label class="card-title font-12">SCAN HERE</label>
-						      </div>
-									<div class="col-12 m-0 p-0">
-										<img src="<?php echo $qrcode; ?>" alt="">
-						      </div>
+									<?php if(!empty($qrcode)): ?>
+										<div class="col-12">
+											<label class="card-title font-12">SCAN HERE</label>
+										</div>
+										<div class="col-12 m-0 p-0">
+											<img src="<?php echo $qrcode; ?>" alt="">
+										</div>
+									<?php endif; ?>
 					      	<div class="col-12 p-0 m-0"></div>
 									<div class="col-6 mb-2">
 						      	<label class="card-title font-12 mb-0">STATUS</label>

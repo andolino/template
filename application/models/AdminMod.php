@@ -9,6 +9,12 @@ class AdminMod extends CI_Model {
 	var $tblAssetCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
 																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
 	var $tblAssetOrder = array('id' => 'desc');
+	
+	//ASSET CHILD
+	var $tblAssetChild = 'v_asset_child';
+	var $tblAssetChildCollumn = array('id', 'tbl_asset_id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
+																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
+	var $tblAssetChildOrder = array('id' => 'desc');
 
 	//ASSET READY TO DEPLOY
 	var $tblAssetRequest = 'v_asset';
@@ -103,6 +109,56 @@ class AdminMod extends CI_Model {
 
 	public function count_filter_asset(){
 		$this->_que_tbl_asset();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+	
+	//ASSET CHILD OBJECT
+	private function _que_tbl_asset_child(){
+		$this->db->from($this->tblAssetChild);
+		$this->db->where('is_deleted', '0');
+		$this->db->where('tbl_asset_id', $this->input->post('tbl_asset_id'));
+		$i = 0;
+		foreach ($this->tblAssetChildCollumn as $item) {
+			if (!empty($_POST['search']['value'])) {
+				if ($i === 0) {
+					$this->db->where('is_deleted', '0');
+					$this->db->like($item, strtolower($_POST['search']['value']));
+					$this->db->where('tbl_asset_id', $this->input->post('tbl_asset_id'));
+				} else {
+					$this->db->where('is_deleted', '0');
+					$this->db->or_like($item, strtolower($_POST['search']['value']));
+					$this->db->where('tbl_asset_id', $this->input->post('tbl_asset_id'));
+				}
+			}
+			$column[$i] = $item;
+			$i++;
+		}
+		if (isset($_POST['order'])) {
+			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+		}elseif($this->tblAssetChildOrder){
+			$order = $this->tblAssetChildOrder;
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+		$this->db->order_by('id', 'DESC');
+	}
+
+	public function get_output_asset_child(){
+		$this->_que_tbl_asset_child();
+		if (!empty($_POST['length']))
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function count_all_asset_child(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblAssetChild);
+		return $this->db->count_all_results();
+	}
+
+	public function count_filter_asset_child(){
+		$this->_que_tbl_asset_child();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -499,8 +555,13 @@ class AdminMod extends CI_Model {
   }
 	
 	public function getAssetRecord($id){
-  	$q = $this->db->query("SELECT * from v_asset vm
-														WHERE vm.id = $id");
+		$q = $this->db->query("SELECT * from v_asset vm
+													WHERE vm.id = $id");
+  	return $q->result();
+  }
+	public function getAssetRecordChild($id){
+		$q = $this->db->query("SELECT * from v_asset_child vm
+													WHERE vm.id = $id");
   	return $q->result();
   }
 

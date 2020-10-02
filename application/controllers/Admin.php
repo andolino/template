@@ -9,10 +9,10 @@ class Admin extends MY_Controller {
 
 	public function index(){
 		$params['heading'] = 'CBAM-ERS DASHBOARD';
-		$params['allAsset'] = $this->db->query("SELECT count(*) as count from tbl_asset a1")->row();
-		$params['allAsset1'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 2")->row();
-		$params['allAsset2'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 3")->row();
-		$params['allAsset3'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 4")->row();
+		$params['allAsset'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.is_deleted = 0")->row();
+		$params['allAsset1'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 2 AND a1.is_deleted = 0")->row();
+		$params['allAsset2'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 3 AND a1.is_deleted = 0")->row();
+		$params['allAsset3'] = $this->db->query("SELECT count(*) as count from tbl_asset a1 where a1.status_id = 4 AND a1.is_deleted = 0")->row();
 		$this->adminContainer('admin/index', $params);
 	}
 
@@ -57,8 +57,9 @@ class Admin extends MY_Controller {
 				$found = password_verify($password, $database_password) ? 'success' : 'failed';
 				// store info in session
 				$userdata = array(
-					'username'  => $username,
-					'users_id' => $q->row()->users_id
+					'username' => $username,
+					'users_id' => $q->row()->users_id,
+					'level'		 => $q->row()->level
 				);
 				$this->session->set_userdata($userdata);
 			} else {
@@ -104,7 +105,7 @@ class Admin extends MY_Controller {
 		}
 		echo json_encode($errors);
 	}
-
+	
 	public function submit_new_password(){
 		$this->form_validation->set_rules('new-password', 'New Password', 'required');
 		$this->form_validation->set_rules('re-new-password', 'Re-Enter New Password', 'required|matches[new-password]');
@@ -120,6 +121,99 @@ class Admin extends MY_Controller {
 			$errors['msg'] = 'success';
 		}
 		echo json_encode($errors);
+	}
+	
+	public function submit_admin_new_password(){
+		$rules = array(
+			[
+				'field' => 'curr_password',
+				'label' => 'Current Password',
+				'rules' => 'required'
+			],
+			[
+				'field' => 'password',
+				'label' => 'Password',
+				'rules' => 'required|callback_valid_password'
+			],
+			[
+				'field' => 'new_password',
+				'label' => 'New Password',
+				'rules' => 'required|matches[password]|callback_valid_password'
+			],
+		);
+		$this->form_validation->set_rules($rules);
+		// $this->form_validation->set_rules('new-password', 'New Password', 'required');
+		// $this->form_validation->set_rules('re-new-password', 'Re-Enter New Password', 'required|matches[new-password]');
+		$errors 				 = array();
+		if ($this->form_validation->run() == FALSE) {
+			$errors 			 = $this->form_validation->error_array();
+			$errors['msg'] = 'failed';
+		} else {
+			$un     			 = $this->uri->segment(2);
+			$curr_password 		 = $this->input->post('curr_password');
+			$users = $this->db->get_where('users', array('txt_password'=>$curr_password))->row();
+			if (!empty($users)) {
+				$password 		 = $this->input->post('new_password');
+				$hashed_pw 	 	 = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
+				$this->db->update('users', array('password' => $hashed_pw, 'txt_password' => $this->input->post('new_password')), array('users_id' => $this->session->users_id));
+				$errors['msg'] = 'success';
+			} else {
+				$errors['msg'] = 'failed';
+			}
+		}
+		echo json_encode($errors);
+	}
+
+	public function valid_password($password = ''){
+		$password = trim($password);
+
+		$regex_lowercase = '/[a-z]/';
+		$regex_uppercase = '/[A-Z]/';
+		$regex_number = '/[0-9]/';
+		$regex_special = '/[!@#$%^&*()\-_=+{};:,<.>§~]/';
+
+		if (empty($password)){
+			$this->form_validation->set_message('valid_password', 'The {field} field is required.');
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_lowercase, $password) < 1){
+			$this->form_validation->set_message('valid_password', 'The {field} field must be at least one lowercase letter.');
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_uppercase, $password) < 1){
+			$this->form_validation->set_message('valid_password', 'The {field} field must be at least one uppercase letter.');
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_number, $password) < 1){
+			$this->form_validation->set_message('valid_password', 'The {field} field must have at least one number.');
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_special, $password) < 1){
+			$this->form_validation->set_message('valid_password', 'The {field} field must have at least one special character.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>§~'));
+			return FALSE;
+		}
+
+		if (strlen($password) < 5){
+			$this->form_validation->set_message('valid_password', 'The {field} field must be at least 5 characters in length.');
+			return FALSE;
+		}
+
+		if (strlen($password) > 32){
+			$this->form_validation->set_message('valid_password', 'The {field} field cannot exceed 32 characters in length.');
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+	
+	public function changeAdminPassword(){
+		$params['heading'] = "UPDATE PASSWORD";
+		$params['tblMembers'] = $this->load->view('admin/crud/change-admin-password', $params, TRUE);
+		$this->adminContainer('admin/asset-list', $params);	
 	}
 
 	public function destroy_sess(){
@@ -189,13 +283,39 @@ class Admin extends MY_Controller {
 	}
 
 	public function view_asset(){
-		$asset_id 	  	 	 = $this->input->get('data');
-		$params['data'] 	 = $this->AdminMod->getAssetRecord($asset_id); 
-		$params['uploads'] = $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
-		$url 							 = $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
-		$jsonQrData 			 = json_decode($url->qr_code);
-		$params['qrcode']  = $jsonQrData->result->qr;
+		$asset_id 	  	 	 				= $this->input->get('data');
+		$params['data'] 	 				= $this->AdminMod->getAssetRecord($asset_id); 
+		$params['uploads'] 				= $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$url 							 				= $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
+		$jsonQrData 			 				= json_decode($url->qr_code);
+		$params['qrcode']  				= $jsonQrData->result->qr;
 		$this->load->view('admin/crud/view-asset', $params);
+	}
+	
+	public function view_asset_asset_details(){
+		$asset_id 	  	 	 				= $this->input->get('data');
+		$params['curr_badge']	  	 	 				= $this->input->get('curr_badge');
+		$params['data'] 	 				= $this->AdminMod->getAssetRecordChild($asset_id); 
+		$params['uploads'] 				= $this->db->get_where('tbl_uploads', array('child_asset_id' => $asset_id))->row();
+		$url 							 				= $this->db->get_where('tbl_qrcodes', array('child_asset_id' => $asset_id))->row();
+		if (!empty($url)) {
+			$jsonQrData 			 				= json_decode($url->qr_code);
+			$params['qrcode']  				= $jsonQrData->result->qr;
+		} else {
+			$params['qrcode']  				= '';
+		}
+		$this->load->view('admin/crud/view-asset-detailed-child', $params);
+	}
+	
+	public function view_child_asset(){
+		$asset_id 	  	 	 	= $this->input->get('data');
+		$params['data'] 	 	= $this->AdminMod->getAssetRecord($asset_id); 
+		$params['uploads'] 	= $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
+		$url 							 	= $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
+		$jsonQrData 			 	= json_decode($url->qr_code);
+		$params['qrcode']  	= $jsonQrData->result->qr;
+		$params['asset_id'] = $asset_id;
+		$this->load->view('admin/crud/view-child-asset', $params);
 	}
 	
 	public function view_asset_mobile(){
@@ -248,7 +368,8 @@ class Admin extends MY_Controller {
 										data-cls="cont-view-member" 
 										data-placement="top" 
 										data-toggle="tooltip" 
-										title="View" 
+										title="View Asset" 
+										data-type="main_asset"
 										data-id="'.$row->id.'"><i class="fas fa-search"></i></a> | 
 								<a href="javascript:void(0);" 
 										id="loadPage" 
@@ -256,6 +377,78 @@ class Admin extends MY_Controller {
 										data-toggle="tooltip" 
 										title="Edit" 
 										data-link="edit-asset" 
+										data-ind="'.$row->id.'" 
+										data-cls="cont-edit-member" 
+										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
+								<a href="javascript:void(0);" 
+										id="remove-lgu-const-list" 
+										data-placement="top" 
+										data-toggle="tooltip" 
+										title="Remove" 
+										data-id="'.$row->id.'"><i class="fas fa-trash"></i></a> | 
+								<a href="javascript:void(0);" 
+										id="loadPage" 
+										data-link="view-child-asset" 
+										data-ind="'.$row->id.'" 
+										data-badge-head="'.strtoupper($row->asset_name).'" 
+										data-cls="cont-view-member" 
+										data-placement="top" 
+										data-toggle="tooltip"
+										title="View Child Asset" 
+										data-id="'.$row->id.'"><i class="fas fa-project-diagram"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_asset(),
+			'recordsFiltered' => $this->AdminMod->count_filter_asset(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
+	public function server_tbl_asset_child(){
+		$result 	= $this->AdminMod->get_output_asset_child();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = '<input type="checkbox" class="chk-const-list-tbl" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
+   		$data[] = $row->asset_name;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->model;
+			$data[] = $row->status;
+			$data[] = $row->screen_name;
+   		$data[] =	$row->company;
+   		$data[] = date('Y-m-d', strtotime($row->purchase_date));
+			$data[] = $row->supplier;
+			$data[] = $row->order_number;
+			$data[] = number_format($row->purchase_cost, 2);
+			$data[] = $row->warranty_months;
+			$data[] = $row->default_location;
+			$data[] = '<a href="javascript:void(0);" 
+										id="loadPage" 
+										data-link="view-asset-child-details" 
+										data-ind="'.$row->id.'" 
+										data-badge-head="'.strtoupper($row->asset_name).'" 
+										data-cls="cont-view-member" 
+										data-placement="top" 
+										data-toggle="tooltip" 
+										title="View Asset" 
+										data-type="child_asset"
+										class="child-asset-appendbadge"
+										data-id="'.$row->id.'"><i class="fas fa-search"></i></a> | 
+								<a href="javascript:void(0);" 
+										id="loadPage" 
+										data-placement="top" 
+										data-toggle="tooltip" 
+										title="Edit" 
+										data-link="edit-child-asset" 
 										data-ind="'.$row->id.'" 
 										data-cls="cont-edit-member" 
 										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
@@ -340,14 +533,15 @@ class Admin extends MY_Controller {
 	}
 
 	public function add_asset(){
-		$params['companies'] = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
-		$params['models'] 	 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
-		$params['status'] 	 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
-		$params['suppliers'] = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
-		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
-		$params['users']     = $this->db->get_where('users', array('is_deleted' => 0))->result();
-		$params['office']     = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
-		$params['departments']     = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$params['asset_id']  		= $this->input->get('data');
+		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] 		= $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] 		= $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$params['office']    		= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/create-asset', $params);	
 	}
 
@@ -365,11 +559,47 @@ class Admin extends MY_Controller {
 		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/crud/edit-asset', $params);
 	}
+	
+	public function edit_child_asset(){
+		$asset_id 			 		 		= $this->input->get('data');
+		$params['dataAsset'] 		= $this->db->get_where('tbl_child_asset', array('id' => $asset_id))->row();
+		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] 		= $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] 		= $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['uploads'] 	 		= $this->db->get_where('tbl_uploads', array('child_asset_id' => $asset_id))->row();
+		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$params['office']     	= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$this->load->view('admin/crud/edit-child-asset', $params);
+	}
+
+	public function getParentCustodian(){
+		$res = $this->db->get_where('tbl_asset', array('id'=>$this->input->post('asset_id')))->row();
+		echo json_encode(
+						array(
+							'checkout_user_id'=>$res->checkout_user_id,
+							'office_management_id'=>$res->office_management_id,
+							'departments_id'=>$res->departments_id,
+							'location_id'=>$res->location_id,
+						)
+					);
+	}
 
 	public function save_asset(){
 		$this->form_validation->set_rules('company_id', 'Company', 'required');
-		$this->form_validation->set_rules('asset_tag', 'Asset Tag', 'required');
-		$this->form_validation->set_rules('model_id', 'Model', 'required');
+		if ($this->input->post('asset_tag') != $this->input->post('original_asset_tag')) {
+			if (!empty($_POST['tbl_asset_id'])) {
+				$this->form_validation->set_rules('asset_tag', 'Asset Tag', 'required|is_unique[tbl_child_asset.asset_tag]');
+			} else {
+				$this->form_validation->set_rules('asset_tag', 'Asset Tag', 'required|is_unique[tbl_asset.asset_tag]');
+			}
+		}
+		$this->form_validation->set_message('is_unique', '%s is taken.');
+		if ($this->input->post('model_id')) {
+			$this->form_validation->set_rules('model_id', 'Model', 'required');
+		}
 		$this->form_validation->set_rules('status_id', 'Status', 'required');
 		$this->form_validation->set_rules('serial', 'Serial', 'required');
 		$this->form_validation->set_rules('name', 'Asset Name', 'required');
@@ -400,6 +630,15 @@ class Admin extends MY_Controller {
 					case 'requestable':
 						$dataField['requestable'] = str_replace(',', '', $value);
 						break;
+					case 'original_asset_tag':
+							// ignoring name
+							break;
+					case 'tbl_asset_id':
+							// ignoring name
+							break;
+					case 'gen_qr_code':
+							// ignoring name
+							break;
 					default:
 						$dataField['requestable'] = 0;
 						$dataField[$key] 			 = str_replace(',', '', $value);
@@ -412,43 +651,67 @@ class Admin extends MY_Controller {
 			*/
 			if ($isForUpdate) {
 				$dataField['updated_at'] = date('Y-m-d');
-				$prev_history = $this->db->query("SELECT th.id, th.created_at, th.current_custodian_id, th.current_location_id 
+				
+				if (!empty($_POST['tbl_asset_id'])) {
+					$prev_history = $this->db->query("SELECT th.id, th.created_at, th.current_custodian_id, th.current_location_id 
+																					FROM tbl_history th 
+																					WHERE th.asset_child_id = " . $_POST['tbl_asset_id'] . " ORDER BY th.id desc LIMIT 1")->row();
+					// $dataField['tbl_asset_id'] = $this->input->post('tbl_asset_id');
+					$this->db->update('tbl_child_asset', $dataField, array('id'=>$updateID));
+				} else {
+					$prev_history = $this->db->query("SELECT th.id, th.created_at, th.current_custodian_id, th.current_location_id 
 																					FROM tbl_history th 
 																					WHERE th.asset_id = " . $updateID . " ORDER BY th.id desc LIMIT 1")->row();
-				$this->db->update('tbl_asset', $dataField, array('id'=>$updateID));
+					$this->db->update('tbl_asset', $dataField, array('id'=>$updateID));
+				}
+				
 				$errors['id'] = $updateID;
 				$this->upload_const_dp($updateID);
 				//save history logs
 				$this->save_history_logs(array(
-					'asset_id' => $updateID,
-					'current_custodian_id' => $this->input->post('checkout_user_id'),
-					'current_location_id' => $this->input->post('location_id'),
+					'asset_id' 							=> !empty($_POST['tbl_asset_id']) ? null : $updateID,
+					'current_custodian_id' 	=> $this->input->post('checkout_user_id'),
+					'current_location_id' 	=> $this->input->post('location_id'),
 					'previous_custodian_id' => $prev_history->current_custodian_id,
-					'previous_location_id' => $prev_history->current_location_id,
-					'description' => 'update',
-					'user_id' => $this->session->users_id,
-					'created_at' => $prev_history->created_at,
-					'updated_at' => date('Y-m-d H:i:s')
+					'previous_location_id' 	=> $prev_history->current_location_id,
+					'description' 					=> 'update',
+					'user_id' 							=> $this->session->users_id,
+					'created_at' 						=> $prev_history->created_at,
+					'updated_at' 						=> date('Y-m-d H:i:s'),
+					'asset_child_id'				=> !empty($_POST['tbl_asset_id']) ? $_POST['tbl_asset_id'] : null
 				));
 			} else {
 				$dataField['created_at'] = date('Y-m-d');
-				$this->db->insert('tbl_asset', $dataField);
-				$errors['id'] = $this->db->insert_id();
-				$this->upload_const_dp($errors['id']);
-				$this->generateQR($errors['id']);
+				if (!empty($_POST['tbl_asset_id'])) {
+					$dataField['tbl_asset_id'] = $this->input->post('tbl_asset_id');
+					$this->db->insert('tbl_child_asset', $dataField);
+					$errors['id'] = $this->db->insert_id();
+					$this->upload_const_dp($errors['id']);
+					if ($this->input->post('gen_qr_code')) {
+						$this->generateQR($errors['id']);
+					}
+				} else {
+					$this->db->insert('tbl_asset', $dataField);
+					$errors['id'] = $this->db->insert_id();
+					$this->upload_const_dp($errors['id']);
+					$this->generateQR($errors['id']);
+				}
+				
 				//save history logs
 				$this->save_history_logs(array(
-					'asset_id' => $errors['id'],
+					'asset_id' 						 => !empty($_POST['tbl_asset_id']) ? null : $errors['id'],
 					'current_custodian_id' => $this->input->post('checkout_user_id'),
-					'current_location_id' => $this->input->post('location_id'),
-					'description' => 'create',
-					'user_id' => $this->session->users_id,
-					'created_at' => date('Y-m-d H:i:s')
+					'current_location_id'  => $this->input->post('location_id'),
+					'description' 				 => 'create',
+					'user_id' 						 => $this->session->users_id,
+					'created_at' 					 => date('Y-m-d H:i:s'),
+					'asset_child_id'			 => !empty($_POST['tbl_asset_id']) ? $_POST['tbl_asset_id'] : null
 				));
 			}
 			
 		}
 		echo json_encode($errors);
+
 	}
 
 	public function upload_const_dp($id){
@@ -488,23 +751,29 @@ class Admin extends MY_Controller {
 
 			$chkExisting    = $this->db->get_where('tbl_uploads', array('asset_id' => $id))->result();
 			if ($chkExisting) {
+				$dataWhereId = [];
+				if (!empty($_POST['tbl_asset_id'])) {
+					$dataWhereId['child_asset_id'] = $id;
+				} else {
+					$dataWhereId['asset_id'] = $id;
+				}
 				$this->db->update('tbl_uploads', 
 					array(
 						'image_name' 			 => $dImg['file_name'],
 						'image_path' 			 => $dImg['file_path'],
 						'transaction_date' => date('Y-m-d')
-					), 
-					array('asset_id' => $id)
-				);
+					), $dataWhereId);
 			} else {
-				$this->db->insert('tbl_uploads', 
-					array(
-						'asset_id' 					 => $id,
-						'image_name' 				 => $dImg['file_name'],
-						'image_path' 				 => $dImg['file_path'],
-						'transaction_date' 	 => date('Y-m-d')
-					)
-				);	
+				$dataSave = [];
+				if (!empty($_POST['tbl_asset_id'])) {
+					$dataSave['child_asset_id'] = $id;
+				} else {
+					$dataSave['asset_id'] = $id;
+				}
+				$dataSave['image_name'] = $dImg['file_name'];
+				$dataSave['image_path'] = $dImg['file_path'];
+				$dataSave['transaction_date'] = date('Y-m-d');
+				$this->db->insert('tbl_uploads', $dataSave);	
 			}
 			$data['file_name'] = $dImg['file_name'];
 			$data['success'] = true;
@@ -518,6 +787,11 @@ class Admin extends MY_Controller {
 	}	
 	
 	public function getChkdAsset(){
+		$arr_asset_id = $this->input->post('data');
+		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
+	}
+	
+	public function getChkdChildAsset(){
 		$arr_asset_id = $this->input->post('data');
 		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
 	}
@@ -560,6 +834,7 @@ class Admin extends MY_Controller {
 		$d = $this->uri->segment(2);
 		$dec_un = $this->encdec($d, 'd');
 		$res = $this->db->get_where('v_asset', array('id' => $dec_un))->result();
+		$child = $this->db->get_where('v_asset_child', array('tbl_asset_id' => $dec_un))->result();
 		if(!$this->session->userdata('users_id')){
 			$userdata = array(
 				'redirects_url'  => base_url() . "get-assets/" . $d,
@@ -572,7 +847,37 @@ class Admin extends MY_Controller {
 			redirect(base_url() . 'mobile-view-asset?data=' . $dec_un);
 		} else {
 			$params['data']=$res;
+			$params['child']=$child;
 			$params['uploads']=$this->db->get_where('tbl_uploads', array('asset_id' => $dec_un))->row();
+			$this->load->view('admin/asset-mobile-view', $params);
+		}
+	}
+	
+	public function get_data_assets_child(){
+		// header("Access-Control-Allow-Origin: *");
+		// header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		// header("Content-type: application/json charset=UTF-8");
+		// $request_body = file_get_contents('php://input');
+		// $requestData 	= json_decode($request_body);
+		$d = $this->uri->segment(2);
+		$dec_un = $this->encdec($d, 'd');
+		$res = $this->db->get_where('v_asset_child', array('id' => $dec_un))->result();
+		$parentAsset = $this->db->get_where('v_asset', array('id' => $res[0]->tbl_asset_id))->row();
+
+		if(!$this->session->userdata('users_id')){
+			$userdata = array(
+				'redirects_url'  => base_url() . "get-assets-child/" . $d,
+			);
+			$this->session->set_userdata($userdata);
+		  redirect('login');
+		}
+		$logedUser = $this->db->get_where('users', array('users_id' => $this->session->users_id))->row();
+		if ($logedUser->level == 0) {
+			redirect(base_url() . 'mobile-view-asset?data=' . $dec_un);
+		} else {
+			$params['parentAsset']=$parentAsset;
+			$params['data']=$res;
+			$params['uploads']=$this->db->get_where('tbl_uploads', array('child_asset_id' => $dec_un))->row();
 			$this->load->view('admin/asset-mobile-view', $params);
 		}
 	}
@@ -583,7 +888,16 @@ class Admin extends MY_Controller {
 		$data = json_decode($enc_ai);
 		$data = implode(',',$data);
 		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
-		$this->output->enable_profiler(true);
+		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
+		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
+	}
+	
+	public function printChildAssetQr(){
+		$arr_asset_id = $this->uri->segment(2);
+		$enc_ai = $this->encdec($arr_asset_id, 'd');
+		$data = json_decode($enc_ai);
+		$data = implode(',',$data);
+		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_child_asset ta on ta.id = tq.child_asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
 		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
 		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
 	}
@@ -601,7 +915,7 @@ class Admin extends MY_Controller {
 		$qrData = $this->db->get_where('tbl_qrcodes', array('code' => $this->input->post('code')))->row();
 		$address = $this->getaddress($this->input->post('lat'), $this->input->post('lng'));
 		$this->db->insert('tbl_gps', array(
-																	'asset_id' 		=> $qrData->asset_id,
+																	'asset_id' 		=> $qrData->child_asset_id != '' ? '' : $qrData->asset_id,
 																	'event' 			=> $this->input->post('event'), 
 																	'timestamp' 	=> $this->input->post('timestamp'), 
 																	'redirects' 	=> $this->input->post('redirects'), 
@@ -617,7 +931,8 @@ class Admin extends MY_Controller {
 																	'type' 				=> $this->input->post('type'), 
 																	'code' 				=> $this->input->post('code'), 
 																	'secrettoken' => $this->input->post('secrettoken'),
-																	'address' 	  => $address->results[0]->formatted_address //$address->result->formatted_address
+																	'address' 	  => $address->results[0]->formatted_address, //$address->result->formatted_address
+																	'child_asset_id' => $qrData->child_asset_id != '' ? $qrData->child_asset_id : '',
 																));
 
 		$asset_data = $this->db->query("SELECT * FROM tbl_asset ta left join tbl_locations tl on ta.location_id = tl.id WHERE ta.id = ".$qrData->asset_id)->row();																

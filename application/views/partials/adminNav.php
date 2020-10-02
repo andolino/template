@@ -8,9 +8,10 @@
   </div>
   <ul class="list-unstyled components">
       <p class="text-center"> WELCOME <?php echo strtoupper($this->session->username); ?></p>
+      <?php if($logged_in->level == 0): ?>
       <li>
         <a href="<?php echo base_url(); ?>" class="font-12"><i class="fas fa-barcode"></i> DASHBOARD</a>
-        <a href="<?php echo base_url(); ?>settings" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
+          <a href="<?php echo base_url(); ?>settings" class="font-12"><i class="fas fa-cog"></i> SETTINGS</a>
       </li>
       <li>
         <a href="<?php echo base_url(); ?>view-history"><i class="fas fa-tasks"></i> HISTORY</a>
@@ -44,6 +45,11 @@
 					</li> -->
 				</ul>
       </li>
+      <?php else: ?>
+        <li>
+          <a href="<?php echo base_url(); ?>change-admin-password"><i class="fas fa-key"></i> Change Password</a>
+        </li>
+      <?php endif; ?>
   </ul>
 
 </nav>

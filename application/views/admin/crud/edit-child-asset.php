@@ -21,7 +21,7 @@
 	</div> -->
 	<div class="col-10">
 		<form id="frm-create-asset">
-		<input type="hidden" name="tbl_asset_id" value="<?php echo !empty($asset_id) ? $asset_id : ''; ?>">
+		<input type="hidden" name="tbl_asset_id" value="<?php echo $dataAsset->tbl_asset_id; ?>">
 		<input type="hidden" name="original_asset_tag" value="<?php echo $dataAsset->asset_tag; ?>">
 			<div class="row">
 					<!-- heading -->
@@ -45,15 +45,15 @@
 						<label for="asset_tag" class="font-12">Asset Tag</label>
 						<input type="text" class="form-control form-control-sm font-12" id="asset_tag" name="asset_tag" value="<?php echo $dataAsset->asset_tag; ?>">
 					</div>
-					<!-- <div class="col-3 pl-0">
+					<div class="col-3 pl-0">
 						<label for="model_id" class="font-12">Model ID</label>
 						<select class="custom-select custom-select-sm font-12" id="model_id" name="model_id">
 						  <option selected hidden value="">-SELECT-</option>
-						  <?php //foreach ($models as $row): ?>
-						  	<option value="<?php //echo $row->id; ?>" <?php //echo $dataAsset->model_id == $row->id ? 'selected' : ''; ?>><?php //echo $row->name; ?></option>
-						  <?php //endforeach; ?>
+						  <?php foreach ($models as $row): ?>
+						  	<option value="<?php echo $row->id; ?>" <?php echo $dataAsset->model_id == $row->id ? 'selected' : ''; ?>><?php echo $row->name; ?></option>
+						  <?php endforeach; ?>
 						</select>
-					</div> -->
+					</div>
 					<div class="col-12 p-0 m-0"></div>
 					<div class="col-3 mt-2">
 						<label for="status_id" class="font-12">Status</label>

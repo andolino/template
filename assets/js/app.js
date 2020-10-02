@@ -51,13 +51,15 @@ $(document).ready(function() {
 
   //load data-page
   $(document).on('click', '#loadPage', function(event) {
-    var link          = $(this).attr('data-link');
-    var d             = $(this).attr('data-ind');
-    var dataBadgeHead = $(this).attr('data-badge-head');
-    var acls          = $(this).attr('data-cls');
+    var link                 = $(this).attr('data-link');
+    var d                    = $(this).attr('data-ind');
+    var dataBadgeHead        = $(this).attr('data-badge-head');
+    var acls                 = $(this).attr('data-cls');
+    var asset_or_child_asset = $(this).attr('data-type');
+    var curr_badge = $('#badge-heading').html();
     // $(this).tooltip('hide');
     $('.custom-container').html('');
-    $.get(baseURL + link, { 'data' : d }, function(data, textStatus, xhr) {
+    $.get(baseURL + link, { 'data' : d, 'is_child_asset' : asset_or_child_asset, 'curr_badge': curr_badge }, function(data, textStatus, xhr) {
       $('.custom-container').html(data);
       $(".pickerDate").datepicker({
         dateFormat: 'yy-mm-dd',
@@ -83,6 +85,7 @@ $(document).ready(function() {
       //datatables for single page
       //datatables for page reload
       initMembersDataTables();
+      initMembersChildDataTables();
       initActivityLogsDataTables();
       initAssetRequestDataTables();
       initUsersDataTables();
@@ -98,6 +101,7 @@ $(document).ready(function() {
 
   //init datatable list
   initMembersDataTables();
+  initMembersChildDataTables();
   initUsersDataTables();
   initAssetRequestDataTables();
   initActivityLogsDataTables();
@@ -109,6 +113,10 @@ $(document).ready(function() {
   $(document).on('submit', '#frm-create-asset', function(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
+    $('#checkout_user_id').prop('disabled', false);
+    $('#office_management_id').prop('disabled', false);
+    $('#departments_id').prop('disabled', false);
+    $('#location_id').prop('disabled', false);
     var frm = new FormData(this);
     $.ajax({
       url      : 'save-asset',
@@ -135,6 +143,10 @@ $(document).ready(function() {
               $('#'+index).parent('div').find('div.invalid-feedback').hide();
             });
           });
+          $('#checkout_user_id').prop('disabled', true);
+          $('#office_management_id').prop('disabled', true);
+          $('#departments_id').prop('disabled', true);
+          $('#location_id').prop('disabled', true);
         } else {
           Swal.fire(
             'Success!',
@@ -165,6 +177,7 @@ $(document).ready(function() {
           //   });
           // }
           // $('#frm-create-asset').trigger('reset');
+          $('a[data-link="tbl-asset"]').trigger('click');
         }
       }
     });
@@ -194,6 +207,28 @@ $(document).ready(function() {
     });
   });
 
+  $(document).on('click', '#apply_par_custodian', function (e) {
+    if ($(this).is(':checked')) {
+      $.ajax({
+        type: "POST",
+        url: "get-parent-custodian",
+        data: { "asset_id" : $(this).val() },
+        dataType: "JSON",
+        success: function (res) {
+          $('#checkout_user_id').val(res.checkout_user_id).trigger('change').prop('disabled', true);
+          $('#office_management_id').val(res.office_management_id).trigger('change').prop('disabled', true);
+          $('#departments_id').val(res.departments_id).trigger('change').prop('disabled', true);
+          $('#location_id').val(res.location_id).trigger('change').prop('disabled', true);
+        }
+      });
+    } else {
+      $('#checkout_user_id').val('').trigger('change').prop('disabled', false);
+      $('#office_management_id').val('').trigger('change').prop('disabled', false);
+      $('#departments_id').val('').trigger('change').prop('disabled', false);
+      $('#location_id').val('').trigger('change').prop('disabled', false);
+    }
+  });
+
   $(document).on('change', '#upload-file-dp', function() {
     $('.spinner-cont').removeClass('none');
     $('#frm-upload-dp').trigger('submit');
@@ -205,7 +240,7 @@ $(document).ready(function() {
       if ($(this).is(':checked')) { d[i] = $(el).val(); }
     });
     var myNewD = d.filter(function (el) { return el != null && el != ""; });
-    console.log(myNewD);
+    // console.log(myNewD);
     $.ajax({
       type: "POST",
       url: "get-chkd-asset",
@@ -215,8 +250,34 @@ $(document).ready(function() {
         window.open('print-asset-qr/'+res.data);
       }
     });
-
   });
+  
+  $(document).on('click', '#printChildAssetQr', function() {
+    var d = [];
+    $.each($('.chk-const-list-tbl'), function (i, el) { 
+      if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    });
+    var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    // console.log(myNewD);
+    $.ajax({
+      type: "POST",
+      url: "get-chkd-child-asset",
+      data: {'data': myNewD},
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-child-asset-qr/'+res.data);
+      }
+    });
+  });
+
+  // $(document).one('click', '.child-asset-appendbadge', function (e) {
+  //   // var id = $(this).attr('data-ind');
+  //   // $('a[data-ind="'+id+'"]').attr('data-badge-head', $("#badge-heading").html());
+  //   // console.log($("#badge-heading").html());
+  //   // setTimeout(function(){
+  //     $('a#loadPage').attr('data-badge-head', $("#badge-heading").html());
+  //   // }, 500);
+  // });
   
   $(document).on('click', '#showMapGeo', function() {
     $('#custom-modal').modal('show');
@@ -236,8 +297,9 @@ $(document).ready(function() {
   });
   
   $(document).on('click', '#chk-const-list-tbl-all', function(e) {
-    var rows = tbl_asset.rows({ 'search': 'applied' }).nodes();
-    $('input[type="checkbox"]', rows).prop('checked', this.checked); 
+    // var rows = tbl_asset.rows({ 'search': 'applied' }).nodes();
+    var table = $(e.target).closest('table');
+    $('td input:checkbox',table).prop('checked',this.checked);
     if ($(this).is(':checked')) {
       $('#printAssetQr').removeAttr('disabled');
     } else {
@@ -308,6 +370,42 @@ $(document).ready(function() {
         // alert("Upload Image Successful.");
         $('#lgu-captured-image').attr('src', baseURL + 'assets/image/uploads/' + data.file_name);
         animateSingleOut('.spinner-cont', 'fadeOut');
+      }
+    });
+  });
+
+  $(document).on('submit', '#frm-change-password', function(e) {
+    e.preventDefault();
+    var frm = $(this).serialize();
+    $.ajax({
+      url:'submit-admin-new-password',
+      type:"post",
+      data: frm,
+      dataType: 'json',
+      success: function(data){
+        if (data.msg == 'failed') {
+          if (data.hasOwnProperty('password')) {
+            $('.msg-password').html('<div class="alert alert-danger font-12" role="alert">'+data.password+'</div>');
+            animateSingleIn('.msg-password', 'fadeIn');
+          }
+          if (data.hasOwnProperty('new_password')) {
+            $('.msg_new_password').html('<div class="alert alert-danger font-12" role="alert">'+data.new_password+'</div>');
+            animateSingleIn('.msg_new_password', 'fadeIn');
+          }
+          setTimeout(() => {
+            animateSingleOut('.msg-password', 'fadeOut');
+            animateSingleOut('.msg_new_password', 'fadeOut');
+          }, 5000);
+        }
+        
+        if (data.msg == 'success') {
+          Swal.fire(
+            'Success!',
+            'Password Successfully Updated!',
+            'success'
+          );
+        } 
+        $('#frm-change-password').trigger('change');
       }
     });
   });
@@ -410,6 +508,49 @@ function initMembersDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "page" : $("#tbl-asset-list").attr('data-page')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initMembersChildDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-child-asset-list').DataTable().clear().destroy();
+  tbl_asset  = $("#tbl-child-asset-list").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[1, 'asc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,13]
+      },
+      { 
+        visible              : false, 
+        targets              : [3,9]
+      },
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-asset-child',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "page" : $("#tbl-child-asset-list").attr('data-page'),
+                                "tbl_asset_id" : $("#tbl-child-asset-list").attr('data-assetid')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {

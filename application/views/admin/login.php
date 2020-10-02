@@ -23,8 +23,9 @@
         data: frm,
         success: function(res){
           var cnt = Object.keys(res).length;
+          console.log(cnt);
           // console.log(typeof res.msg, typeof cnt);
-          if (cnt === 1 && res.msg == 'failed') {
+          if (res.msg == 'failed') {
             Swal.fire(
               'Oops!',
               'Invalid Credentials',

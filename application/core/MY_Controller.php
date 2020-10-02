@@ -10,7 +10,8 @@ class MY_Controller extends CI_Controller{
 		if(!$this->session->userdata('users_id')){
 		  redirect('login');
 		}
-        $param['go_logout'] = 'logout';
+		$param['go_logout'] = 'logout';
+		$param['logged_in'] 	 = $this->db->get_where('users', array('users_id' => $this->session->users_id))->row();
 		$this->load->view('partials/adminHdr', $param);
 		$this->load->view('partials/adminNav', $param);
 		$this->load->view($data, $param, $return);
@@ -187,22 +188,39 @@ class MY_Controller extends CI_Controller{
 		}
 
 		public function generateQR($id){
-			$encId 		  	= $this->encdec($id, 'e');
-			$apiKey       = "273d88623b2ea85055e3515c0f63af1b";
-			$apiUrl       = "https://mbyongson.qrd.by/api";
-			$action       = "short";
-			$url          = base_url() . "get-assets/" . $encId . '&gps=1';
-
-			$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
-			$json         = file_get_contents($jsonurl, 0, null, null);
-			$json_output  = json_decode($json);
-			$json_encoded = json_encode($json_output);
-			$code         = explode('/', $json_output->result->qr);
-			return $this->db->insert('tbl_qrcodes', array(
-																								'asset_id' => $id,
-																								'qr_code'  => $json_encoded,
-																								'code'     => $code[4],
-																							));
+			if (!empty($_POST['tbl_asset_id'])) {
+				$encId 		  	= $this->encdec($id, 'e');
+				$apiKey       = "b48f35675096f35f703ee519dd293db8";
+				$apiUrl       = "https://mamary.qrd.by/api";
+				$action       = "short";
+				$url          = base_url() . "get-assets-child/" . $encId . '&gps=1';
+				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$json         = file_get_contents($jsonurl, 0, null, null);
+				$json_output  = json_decode($json);
+				$json_encoded = json_encode($json_output);
+				$code         = explode('/', $json_output->result->qr);
+				return $this->db->insert('tbl_qrcodes', array(
+																									'child_asset_id' => $id,
+																									'qr_code'  => $json_encoded,
+																									'code'     => $code[4],
+																								));
+			} else {
+				$encId 		  	= $this->encdec($id, 'e');
+				$apiKey       = "b48f35675096f35f703ee519dd293db8";
+				$apiUrl       = "https://mamary.qrd.by/api";
+				$action       = "short";
+				$url          = base_url() . "get-assets/" . $encId . '&gps=1';
+				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$json         = file_get_contents($jsonurl, 0, null, null);
+				$json_output  = json_decode($json);
+				$json_encoded = json_encode($json_output);
+				$code         = explode('/', $json_output->result->qr);
+				return $this->db->insert('tbl_qrcodes', array(
+																									'asset_id' => $id,
+																									'qr_code'  => $json_encoded,
+																									'code'     => $code[4],
+																								));
+			}
 		}
 
 		public function save_action_logs($data){
@@ -224,6 +242,11 @@ class MY_Controller extends CI_Controller{
 			$kilometers = $miles * 1.609344;
 			$meters 		= $kilometers * 1000;
 			return compact('miles','feet','yards','kilometers','meters'); 
+			
 		}
+
+	
+	
+
 
 }

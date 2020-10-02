@@ -520,3 +520,5 @@ label[id*="-error"] {
 #tbl-asset-list tbody tr td:nth-child(12){
   width: 7% !important;
 }
+
+#tbl-loans-by-request-approved tbody tr td:nth-child(9) { width: 7%; }
