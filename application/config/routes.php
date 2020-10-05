@@ -91,6 +91,7 @@ $route['get-locations-frm'] 	= 'Settings/getLocationsFrm';
 $route['add-data'] 	= 'Settings/addData';
 $route['tbl-asset'] 						= 'Admin/tbl_asset';
 $route['delete-asset'] 					= 'Admin/deleteAsset';
+$route['delete-child-asset'] 					= 'Admin/deleteChildAsset';
 $route['get-users-frm'] 	= 'Settings/getUsersFrm';
 $route['get-users-frm-fp'] 	= 'Settings/getUsersFrmFp';
 $route['login'] 											= 'Admin/usr_login';
@@ -110,6 +111,11 @@ $route['get-chkd-child-asset'] 	= 'Admin/getChkdChildAsset';
 $route['get-parent-custodian'] 	= 'Admin/getParentCustodian';
 $route['change-admin-password'] 	= 'Admin/changeAdminPassword';
 $route['submit-admin-new-password'] 	= 'Admin/submit_admin_new_password';
+$route['get-asset-print-frm'] 	= 'Admin/getAssetPrintFrm';
+$route['get-print-asset-report'] 	= 'Admin/getPrintAssetReport';
+$route['print-asset-report/(:any)'] 	= 'Admin/printAssetReport';
+$route['print-transmital-slip/(:any)'] 	= 'Admin/printTransmitalSlip';
+$route['print-transmital-slip/(:any)/(:any)'] 	= 'Admin/printTransmitalSlip';
 
 
 

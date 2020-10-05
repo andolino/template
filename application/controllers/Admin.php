@@ -453,7 +453,7 @@ class Admin extends MY_Controller {
 										data-cls="cont-edit-member" 
 										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
 								<a href="javascript:void(0);" 
-										id="remove-lgu-const-list" 
+										id="remove-child-asset" 
 										data-placement="top" 
 										data-toggle="tooltip" 
 										title="Remove" 
@@ -533,15 +533,16 @@ class Admin extends MY_Controller {
 	}
 
 	public function add_asset(){
-		$params['asset_id']  		= $this->input->get('data');
-		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
-		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
-		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
-		$params['suppliers'] 		= $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
-		$params['locations'] 		= $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
-		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
-		$params['office']    		= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
-		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$params['asset_id']  			 = $this->input->get('data');
+		$params['companies'] 			 = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['models'] 	 			 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
+		$params['status'] 	 			 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
+		$params['suppliers'] 			 = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
+		$params['locations'] 			 = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['users']     			 = $this->db->get_where('users', array('is_deleted' => 0))->result();
+		$params['office']    			 = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['departments']  	 = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$params['dataParentAsset'] = $this->db->get_where('tbl_asset', array('sibling'=>null, 'is_deleted'=>0))->result();
 		$this->load->view('admin/crud/create-asset', $params);	
 	}
 
@@ -557,6 +558,7 @@ class Admin extends MY_Controller {
 		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
 		$params['office']     	= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
 		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$params['dataParentAsset'] = $this->db->get_where('tbl_asset', array('sibling'=>null, 'is_deleted'=>0))->result();
 		$this->load->view('admin/crud/edit-asset', $params);
 	}
 	
@@ -639,6 +641,9 @@ class Admin extends MY_Controller {
 					case 'gen_qr_code':
 							// ignoring name
 							break;
+					case 'siblings':
+							// ignoring name
+							break;
 					default:
 						$dataField['requestable'] = 0;
 						$dataField[$key] 			 = str_replace(',', '', $value);
@@ -708,10 +713,53 @@ class Admin extends MY_Controller {
 					'asset_child_id'			 => !empty($_POST['tbl_asset_id']) ? $_POST['tbl_asset_id'] : null
 				));
 			}
-			
 		}
+
+		//update sibling parent
+		$this->db->update('tbl_asset', array('sibling'=>$errors['id']), array('id'=>$this->input->post('siblings')));
+
 		echo json_encode($errors);
 
+	}
+
+	public function getAssetPrintFrm(){
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
+		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
+		$this->load->view('admin/crud/print-asset-frm', $params);
+	}
+
+	public function getPrintAssetReport(){
+		$where = 'WHERE is_deleted = 0';
+		if($this->input->post('location_id') != ''){
+			$where .= ' AND location_id = ' . $this->input->post('location_id');
+		}
+		if ($this->input->post('custodian') != '') {
+			$where .= ' AND users_id = ' . $this->input->post('custodian');
+		}
+		if ($this->input->post('asset_type') == 1){
+			$where .= ' AND parent IS NOT NULL';
+		}
+		echo json_encode(array('data'=> $this->encdec($where, 'e')));
+	}
+	
+	public function printAssetReport(){
+		$where = $this->encdec($this->uri->segment(2), 'd');
+		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
+		$params['data'] = $res;
+		// $this->output->enable_profiler(true);
+		$html = $this->load->view('admin/crud/pdf-asset-report', $params, TRUE);
+		$this->AdminMod->pdf($html, 'Asset List Report', false, 'LEGAL', false, false, false, 'ASSET LIST REPORT', '');
+	}
+	
+	public function printTransmitalSlip(){
+		$where = $this->encdec($this->uri->segment(2), 'd');
+		$data_procces = $this->uri->segment(3);
+		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
+		$params['data'] = $res;
+		$params['data_procces'] = $data_procces;
+		// $this->output->enable_profiler(true);
+		$html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
+		$this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
 	}
 
 	public function upload_const_dp($id){
@@ -784,6 +832,12 @@ class Admin extends MY_Controller {
 	public function deleteAsset(){
 		$asset_id = $this->input->post('id');
 		$this->db->update('tbl_asset', array('is_deleted' => '1'), array('id' => $asset_id));
+		$this->db->update('tbl_child_asset', array('is_deleted' => '1'), array('tbl_asset_id' => $asset_id));
+	}	
+	
+	public function deleteChildAsset(){
+		$asset_id = $this->input->post('id');
+		$this->db->update('tbl_child_asset', array('is_deleted' => '1'), array('id' => $asset_id));
 	}	
 	
 	public function getChkdAsset(){
@@ -934,31 +988,37 @@ class Admin extends MY_Controller {
 																	'address' 	  => $address->results[0]->formatted_address, //$address->result->formatted_address
 																	'child_asset_id' => $qrData->child_asset_id != '' ? $qrData->child_asset_id : '',
 																));
-
-		$asset_data = $this->db->query("SELECT * FROM tbl_asset ta left join tbl_locations tl on ta.location_id = tl.id WHERE ta.id = ".$qrData->asset_id)->row();																
-		$distance_diff = $this->getDistanceBetweenPoints($_POST['lat'], $_POST['lng'], $asset_data->lat, $asset_data->lng);
+		if ($qrData->child_asset_id != '') {
+			$asset_data = $this->db->query("SELECT * FROM tbl_child_asset ta left join tbl_locations tl on ta.location_id = tl.id WHERE ta.id = ".$qrData->child_asset_id)->row();																
+			$distance_diff = $this->getDistanceBetweenPoints($_POST['lat'], $_POST['lng'], $asset_data->lat, $asset_data->lng);
+		} else {
+			$asset_data = $this->db->query("SELECT * FROM tbl_asset ta left join tbl_locations tl on ta.location_id = tl.id WHERE ta.id = ".$qrData->asset_id)->row();																
+			$distance_diff = $this->getDistanceBetweenPoints($_POST['lat'], $_POST['lng'], $asset_data->lat, $asset_data->lng);
+		}
 		//if distance from near location is less than 100 meters
 		if ($distance_diff['meters'] <= 100) {	
 			$this->db->update('tbl_asset', array('status_id' => 4), array('id' => $qrData->asset_id));
 			$this->save_action_logs(array(
 				'user_id' 			=> $this->session->users_id,
 				'action_type' 	=> 'scanned asset to deploy',
-				'target_id' 		=> $qrData->asset_id,
+				'target_id' 		=> $qrData->child_asset_id != '' ? 0 : $qrData->asset_id,
 				'target_type' 	=> 'asset',
 				// 'item_type' 	=>  'Asset',
 				// 'item_id' 		=>  $updateID,
-				'created_at' 		=> date('Y-m-d H:i:s')
+				'created_at' 		=> date('Y-m-d H:i:s'),
+				'target_child_id' => $qrData->child_asset_id != '' ? $qrData->child_asset_id : null
 			));
 		} else {
 			$this->db->update('tbl_asset', array('status_id' => 3), array('id' => $qrData->asset_id));
 			$this->save_action_logs(array(
 				'user_id' 			=> $this->session->users_id,
 				'action_type' 	=> 'scanned asset to dispatch',
-				'target_id' 		=> $qrData->asset_id,
+				'target_id' 		=> $qrData->child_asset_id != '' ? 0 : $qrData->asset_id,
 				'target_type' 	=> 'asset',
 				// 'item_type' 	=>  'Asset',
 				// 'item_id' 		=>  $updateID,
-				'created_at' 		=> date('Y-m-d H:i:s')
+				'created_at' 		=> date('Y-m-d H:i:s'),
+				'target_child_id' => $qrData->child_asset_id != '' ? $qrData->child_asset_id : null
 			));
 		}
 

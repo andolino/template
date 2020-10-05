@@ -1,6 +1,6 @@
 <div class="cont-add-member row none">
 	<div class="offset-8 col-1">
-		<a href="javascript:void(0);" class="float-right pr-2 pb-2" id="loadPage" data-link="tbl-asset" data-badge-head="ASSET LIST"
+		<a href="javascript:void(0);" class="float-right pr-2 pb-2" id="loadPage" data-link="<?php echo !empty($asset_id) ? 'view-child-asset' : 'tbl-asset'; ?>" data-badge-head="ASSET LIST"
    								data-cls="cont-tbl-constituent" data-placement="top" data-toggle="tooltip" title="Back to List"><i class="fas fa-times"></i></a>
 	</div>
 	<div class="col-12">
@@ -41,6 +41,29 @@
 										Apply Same Custodian On Parent Asset 
 									</label>
 								</div>
+							</div>
+						</div>
+					<?php else: ?>
+						<div class="row">
+							<!-- <div class="col-sm-5 col-md-1">
+								<div class="form-check pt-2 pb-2">
+									<input class="form-check-input font-12" type="checkbox" value="1" id="siblings_ofchk">
+									<label class="form-check-label font-12" for="siblings_ofchk">
+										Siblings Of :
+									</label>
+								</div>
+							</div> -->
+							<div class="col-sm-12 col-md-12"></div>
+							<div class="col-sm-12 col-md-2 mt-1">
+								<label class="font-12" for="siblings">
+									Siblings Of :
+								</label>
+								<select class="custom-select custom-select-sm font-12" id="siblings" name="siblings">
+									<option selected hidden value="">-SELECT-</option>
+									<?php foreach ($dataParentAsset as $row): ?>
+										<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 						</div>
 					<?php endif; ?>

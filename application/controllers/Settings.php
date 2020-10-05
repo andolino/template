@@ -119,7 +119,7 @@ class Settings extends MY_Controller {
 	public function server_tbl_activity_logs(){
 		$result 	= $this->Table->getOutput('v_activity_logs', ['created_at', 'screen_name', 'action_type', 'asset_name', 
 																														'target_type', 'is_deleted', 'lat', 'lng', 'address', 'target', 
-																														'default_location', 'scanned_lat', 'scanned_lng', 'code'], ['created_at' => 'desc']);
+																														'default_location', 'scanned_lat', 'scanned_lng', 'code', 'asset_name2', 'target2', 'default_location2', 'scanned_lat2', 'scanned_lng2'], ['created_at' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
@@ -127,13 +127,18 @@ class Settings extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = date('Y-m-d H:m:s A', strtotime($row->created_at));
-   		$data[] = $row->screen_name;
+   		$data[] = $row->screen_name == '' ? $row->screen_name2 : $row->screen_name;
    		$data[] = $row->action_type;
-   		$data[] = $row->asset_name;	
-			$data[] = $row->target;	
-			$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->lat.'" data-long="'.$row->lng.'" >'.$row->default_location.'</a>';	
-   		// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
-   		$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showScannedUser" data-code="'.$row->code.'" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'">SCANNED USER</a>';	;	
+   		$data[] = $row->asset_name == '' ? $row->asset_name2 : $row->asset_name;	
+			$data[] = $row->target == '' ? $row->target2 : $row->target;	
+			if ($row->scanned_lat=='') {
+				$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->lat.'" data-long="'.$row->lng.'" >'.$row->default_location2.'</a>';	
+				$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showScannedUser" data-code="'.$row->code.'" data-lat="'.$row->scanned_lat2.'" data-long="'.$row->scanned_lng2.'">SCANNED USER</a>';
+			} else {
+				$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->lat.'" data-long="'.$row->lng.'" >'.$row->default_location.'</a>';
+				$data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showScannedUser" data-code="'.$row->code.'" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'">SCANNED USER</a>';
+			}
+			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
 

@@ -470,6 +470,64 @@ class AdminMod extends CI_Model {
     $pdf->SetY(-15);
     // filename
     $pdf->Output($download_filename.'.pdf', 'I');
+	}
+	
+
+	function pdfToTransmital($html, $download_filename, $orientation = 'P', 
+  								$page_format = 'LETTER', $with_full_page_background = false, 
+  										$image_background = null, $with_page_no = true, $title = '', $font_fam) {
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, $page_format, true, 'UTF-8', false);
+    $pdf->pixelsToUnits(8);
+    $pdf->setPrintHeader(false);
+    // $pdf->setPrintFooter(false);
+    $pdf->SetMargins(17, 40, 15, 25);
+    $pdf->AddPage($orientation);
+    $pdf->SetAutoPageBreak(TRUE, 0);
+    $pdf->SetFont($font_fam, '', 12, false);
+    if ($with_page_no) {
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    }
+    $pdf->setFooterFont(array('', '', 15));
+    if ($with_full_page_background) {
+      // get the current page break margin
+      $bMargin = $pdf->getBreakMargin();
+      // get current auto-page-break mode
+      $auto_page_break = $pdf->getAutoPageBreak();
+      // disable auto-page-break
+      $pdf->SetAutoPageBreak(false, '');
+      // set background image
+      // $img_file = base_url($image_background);
+      $img_file = $image_background;
+      $pdf->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+    }
+    // $pdf->SetHeaderData(false, false, 'Balance Sheet', false);
+    // $pdf->SetTopMargin(55);
+    $pdf->setTitle($title);
+    $pdf->writeHTML($html, true, false, true, false, '');
+		$pdf->SetY(-15);
+		// $pdf->SetAutoPageBreak(false);
+		// filename
+		$pdf->SetFont('helvetica', 'I', 8);
+		$logoX = 25; // 
+   	$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
+   	$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+		$logoWidth = 130; // 15mm
+		$logoY = 335;
+		$logo1 = $pdf->PageNo() . ' | '. $pdf->Image($logoFileName1, 15, 6, $logoWidth);
+		$logo2 = $pdf->PageNo() . ' | '. $pdf->Image($logoFileName2, $logoX, $logoY, $logoWidth);
+		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 007', PDF_HEADER_STRING);
+
+
+		// $pdf->Image($logoFileName1, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		// Title
+		// $pdf->Cell(0, 15, $logo1, 0, false, 'C', 0, '', 0, false, 'M', 'M');
+
+		// $pdf->SetX($pdf->w - $pdf->documentRightMargin - $logoWidth); // documentRightMargin = 18
+		// Page number
+		// $pdf->Cell(0, 10, $logo2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		
+		// $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    $pdf->Output($download_filename.'.pdf', 'I');
   }
 
 

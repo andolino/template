@@ -39,6 +39,7 @@ $(document).ready(function() {
     var fixedInput = currentInput.replace(/[A-Za-z!@#$%^&*()]/g, '');
     $(this).val(fixedInput);
   });
+  
 
   /**
     *
@@ -81,7 +82,9 @@ $(document).ready(function() {
       animateSingleIn('.'+acls, 'fadeInUp');
       
       animateSingleIn('.cont-tbl-constituent', 'fadeIn');
-      
+      $('#siblings_of').select2({
+        width: '100%',
+      });
       //datatables for single page
       //datatables for page reload
       initMembersDataTables();
@@ -199,6 +202,30 @@ $(document).ready(function() {
           'Successfully Deleted!',
           'success'
         );
+        initMembersDataTables();
+      });
+      
+    }, function(){
+      console.log('Fail');
+    });
+  });
+  
+  $(document).on('click', '#remove-child-asset', function(e) {
+    e.preventDefault();
+    var id = $(this).attr('data-id');
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Are you sure you want to delete this child assets?', 'warning'], 
+      function(){
+      $.post('delete-child-asset', {'id': id}, function(data, textStatus, xhr) {
+        Swal.fire(
+          'Alright!',
+          'Successfully Deleted!',
+          'success'
+        );
         tbl_asset.ajax.reload();
       });
       
@@ -234,6 +261,54 @@ $(document).ready(function() {
     $('#frm-upload-dp').trigger('submit');
   });
 
+  $(document).on('click', '#printAssetAssetReport', function() {
+    // var d = [];
+    // $.each($('.chk-const-list-tbl'), function (i, el) { 
+    //   if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    // });
+    // var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    $('#custom-modal').modal('show');
+    $.get("get-asset-print-frm", {}, function (data, textStatus, jqXHR) {
+      $('#custom-modal .modal-content').html(data);
+    });
+    // console.log(myNewD);
+    
+  });
+
+  $(document).on('submit', '#frm-print-asset-report', function (e) {
+    e.preventDefault();
+    var frm = $(this).serialize();
+    $.ajax({
+      type: "POST",
+      url: "get-print-asset-report",
+      data: frm,
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-asset-report/'+res.data);
+      }
+    });
+  });
+  
+  $(document).on('click', '#printTransmitalSlip', function (e) {
+    if ($('#custodian').val() == '') {
+      Swal.fire(
+        'Oopps!',
+        'Please select custodian',
+        'info'
+      );
+    } else {
+      $.ajax({
+        type: "POST",
+        url: "get-print-asset-report",
+        data: {},
+        dataType: "JSON",
+        success: function (res) {
+          window.open('print-transmital-slip/'+res.data+'/'+$('#date_generated').val());
+        }
+      });
+    }
+  });
+  
   $(document).on('click', '#printAssetQr', function() {
     var d = [];
     $.each($('.chk-const-list-tbl'), function (i, el) { 
