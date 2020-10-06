@@ -746,6 +746,7 @@ class Admin extends MY_Controller {
 		$where = $this->encdec($this->uri->segment(2), 'd');
 		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
 		$params['data'] = $res;
+		// $this->createPdf();
 		// $this->output->enable_profiler(true);
 		$html = $this->load->view('admin/crud/pdf-asset-report', $params, TRUE);
 		$this->AdminMod->pdf($html, 'Asset List Report', false, 'LEGAL', false, false, false, 'ASSET LIST REPORT', '');
@@ -757,9 +758,10 @@ class Admin extends MY_Controller {
 		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
 		$params['data'] = $res;
 		$params['data_procces'] = $data_procces;
+		$this->createPdf('admin/crud/print-transmital-slip', $params);
 		// $this->output->enable_profiler(true);
-		$html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
-		$this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
+		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
+		// $this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
 	}
 
 	public function upload_const_dp($id){
