@@ -70,7 +70,7 @@
         <td style="padding:0px;width:14%;font-size: 10x !important;font-family: 'Arial';line-height:1.9">Dear Sir,</td>
       </tr>
       <tr>
-        <td style="padding:0px;width:12%;font-size: 10x !important;font-family: 'Arial';">We are transmitting herewith one hundred) registration kits with the other following asset inside it:</td>
+        <td style="padding:0px;width:12%;font-size: 10x !important;font-family: 'Arial';">We are transmitting herewith <?php echo $motherCount; ?> registration kits with the other following asset inside it:</td>
       </tr>
       </table>
       <br>
@@ -89,18 +89,18 @@
           <?php $c2 = 0; ?>
           <?php if($row->parent != ''): ?>
             <tr>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $c; ?></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<strong><?php echo $row->name; ?></strong></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo 1; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<strong><?php echo strtoupper($row->name); ?></strong></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->serial; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->asset_tag; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->short; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->end_user; ?></td>
             </tr>
           <?php $c++; ?>
           <?php else: ?>
             <tr>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp; <?php echo $c . '.' . $c2; ?></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo '(' . ($row->counter == '' ? 1 : $row->counter) . ') ' . $row->name; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo ($row->counter == '' ? 1 : $row->counter); ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->name; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->serial; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->asset_tag; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->short; ?></td>
@@ -188,18 +188,18 @@
           <?php $c2 = 0; ?>
           <?php if($row->parent != ''): ?>
             <tr>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $c; ?></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<strong><?php echo $row->name; ?></strong></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;</td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo 1; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<strong><?php echo strtoupper($row->name); ?></strong></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->serial; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->asset_tag; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->short; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->end_user; ?></td>
             </tr>
           <?php $c++; ?>
           <?php else: ?>
             <tr>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp; <?php echo $c . '.' . $c2; ?></td>
-              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo '(' . ($row->counter == '' ? 1 : $row->counter) . ') ' . $row->name; ?></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<strong><?php echo ($row->counter == '' ? 1 : $row->counter); ?></strong></td>
+              <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->name; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->serial; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->asset_tag; ?></td>
               <td style="padding:3px;font-family: 'Arial';font-size:12px;">&nbsp;&nbsp;<?php echo $row->short; ?></td>

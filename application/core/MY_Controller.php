@@ -139,6 +139,18 @@ class MY_Controller extends CI_Controller{
         $out .= ' AND ' . $this->convertIntegerToWords((is_string($nums[1]) ? (int) $nums[1] : $nums[1])) .' CENTAVO/S';
         }
         return ucwords($out);
+		}
+		
+		function convertNumberWithourCurrency($number) {
+        $out = '';
+        // $currencylabelsarray = array('PESO/S' => 'PESOS/S', 'CENTAVO/S' => 'CENTAVO/S');
+        if(!is_numeric($number)) return false;
+        $nums = explode('.', $number);
+        $out = $this->convertIntegerToWords($nums[0]);
+        if(isset($nums[1])) {
+        $out .= ' AND ' . $this->convertIntegerToWords((is_string($nums[1]) ? (int) $nums[1] : $nums[1]));
+        }
+        return ucwords($out);
     }
 
 		

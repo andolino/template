@@ -151,7 +151,7 @@ $(document).ready(function() {
           $('#departments_id').prop('disabled', true);
           $('#location_id').prop('disabled', true);
         } else {
-          Swal.fire(
+          Swal.fire(  
             'Success!',
             'You successfully saved!',
             'success'

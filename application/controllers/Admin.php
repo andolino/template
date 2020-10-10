@@ -542,13 +542,17 @@ class Admin extends MY_Controller {
 		$params['users']     			 = $this->db->get_where('users', array('is_deleted' => 0))->result();
 		$params['office']    			 = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
 		$params['departments']  	 = $this->db->get_where('departments', array('is_deleted' => 0))->result();
-		$params['dataParentAsset'] = $this->db->get_where('tbl_asset', array('sibling'=>null, 'is_deleted'=>0))->result();
+		$params['dataParentAsset'] = $this->db->query("SELECT * 
+																										FROM tbl_asset ta
+																										WHERE ta.id NOT IN (SELECT ta2.sibling FROM tbl_asset ta2 WHERE ta2.sibling IS NOT NULL AND ta2.is_deleted = 0) 
+																										AND ta.is_deleted = 0")->result();
 		$this->load->view('admin/crud/create-asset', $params);	
 	}
 
 	public function edit_asset(){
 		$asset_id 			 		 		= $this->input->get('data');
 		$params['dataAsset'] 		= $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
+		$params['siblingName'] 	= function($id){ return $this->db->get_where('tbl_asset', array('id' => $id))->row(); };
 		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
 		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
 		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
@@ -558,7 +562,11 @@ class Admin extends MY_Controller {
 		$params['users']     		= $this->db->get_where('users', array('is_deleted' => 0))->result();
 		$params['office']     	= $this->db->get_where('office_management', array('is_deleted' => 0))->result();
 		$params['departments']  = $this->db->get_where('departments', array('is_deleted' => 0))->result();
-		$params['dataParentAsset'] = $this->db->get_where('tbl_asset', array('sibling'=>null, 'is_deleted'=>0))->result();
+		$params['dataParentAsset'] = $this->db->query("SELECT * 
+																										FROM tbl_asset ta
+																										WHERE ta.id NOT IN (SELECT ta2.sibling FROM tbl_asset ta2 WHERE ta2.sibling IS NOT NULL AND ta2.is_deleted = 0) 
+																										AND ta.is_deleted = 0 
+																										AND ta.id <> $asset_id")->result();
 		$this->load->view('admin/crud/edit-asset', $params);
 	}
 	
@@ -756,8 +764,10 @@ class Admin extends MY_Controller {
 		$where = $this->encdec($this->uri->segment(2), 'd');
 		$data_procces = $this->uri->segment(3);
 		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
+		$motherCount = $this->db->query("SELECT count(*) as tot_mother FROM v_asset_report " . $where . ' AND parent is not null AND sibling is null')->row();
 		$params['data'] = $res;
 		$params['data_procces'] = $data_procces;
+		$params['motherCount'] = $this->convertNumberWithourCurrency($motherCount->tot_mother);
 		$this->createPdf('admin/crud/print-transmital-slip', $params);
 		// $this->output->enable_profiler(true);
 		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
@@ -835,7 +845,8 @@ class Admin extends MY_Controller {
 		$asset_id = $this->input->post('id');
 		$this->db->update('tbl_asset', array('is_deleted' => '1'), array('id' => $asset_id));
 		$this->db->update('tbl_child_asset', array('is_deleted' => '1'), array('tbl_asset_id' => $asset_id));
-	}	
+		$this->db->update('tbl_asset', array('sibling' => null), array('sibling' => $asset_id));
+	}
 	
 	public function deleteChildAsset(){
 		$asset_id = $this->input->post('id');

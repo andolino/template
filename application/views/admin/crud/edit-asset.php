@@ -43,8 +43,9 @@
 						<label class="font-12" for="siblings">
 							Siblings Of :
 						</label>
+						<?php $siblingNameD = $siblingName($dataAsset->sibling); ?>
 						<select class="custom-select custom-select-sm font-12" id="siblings" name="siblings">
-							<option selected hidden value="">-SELECT-</option>
+							<option selected value="<?php echo $dataAsset->sibling; ?>"><?php echo !empty($siblingNameD) ? $siblingNameD->name : ''; ?></option>
 							<?php foreach ($dataParentAsset as $row): ?>
 								<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
 							<?php endforeach; ?>
