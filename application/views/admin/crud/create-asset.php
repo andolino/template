@@ -181,13 +181,21 @@
 					<textarea class="form-control form-control-sm font-12" id="notes" name="notes"></textarea>
 				</div>
 				<div class="col-12 p-0 m-0"></div>
-				
-				<div class="col-5 mt-4 pl-2 pt-2">
+				<div class="form-group clearfix">
+						<div class="col-md-9 col-md-offset-3">
+								<div class="file_prev"></div>
+								<label for="upload-file-dp" class="custom-file-upload">Upload image</label>
+						</div>
+						<div class="col-md-9 col-md-offset-3">
+								<input type="file" class="" id="upload-file-dp" name="upload-file-dp" aria-describedby="fileHelp" required>
+						</div>
+				</div>
+				<!-- <div class="col-5 mt-4 pl-2 pt-2">
 					<button type="button" class="btn btn-info btn-sm" onclick="$('#img-asset').trigger('click');">Select File..</button>
 					<input type='file' id="img-asset" class="none" name="upload-file-dp" />
 					<img id="src-img-asset" class="none" src="#" />
 					<p class="help-block font-12" id="upload-file-status">Accepted filetypes are jpg, png, gif, and svg. Max upload size allowed is 40M.</p>
-				</div>
+				</div> -->
 			</div>	
 
 			

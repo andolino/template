@@ -234,6 +234,29 @@ $(document).ready(function() {
     });
   });
 
+  $(document).on("change", "#upload-file-dp", function() {
+    if (typeof FileReader == "undefined") {
+      Swal.fire(
+        'Oopps!',
+        "Your browser doesn't support HTML5, Please upgrade your browser",
+        'info'
+      );
+    } else {
+        var container = $(".file_prev");
+        //remove all previous selected files
+        container.empty();
+
+        //create instance of FileReader
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $("<img />", {
+                src: e.target.result
+            }).appendTo(container);
+        };
+        reader.readAsDataURL($(this)[0].files[0]);
+    }
+});
+
   $(document).on('click', '#apply_par_custodian', function (e) {
     if ($(this).is(':checked')) {
       $.ajax({
@@ -256,10 +279,10 @@ $(document).ready(function() {
     }
   });
 
-  $(document).on('change', '#upload-file-dp', function() {
-    $('.spinner-cont').removeClass('none');
-    $('#frm-upload-dp').trigger('submit');
-  });
+  // $(document).on('change', '#upload-file-dp', function() {
+  //   $('.spinner-cont').removeClass('none');
+  //   $('#frm-upload-dp').trigger('submit');
+  // });
 
   $(document).on('click', '#printAssetAssetReport', function() {
     // var d = [];

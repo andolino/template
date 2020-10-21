@@ -522,3 +522,28 @@ label[id*="-error"] {
 }
 
 #tbl-loans-by-request-approved tbody tr td:nth-child(9) { width: 7%; }
+
+#upload-file-dp{
+  position: fixed;
+  top: -1000px !important;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 27px 26px;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ececec;
+}
+
+.file_prev img {
+  height: 100px;
+  width: auto;
+  margin-bottom: 15px;
+  margin-right: 10px;
+}
+
+.file_prev {
+  vertical-align: top;
+}
