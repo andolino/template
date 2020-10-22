@@ -273,6 +273,30 @@ class Settings extends MY_Controller {
 
 		echo json_encode($output);
 	}
+	
+	public function server_asset_category(){
+		$result 	= $this->Table->getOutput('asset_category', ['asset_category_id', 'code', 'name', 'entry_date', 'is_deleted'], ['asset_category_id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->code;
+   		$data[] = $row->name;
+ 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-asset-category-frm" data-id="'.$row->asset_category_id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="asset_category" data-field="asset_category_id" data-id="'.$row->asset_category_id.'"><i class="fas fa-trash"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
 
 	public function server_office(){
 		$result 	= $this->Table->getOutput('office_management', ['office_management_id', 'office_code', 'office_name', 'entry_date', 'is_deleted'], ['office_management_id' => 'desc']);
@@ -371,6 +395,12 @@ class Settings extends MY_Controller {
 		$params['data'] = $this->db->get_where('departments', array('is_deleted' => 0,'departments_id' => $this->input->post('id')))->row();
 		$this->load->view('admin/settings/forms/frm-departments', $params);
 	}
+	
+	public function getAssetCategoryFrm(){
+		$params['has_update'] = $this->input->post('id');
+		$params['data'] = $this->db->get_where('asset_category', array('is_deleted' => 0,'asset_category_id' => $this->input->post('id')))->row();
+		$this->load->view('admin/settings/forms/frm-asset-category', $params);
+	}
 
 	public function getOfficeFrm(){
 		$params['has_update'] = $this->input->post('id');
@@ -381,7 +411,7 @@ class Settings extends MY_Controller {
 	
 	public function showMapScanned(){
 		$params['lat'] = $this->input->post('lat');
-		$params['lng'] = $this->input->post('lng');
+		$params['lng'] = $this->input->post('lng');	
 		$this->load->view('admin/crud/show-map', $params);
 	}
 	
@@ -499,6 +529,11 @@ class Settings extends MY_Controller {
 	public function view_departments(){
 		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/settings/view-departments', $params);
+	}
+	
+	public function view_asset_category(){
+		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-asset-category', $params);
 	}
 
 	public function view_office(){

@@ -342,6 +342,42 @@ $(document).ready(function() {
             console.log('Fail');
       });
   });
+  
+  $(document).on('submit', '#frm-asset-category-settings', function(e) {
+    e.preventDefault();
+    var frm = $(this).serializeArray();
+    frm.push({name: 'tbl', value: 'asset_category'});
+    frm.push({name: 'pk_key', value: 'asset_category_id'});
+    frm.push({name: 'unique', value: 'code'});
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_asset_category.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
 
 
 
@@ -612,6 +648,50 @@ function initDepartmentsDataTables(){
   });
 }
 
+function initAssetCategoryDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_asset_category  = $("#tbl-asset-category-settings").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2] 
+      },
+      { 
+        className            : 'text-center', 
+        targets              : [2] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-asset-category',
+        "type"                 : 'POST',
+        // "data"                 : { 
+        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
+        //                       }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
 function initOfficeDataTables(){
   var myObjKeyLguConst = {};
   tbl_office  = $("#tbl-office-settings").DataTable({
@@ -719,6 +799,7 @@ function removeData(d){
           tbl_suppliers.ajax.reload();
           tbl_locations.ajax.reload();
           tbl_departments.ajax.reload();
+          tbl_asset_category.ajax.reload();
           tbl_office.ajax.reload();
         });
       }, function(){

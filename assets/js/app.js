@@ -15,6 +15,7 @@ var tbl_suppliers = [];
 var tbl_locations = [];
 var tbl_activity_logs = [];
 var tbl_departments = [];
+var tbl_asset_category = [];
 var tbl_office = [];
 var tbl_history_logs = [];
 
@@ -97,6 +98,7 @@ $(document).ready(function() {
       initSupplierDataTables();
       initLocationsDataTables();
       initDepartmentsDataTables();
+      initAssetCategoryDataTables();
       initOfficeDataTables();
 
     });    
@@ -109,6 +111,7 @@ $(document).ready(function() {
   initAssetRequestDataTables();
   initActivityLogsDataTables();
   initDepartmentsDataTables();
+  initAssetCategoryDataTables();
   initOfficeDataTables();
   initHistoryLogsDataTables();
 

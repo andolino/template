@@ -40,6 +40,17 @@
 			<i class="fas fa-user-friends font-25"></i>  DEPARTMENTS 
 		</button>	
 	</div>
+	<div class="col-lg-3 col-md-4 col-sm-6 font-12 pr-0 pt-3 btn-panel-bar">
+		<button type="button" 
+						class="btn btn-md rounded-0 btn-default w-100" 
+						id="loadPage" 
+						data-badge-head="ASSET CATEGORY" 
+						data-link="view-asset-category" 
+						data-ind="" 
+						data-cls="cont-view-departments">
+			<i class="fas fa-th-list font-25"></i>  ASSET CATEGORY 
+		</button>	
+	</div>
 	<!-- <div class="col-4 font-12 pr-0 pt-3 btn-panel-bar">
 		<button type="button" class="btn btn-md btn-default w-100" id="loadPage" data-badge-head="CONTRIBUTION RATE" data-link="view-contribution-rate" data-ind="" data-cls="cont-view-contribution-rate"><img src="<?php //echo base_url('assets/image/icon/currency.png'); ?>"> CONTRIBUTION/CASH GIFT RATE </button>	
 	</div> -->	

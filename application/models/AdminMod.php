@@ -515,8 +515,9 @@ class AdminMod extends CI_Model {
 		$logoY = 335;
 		$logo1 = $pdf->PageNo() . ' | '. $pdf->Image($logoFileName1, 15, 6, $logoWidth);
 		$logo2 = $pdf->PageNo() . ' | '. $pdf->Image($logoFileName2, $logoX, $logoY, $logoWidth);
-		$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 007', PDF_HEADER_STRING);
-
+		// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 007', PDF_HEADER_STRING);
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
 
 		// $pdf->Image($logoFileName1, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 		// Title

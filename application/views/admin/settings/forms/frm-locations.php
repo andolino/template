@@ -2,9 +2,24 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="form-group">
-		    <label for="name" class="font-12">ADDRESS</label>
+		    <label for="name" class="font-12">NAME</label>
 		    <input type="text" class="form-control form-control-sm font-12 input-address-lat-lng" id="name" name="name" value="<?php echo !empty($data) ? $data->name : ''; ?>" required>
 		    <div class="name err-msg"></div>
+		  </div>
+			<div class="form-group">
+		    <label for="contact_person" class="font-12">CONTACT PERSON</label>
+		    <input type="text" class="form-control form-control-sm font-12" id="contact_person" name="contact_person" value="<?php echo !empty($data) ? $data->contact_person : ''; ?>" required>
+		    <div class="contact_person err-msg"></div>
+		  </div>
+			<div class="form-group">
+		    <label for="contact_number" class="font-12">CONTACT NUMBER</label>
+		    <input type="text" class="form-control form-control-sm font-12" id="contact_number" name="contact_number" value="<?php echo !empty($data) ? $data->contact_number : ''; ?>" required>
+		    <div class="contact_number err-msg"></div>
+		  </div>
+			<div class="form-group">
+		    <label for="email" class="font-12">EMAIL</label>
+		    <input type="text" class="form-control form-control-sm font-12" id="email" name="email" value="<?php echo !empty($data) ? $data->email : ''; ?>" required>
+		    <div class="email err-msg"></div>
 		  </div>
 			<div class="form-group">
 		    <label for="lat" class="font-12">LATITUDE</label>
