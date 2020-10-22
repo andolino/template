@@ -89,15 +89,27 @@ public function index()
     //  }
   }
 
-	-- CREATE TABLE `asset_category` (
---   `asset_category_id` int(11) NOT NULL AUTO_INCREMENT,
---   `code` varchar(255) DEFAULT NULL,
---   `name` varchar(50) DEFAULT NULL,
---   `is_deleted` tinyint(1) DEFAULT 0,
---   `entry_date` date DEFAULT NULL,
---   PRIMARY KEY (`asset_category_id`)
--- );
-
-alter table tbl_locations add column contact_person text default null;
-alter table tbl_locations add column contact_number text default null;
-alter table tbl_locations add column email text default null;
+// vscode
+{
+    "editor.fontSize": 12,
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Vue Theme",
+    "editor.quickSuggestions": {
+        "comments": false,
+        "other": true,
+        "strings": true
+    },
+    "editor.tabSize": 2,
+    "workbench.colorCustomizations": {
+        "activityBar.foreground": "#fdea42",
+        "activityBarBadge.background": "#1d1c1c",
+        "activityBarBadge.foreground": "#1d1c1c",
+        "editor.background": "#1d1c1c",
+        "activityBar.background": "#1d1c1c",
+        "sideBar.background": "#1d1c1c",
+        "editorGroupHeader.tabsBackground": "#1d1c1c",
+        "tab.unfocusedHoverBackground" : "#1d1c1c",
+        "tab.activeBackground" : "#022a3a",
+        "tab.inactiveBackground" : "#1d1c1c"
+    }
+}
