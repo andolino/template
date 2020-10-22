@@ -88,3 +88,16 @@ public function index()
     //    return false;
     //  }
   }
+
+	-- CREATE TABLE `asset_category` (
+--   `asset_category_id` int(11) NOT NULL AUTO_INCREMENT,
+--   `code` varchar(255) DEFAULT NULL,
+--   `name` varchar(50) DEFAULT NULL,
+--   `is_deleted` tinyint(1) DEFAULT 0,
+--   `entry_date` date DEFAULT NULL,
+--   PRIMARY KEY (`asset_category_id`)
+-- );
+
+alter table tbl_locations add column contact_person text default null;
+alter table tbl_locations add column contact_number text default null;
+alter table tbl_locations add column email text default null;
