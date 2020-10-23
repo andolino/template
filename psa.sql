@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2020 at 08:39 AM
+-- Generation Time: Oct 23, 2020 at 12:11 PM
 -- Server version: 10.4.11-MariaDB
--- PHP Version: 7.2.31
+-- PHP Version: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -182,6 +182,27 @@ CREATE TABLE `account_subsidiary` (
 INSERT INTO `account_subsidiary` (`account_subsidiary_id`, `code`, `employee_id`, `name`, `users_id`, `is_deleted`, `entry_date`, `sub_code`) VALUES
 (1, '103', '000934', 'Dondon', NULL, 0, '2020-05-12', '934'),
 (2, '102', '002422', 'Peter', NULL, 0, '2020-05-12', '823');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset_category`
+--
+
+CREATE TABLE `asset_category` (
+  `asset_category_id` int(11) NOT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `asset_category`
+--
+
+INSERT INTO `asset_category` (`asset_category_id`, `code`, `name`, `is_deleted`, `entry_date`) VALUES
+(1, '00293', 'CATEGORY 1', 0, '2020-10-22');
 
 -- --------------------------------------------------------
 
@@ -1289,19 +1310,21 @@ CREATE TABLE `tbl_asset` (
   `checkout_user_id` int(2) DEFAULT NULL,
   `office_management_id` int(11) DEFAULT NULL,
   `departments_id` int(11) DEFAULT NULL,
-  `sibling` int(11) DEFAULT NULL
+  `sibling` int(11) DEFAULT NULL,
+  `asset_category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset`
 --
 
-INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `sibling`) VALUES
-(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL),
-(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 33),
-(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL),
-(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL),
-(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL);
+INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `sibling`, `asset_category_id`) VALUES
+(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL, NULL),
+(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-10-21 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 34, 1),
+(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL, NULL),
+(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL, NULL),
+(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL, NULL),
+(34, 'MSI Tomahawk Max B450 ATX', '0066687', NULL, '515124124', '2020-11-06', '24000.00', '0056897', NULL, 'TEST', NULL, 1, '2020-10-21 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 2, 30, 1);
 
 -- --------------------------------------------------------
 
@@ -1349,21 +1372,22 @@ CREATE TABLE `tbl_child_asset` (
   `is_deleted` tinyint(1) DEFAULT 0,
   `checkout_user_id` int(2) DEFAULT NULL,
   `office_management_id` int(11) DEFAULT NULL,
-  `departments_id` int(11) DEFAULT NULL
+  `departments_id` int(11) DEFAULT NULL,
+  `asset_category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_child_asset`
 --
 
-INSERT INTO `tbl_child_asset` (`id`, `tbl_asset_id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`) VALUES
-(6, 29, 'AORUS RTX Geforce 3090 Super Gaming', 'GPU 2080', 6, '526124', '2020-09-04', '45000.00', '56124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-09-27 16:00:00', 1, NULL, 1, 0, 48, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 5, 2),
-(7, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b450', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3),
-(8, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b456', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3),
-(9, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 3090', 8, '01065654', '2020-10-01', '35000.00', '9874987561', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 0, 6, 5, 2),
-(10, 29, 'NVIDIA GEFORCE RTX 2060', 'RTX 2060', 8, '51612125', '2020-09-17', '25000.00', '612512154', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, NULL, 0, 0, 0, 1, NULL, NULL, NULL),
-(11, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'Motherboard b550', 6, '6125125', '2020-09-04', '15000.00', '6212415', NULL, '', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4),
-(12, 30, 'TEST', 'TEST1', 5, 'TEST', '2020-10-08', '2500.00', '5121245152', NULL, 'TEST', NULL, 1, '2020-10-04 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 5, 2);
+INSERT INTO `tbl_child_asset` (`id`, `tbl_asset_id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `asset_category_id`) VALUES
+(6, 29, 'AORUS RTX Geforce 3090 Super Gaming', 'GPU 2080', 6, '526124', '2020-09-04', '45000.00', '56124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-09-27 16:00:00', 1, NULL, 1, 0, 48, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 5, 2, NULL),
+(7, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b450', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL),
+(8, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b456', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL),
+(9, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 3090', 8, '01065654', '2020-10-01', '35000.00', '9874987561', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 0, 6, 5, 2, NULL),
+(10, 29, 'NVIDIA GEFORCE RTX 2060', 'RTX 2060', 8, '51612125', '2020-09-17', '25000.00', '612512154', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, NULL, 0, 0, 0, 1, NULL, NULL, NULL, NULL),
+(11, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'Motherboard b550', 6, '6125125', '2020-09-04', '15000.00', '6212415', NULL, '', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, NULL),
+(12, 30, 'TEST', 'TEST1', 5, 'TEST', '2020-10-08', '2500.00', '5121245152', NULL, 'TEST', NULL, 1, '2020-10-04 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 5, 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -1460,7 +1484,9 @@ INSERT INTO `tbl_history` (`id`, `asset_id`, `current_custodian_id`, `previous_c
 (39, 31, 6, NULL, 0, NULL, 'create', '2020-09-30 08:59:47', NULL, NULL, NULL, 0, 1, NULL),
 (40, 32, 6, NULL, 2, NULL, 'create', '2020-10-03 09:00:46', NULL, NULL, NULL, 0, 1, NULL),
 (41, NULL, 6, NULL, 2, NULL, 'create', '2020-10-05 05:09:07', NULL, NULL, NULL, 0, 1, 30),
-(42, 33, 1, NULL, 2, NULL, 'create', '2020-10-20 22:22:58', NULL, NULL, NULL, 0, 1, NULL);
+(42, 33, 1, NULL, 2, NULL, 'create', '2020-10-20 22:22:58', NULL, NULL, NULL, 0, 1, NULL),
+(43, 34, 8, NULL, 2, NULL, 'create', '2020-10-22 02:37:18', NULL, NULL, NULL, 0, 1, NULL),
+(44, 30, 8, 8, 2, 2, 'update', '2020-09-28 04:32:09', '2020-10-22 02:41:00', NULL, NULL, 0, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1474,19 +1500,23 @@ CREATE TABLE `tbl_locations` (
   `image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_deleted` tinyint(1) DEFAULT 0,
   `lat` varchar(255) DEFAULT NULL,
-  `lng` varchar(255) DEFAULT NULL
+  `lng` varchar(255) DEFAULT NULL,
+  `contact_person` text DEFAULT NULL,
+  `contact_number` text DEFAULT NULL,
+  `email` text DEFAULT NULL,
+  `address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_locations`
 --
 
-INSERT INTO `tbl_locations` (`id`, `name`, `image`, `is_deleted`, `lat`, `lng`) VALUES
-(1, 'Metro Manila', NULL, 1, NULL, NULL),
-(2, 'NATIONAL CAPITAL REGION', NULL, 0, NULL, NULL),
-(3, 'REGION 5', NULL, 1, NULL, NULL),
-(4, 'REGION 5', NULL, 0, NULL, NULL),
-(5, '127 caimito st blk 5 west rembo makati city', NULL, 0, '14.563273', '121.050572');
+INSERT INTO `tbl_locations` (`id`, `name`, `image`, `is_deleted`, `lat`, `lng`, `contact_person`, `contact_number`, `email`, `address`) VALUES
+(1, 'Metro Manila', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'NATIONAL CAPITAL REGION', NULL, 0, '14.560344', '121.058747', 'Andolino', '09773656715', 'dondonpentavia@gmail.com', '129 T. Alonzo Ext West Rembo Makati City'),
+(3, 'REGION 5', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'REGION 5', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, '127 caimito st blk 5 west rembo makati city', NULL, 0, '14.563273', '121.050572', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1544,7 +1574,8 @@ INSERT INTO `tbl_qrcodes` (`id`, `asset_id`, `qr_code`, `code`, `image`, `is_del
 (16, 31, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/a6vomh\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/a6vomh\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/WTNVaXJYMjZIMjgwR1o2RWlhS0kzdz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-30 16:59:46\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'a6vomh', NULL, 0, NULL),
 (17, 32, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/doevz0\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/doevz0\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/K2t0YTVyYTdZQ0dxUy9CMGNia01Ndz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-03 17:00:47\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'doevz0', NULL, 0, NULL),
 (18, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/r74nj6\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/r74nj6\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets-child\\/ZlRWaWd5L084NFQwb3JONlNsMVJSUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-05 13:09:06\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'r74nj6', NULL, 0, 12),
-(19, 33, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/f16m23\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/f16m23\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/eUNwZHlOTzRrU0JXT0VOZjMyV28vUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-21 06:22:59\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'f16m23', NULL, 0, NULL);
+(19, 33, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/f16m23\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/f16m23\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/eUNwZHlOTzRrU0JXT0VOZjMyV28vUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-21 06:22:59\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'f16m23', NULL, 0, NULL),
+(20, 34, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/1qv2yi\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/1qv2yi\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/L0IybVNoOGRabEtuQVNCVWNRZUtDQT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-22 10:37:18\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', '1qv2yi', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1639,7 +1670,8 @@ INSERT INTO `tbl_uploads` (`uploads_id`, `asset_id`, `image_name`, `image_path`,
 (29, 0, '41KH7PiXOXL2.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-09-28', 9),
 (30, 0, '13-145-090-V01.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-09-28', 11),
 (31, 31, '3P.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-09-30', NULL),
-(32, 33, 'IMG_20200627_152512.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-21', NULL);
+(32, 33, 'IMG_20200627_152512.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-21', NULL),
+(33, 34, '3P1.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-22', NULL);
 
 -- --------------------------------------------------------
 
@@ -2669,6 +2701,12 @@ ALTER TABLE `account_subsidiary`
   ADD KEY `accnt_main_code_rel_ibfk_1` (`code`);
 
 --
+-- Indexes for table `asset_category`
+--
+ALTER TABLE `asset_category`
+  ADD PRIMARY KEY (`asset_category_id`);
+
+--
 -- Indexes for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
@@ -2993,6 +3031,12 @@ ALTER TABLE `account_subsidiary`
   MODIFY `account_subsidiary_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `asset_category`
+--
+ALTER TABLE `asset_category`
+  MODIFY `asset_category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `beneficiaries`
 --
 ALTER TABLE `beneficiaries`
@@ -3170,7 +3214,7 @@ ALTER TABLE `tbl_action_logs`
 -- AUTO_INCREMENT for table `tbl_asset`
 --
 ALTER TABLE `tbl_asset`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `tbl_child_asset`
@@ -3194,7 +3238,7 @@ ALTER TABLE `tbl_gps`
 -- AUTO_INCREMENT for table `tbl_history`
 --
 ALTER TABLE `tbl_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `tbl_locations`
@@ -3212,7 +3256,7 @@ ALTER TABLE `tbl_models`
 -- AUTO_INCREMENT for table `tbl_qrcodes`
 --
 ALTER TABLE `tbl_qrcodes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tbl_status_labels`
@@ -3230,7 +3274,7 @@ ALTER TABLE `tbl_suppliers`
 -- AUTO_INCREMENT for table `tbl_uploads`
 --
 ALTER TABLE `tbl_uploads`
-  MODIFY `uploads_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `uploads_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `uploads`
