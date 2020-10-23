@@ -53,12 +53,19 @@
 					</div>
 					<!-- end -->
 					<div class="col-3">
-						<label for="company_id" class="font-12">Company</label>
+						<!-- <label for="company_id" class="font-12">Company</label>
 						<select class="custom-select custom-select-sm font-12" id="company_id" name="company_id">
 						  <option selected hidden value="">-SELECT-</option>
-						  <?php foreach ($companies as $row): ?>
-						  	<option value="<?php echo $row->id; ?>" <?php echo $dataAsset->company_id == $row->id ? 'selected' : ''; ?>><?php echo $row->name; ?></option>
-						  <?php endforeach; ?>
+						  <?php //foreach ($companies as $row): ?>
+						  	<option value="<?php //echo $row->id; ?>" <?php //echo $dataAsset->company_id == $row->id ? 'selected' : ''; ?>><?php //echo $row->name; ?></option>
+						  <?php //endforeach; ?>
+						</select> -->
+						<label for="asset_category_id" class="font-12">Asset Category</label>
+						<select class="custom-select custom-select-sm font-12" id="asset_category_id" name="asset_category_id">
+							<option selected hidden value="">-SELECT-</option>
+							<?php foreach ($assetCategory as $row): ?>
+								<option value="<?php echo $row->asset_category_id; ?>" <?php echo $dataAsset->asset_category_id == $row->asset_category_id ? 'selected' : ''; ?>><?php echo $row->name; ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 					<div class="col-3 pl-0">

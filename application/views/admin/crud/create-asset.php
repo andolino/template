@@ -1,7 +1,7 @@
 <div class="cont-add-member row none">
 	<div class="offset-8 col-1">
 		<a href="javascript:void(0);" class="float-right pr-2 pb-2" id="loadPage" data-link="<?php echo !empty($asset_id) ? 'view-child-asset' : 'tbl-asset'; ?>" data-badge-head="ASSET LIST"
-   								data-cls="cont-tbl-constituent" data-placement="top" data-toggle="tooltip" title="Back to List"><i class="fas fa-times"></i></a>
+   								data-cls="cont-view-member" data-placement="top" data-ind="<?php echo !empty($asset_id) ? $asset_id : ''; ?>" data-toggle="tooltip" title="Back to List"><i class="fas fa-times"></i></a>
 	</div>
 	<div class="col-12">
 		<form id="frm-create-asset">
@@ -69,11 +69,18 @@
 					<?php endif; ?>
 				</div>
 				<div class="col-3">
-					<label for="company_id" class="font-12">Company</label>
+					<!-- <label for="company_id" class="font-12">Company</label>
 					<select class="custom-select custom-select-sm font-12" id="company_id" name="company_id">
 						<option selected hidden value="">-SELECT-</option>
-						<?php foreach ($companies as $row): ?>
-							<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+						<?php //foreach ($companies as $row): ?>
+							<option value="<?php //echo $row->id; ?>"><?php //echo $row->name; ?></option>
+						<?php //endforeach; ?>
+					</select> -->
+					<label for="asset_category_id" class="font-12">Asset Category</label>
+					<select class="custom-select custom-select-sm font-12" id="asset_category_id" name="asset_category_id">
+						<option selected hidden value="">-SELECT-</option>
+						<?php foreach ($assetCategory as $row): ?>
+							<option value="<?php echo $row->asset_category_id; ?>"><?php echo $row->name; ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>

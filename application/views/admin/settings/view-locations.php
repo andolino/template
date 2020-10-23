@@ -17,6 +17,7 @@
 				<thead>
 					<tr>
 						<th>NAME</th>
+						<th>ADDRESS</th>
 						<th>ACTION</th>
 					</tr>
 				</thead>

@@ -535,6 +535,7 @@ class Admin extends MY_Controller {
 	public function add_asset(){
 		$params['asset_id']  			 = $this->input->get('data');
 		$params['companies'] 			 = $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['assetCategory'] 	 = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
 		$params['models'] 	 			 = $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
 		$params['status'] 	 			 = $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
 		$params['suppliers'] 			 = $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
@@ -554,6 +555,7 @@ class Admin extends MY_Controller {
 		$params['dataAsset'] 		= $this->db->get_where('tbl_asset', array('id' => $asset_id))->row();
 		$params['siblingName'] 	= function($id){ return $this->db->get_where('tbl_asset', array('id' => $id))->row(); };
 		$params['companies'] 		= $this->db->get_where('tbl_companies', array('is_deleted' => 0))->result();
+		$params['assetCategory'] 	 = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
 		$params['models'] 	 		= $this->db->get_where('tbl_models', array('is_deleted' => 0))->result();
 		$params['status'] 	 		= $this->db->get_where('tbl_status_labels', array('is_deleted' => 0))->result();
 		$params['suppliers'] 		= $this->db->get_where('tbl_suppliers', array('is_deleted' => 0))->result();
@@ -598,7 +600,8 @@ class Admin extends MY_Controller {
 	}
 
 	public function save_asset(){
-		$this->form_validation->set_rules('company_id', 'Company', 'required');
+		// $this->form_validation->set_rules('company_id', 'Company', 'required');
+		$this->form_validation->set_rules('asset_category_id', 'Asset Category', 'required');
 		if ($this->input->post('asset_tag') != $this->input->post('original_asset_tag')) {
 			if (!empty($_POST['tbl_asset_id'])) {
 				$this->form_validation->set_rules('asset_tag', 'Asset Tag', 'required|is_unique[tbl_child_asset.asset_tag]');

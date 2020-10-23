@@ -10,7 +10,8 @@
             data-badge-head="CREATE CHILD ASSET FOR (<?php echo !empty($data) ? $data[0]->asset_name : ''; ?>)" 
             data-link="add-asset" 
             data-ind="<?php echo !empty($data) ? $data[0]->id : ''; ?>" 
-            data-cls="cont-add-member"><i class="fas fa-list"></i> Create Child Asset</button>
+            data-cls="cont-add-member"
+            onclick="setTimeout(function(){$('a#loadPage').attr('data-badge-head', '<?php echo !empty($data) ? strtoupper($data[0]->asset_name) : ''; ?>')}, 1000)"><i class="fas fa-list"></i> Create Child Asset</button>
     <button type="button" 
             class="btn btn-c-success btn-md rounded-0 font-12 mb-3" 
             id="printChildAssetQr"><i class="fas fa-print"></i> Print QR</button>

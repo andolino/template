@@ -547,3 +547,7 @@ label[id*="-error"] {
 .file_prev {
   vertical-align: top;
 }
+
+#tbl-locations-settings tbody tr td:nth-child(1) {
+  width: 33% !important;
+}

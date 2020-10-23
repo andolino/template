@@ -235,6 +235,7 @@ class Settings extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = $row->name;
+   		$data[] = $row->address;
 			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-locations-frm" data-id="'.$row->id.'" data-title="EDIT - '.strtoupper($row->name).'"><i class="fas fa-edit"></i></a> | 
 			 						<a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_locations" data-field="id" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
 			$res[] = $data;
