@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="col-12 p-0 m-0"></div>
-					<div class="col-1 mt-4">
+					<div class="col-2 mt-4">
 						<div class="form-check pt-2">
 							<input class="form-check-input font-12" type="checkbox" value="1" id="requestable" name="requestable" <?php echo $dataAsset->requestable == 1 ? 'checked' : ''; ?>>
 							<label class="form-check-label font-12" for="requestable">
@@ -39,7 +39,7 @@
 							</label>
 						</div>
 					</div>
-					<div class="col-sm-12 col-md-2 mt-1">
+					<div class="col-sm-11 col-md-2 mt-3">
 						<label class="font-12" for="siblings">
 							Siblings Of :
 						</label>
@@ -51,8 +51,9 @@
 							<?php endforeach; ?>
 						</select>
 					</div>
+					<div class="col-sm-12"></div>
 					<!-- end -->
-					<div class="col-3">
+					<div class="col-3 mt-2">
 						<!-- <label for="company_id" class="font-12">Company</label>
 						<select class="custom-select custom-select-sm font-12" id="company_id" name="company_id">
 						  <option selected hidden value="">-SELECT-</option>
@@ -68,9 +69,13 @@
 							<?php endforeach; ?>
 						</select>
 					</div>
-					<div class="col-3 pl-0">
+					<div class="col-3 pl-0 mt-2">
 						<label for="asset_tag" class="font-12">Asset Tag</label>
 						<input type="text" class="form-control form-control-sm font-12" id="asset_tag" name="asset_tag" value="<?php echo $dataAsset->asset_tag; ?>">
+					</div>
+					<div class="col-3 pl-0 mt-2">
+						<label for="property_tag" class="font-12">Property Tag</label>
+						<input type="text" class="form-control form-control-sm font-12" id="property_tag" name="property_tag" value="<?php echo $dataAsset->property_tag; ?>">
 					</div>
 					<!-- <div class="col-3 pl-0">
 						<label for="model_id" class="font-12">Model ID</label>

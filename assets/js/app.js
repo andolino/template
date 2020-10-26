@@ -18,6 +18,16 @@ var tbl_departments = [];
 var tbl_asset_category = [];
 var tbl_office = [];
 var tbl_history_logs = [];
+var tbl_portal_asset_pending = [];
+var tbl_portal_asset_approved = [];
+var tbl_portal_asset_disapproved = [];
+var tbl_portal_asset_cancelled = [];
+var tbl_portal_asset_closed = [];
+var tbl_repair_asset_pending = [];
+var tbl_repair_asset_approved = [];
+var tbl_repair_asset_disapproved = [];
+var tbl_repair_asset_cancelled = [];
+var tbl_repair_asset_closed = [];
 
 $(document).ready(function() {
   //init plugin
@@ -100,6 +110,8 @@ $(document).ready(function() {
       initDepartmentsDataTables();
       initAssetCategoryDataTables();
       initOfficeDataTables();
+      initPortalRequestDataTables();
+      initRepairRequestDataTables();
 
     });    
   });
@@ -114,6 +126,8 @@ $(document).ready(function() {
   initAssetCategoryDataTables();
   initOfficeDataTables();
   initHistoryLogsDataTables();
+  initPortalRequestDataTables();
+  initRepairRequestDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -511,9 +525,170 @@ $(document).ready(function() {
     });
   });
 
-
   $(document).on("change", "#img-asset", function(){
     readUrlImg(this);
+  });
+  
+  $(document).on('click', '#add-portal-request', function(){
+    $('#modal-portal-add-request').modal('show');
+    $('#office_management_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#asset_category_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#serial').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#location_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+  });
+
+  $(document).on('change', '.asset_category_id', function () {
+    var asset_category_id = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: "get-select-asset-rep",
+      data: { "asset_category_id": asset_category_id },
+      success: function (res) {
+        $('.asset-details-container').html(res);
+        $('#serial').select2({
+          width: '100%',
+        });
+      }
+    });
+  });
+  
+  $(document).on('change', '.select-repair-asset-tag', function () {
+    var serial_no = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: "get-tbl-asset-row",
+      data: { "serial_no": serial_no },
+      dataType: 'json',
+      success: function (res) {
+        if (res.hasOwnProperty('html')) {
+          $('.multiple-child-asset').html(res.html);
+          $('#multiple-child-select').select2({
+            width: '100%',
+            dropdownParent: $("#modal-portal-add-request")
+          });
+        } else {
+          $('.multiple-child-asset').html('<div class="alert alert-warning font-12" role="alert">No Child Asset</div>');
+        }
+        $('#asset_tag').val(res.asset_tag);
+        $('#property_tag').val(res.property_tag);
+        $('#custodian').val(res.checkout_user_id);
+
+      }
+    });
+  });
+
+  $(document).on('submit', '#frm-repair-request', function (e) {
+    e.preventDefault();
+    var frm = new FormData(this);
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Finalize Request?', 'question'], 
+      function(){
+        $.ajax({
+          url      : 'save-repair-request',
+          type     : 'POST',
+          context  : this,
+          data     : frm,
+          processData:false,
+          contentType:false,
+          cache:false,
+          async:false,
+          dataType: 'json',
+          success:function(res){
+            Swal.fire(
+              res.param1,
+              res.param2,
+              res.param3
+            );
+            tbl_repair_asset_pending.ajax.reload();
+            tbl_repair_asset_approved.ajax.reload();
+            tbl_repair_asset_disapproved.ajax.reload();
+            tbl_repair_asset_cancelled.ajax.reload();
+            tbl_repair_asset_closed.ajax.reload();
+            $('#modal-portal-add-request').modal('hide');
+          }
+        });
+      }, function(){
+        console.log('Fail');
+    });
+  });
+
+  $(document).on('submit', '#frm-portal-request', function (e) {
+    var frm = $(this).serialize();
+    e.preventDefault();
+      customSwal(
+          'btn btn-success', 
+          'btn btn-danger mr-2', 
+          'Yes', 
+          'Wait', 
+          ['', 'Finalize Request?', 'question'], 
+          function(){
+            $.ajax({
+              url      : 'save-portal-request',
+              type     : 'POST',
+              dataType : 'JSON',
+              context  : this,
+              data     : frm,
+              success:function(res){
+                Swal.fire(
+                  res.param1,
+                  res.param2,
+                  res.param3
+                );
+                tbl_portal_asset_pending.ajax.reload();
+                tbl_portal_asset_approved.ajax.reload();
+                tbl_portal_asset_disapproved.ajax.reload();
+                tbl_portal_asset_cancelled.ajax.reload();
+                tbl_portal_asset_closed.ajax.reload();
+                $('#modal-portal-add-request').modal('hide');
+              }
+            });
+          }, function(){
+            console.log('Fail');
+      });
+  });
+
+  $(document).on('click', '#cancel-portal-request', function () {
+      var id = $(this).attr('data-id');
+      customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Cancel Request?', 'question'], 
+        function(){
+          $.ajax({
+            url      : 'cancel-portal-request',
+            type     : 'POST',
+            context  : this,
+            data     : {
+              'tbl'   : 'tbl_asset_repair_request',
+              'field' : 'id', 
+              'id'    : id
+            },
+            success:function(res){
+              tbl_portal_asset_pending.ajax.reload();
+              tbl_repair_asset_pending.ajax.reload();
+            }
+          });
+        }, function(){
+          console.log('Fail');
+    });
   });
 
 });//ready
@@ -599,7 +774,7 @@ function initMembersDataTables(){
       },
       { 
         visible              : false, 
-        targets              : [3,9]
+        targets              : [9,10,11,12]
       },
     ],
     "serverSide"               : true,
@@ -698,6 +873,384 @@ function initAssetRequestDataTables(){
           myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
         }
         $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+//DISPATCH
+function initPortalRequestDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-portal-pending').DataTable().clear().destroy();
+  tbl_portal_asset_pending  = $("#tbl-portal-pending").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-pending").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-approved').DataTable().clear().destroy();
+  tbl_portal_asset_approved  = $("#tbl-portal-approved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-approved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-disapproved').DataTable().clear().destroy();
+  tbl_portal_asset_disapproved  = $("#tbl-portal-disapproved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-disapproved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-cancelled').DataTable().clear().destroy();
+  tbl_portal_asset_cancelled  = $("#tbl-portal-cancelled").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-cancelled").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  $('#tbl-portal-closed').DataTable().clear().destroy();
+  tbl_portal_asset_closed  = $("#tbl-portal-closed").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-closed").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+//REPAIR
+function initRepairRequestDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-portal-repair-pending').DataTable().clear().destroy();
+  tbl_repair_asset_pending  = $("#tbl-portal-repair-pending").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-repair-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-repair-pending").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-repair-approved').DataTable().clear().destroy();
+  tbl_repair_asset_approved  = $("#tbl-portal-repair-approved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-repair-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-repair-approved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-repair-disapproved').DataTable().clear().destroy();
+  tbl_repair_asset_disapproved  = $("#tbl-portal-repair-disapproved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-repair-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-repair-disapproved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  $('#tbl-portal-repair-cancelled').DataTable().clear().destroy();
+  tbl_repair_asset_cancelled  = $("#tbl-portal-repair-cancelled").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-repair-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-repair-cancelled").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  $('#tbl-portal-repair-closed').DataTable().clear().destroy();
+  tbl_repair_asset_closed  = $("#tbl-portal-repair-closed").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-repair-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-repair-closed").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
     }
   });
 }

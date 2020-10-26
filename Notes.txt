@@ -113,3 +113,21 @@ public function index()
         "tab.inactiveBackground" : "#1d1c1c"
     }
 }
+
+CREATE TABLE `tbl_asset_request` (
+  `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT,
+  `office_management_id` int(11) DEFAULT NULL,
+  `tbl_asset_id` int(11) DEFAULT NULL,
+  `qty` int(255) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `other_location` varchar(255) DEFAULT NULL,
+  `users_id` int(11) DEFAULT NULL,
+  `purpose` text DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` date DEFAULT NULL,
+  PRIMARY KEY (`tbl_asset_request_id`)
+);
+
+alter table tbl_asset_request add column date_need datetime default null;
+alter table tbl_asset_request add column date_return datetime default null;

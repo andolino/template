@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 23, 2020 at 12:11 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.3.23
+-- Host: localhost
+-- Generation Time: Oct 26, 2020 at 04:17 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1311,20 +1311,94 @@ CREATE TABLE `tbl_asset` (
   `office_management_id` int(11) DEFAULT NULL,
   `departments_id` int(11) DEFAULT NULL,
   `sibling` int(11) DEFAULT NULL,
-  `asset_category_id` int(11) DEFAULT NULL
+  `asset_category_id` int(11) DEFAULT NULL,
+  `property_tag` varchar(191) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset`
 --
 
-INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `sibling`, `asset_category_id`) VALUES
-(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL, NULL),
-(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-10-21 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 34, 1),
-(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL, NULL),
-(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL, NULL),
-(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL, NULL),
-(34, 'MSI Tomahawk Max B450 ATX', '0066687', NULL, '515124124', '2020-11-06', '24000.00', '0056897', NULL, 'TEST', NULL, 1, '2020-10-21 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 2, 30, 1);
+INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `sibling`, `asset_category_id`, `property_tag`) VALUES
+(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL, NULL, NULL),
+(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-10-21 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 34, 1, NULL),
+(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL, NULL, NULL),
+(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL, NULL, NULL),
+(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', '2020-10-24 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL, 1, '0022093'),
+(34, 'MSI Tomahawk Max B450 ATX', '0066687', NULL, '515124124', '2020-11-06', '24000.00', '0056897', NULL, 'TEST', NULL, 1, '2020-10-21 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 2, 30, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_asset_repair_request`
+--
+
+CREATE TABLE `tbl_asset_repair_request` (
+  `id` int(11) NOT NULL,
+  `asset_category_id` int(11) DEFAULT NULL,
+  `serial` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `asset_tag` text DEFAULT NULL,
+  `property_tag` text DEFAULT NULL,
+  `tbl_child_asset_id` text DEFAULT NULL,
+  `regkits_no` text DEFAULT NULL,
+  `custodian` int(11) DEFAULT NULL,
+  `date_reported` datetime DEFAULT NULL,
+  `problem_desc` text DEFAULT NULL,
+  `file_upload` text DEFAULT NULL,
+  `image_upload` text DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` datetime DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 0,
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_date` datetime DEFAULT NULL,
+  `disapproved_by` int(11) DEFAULT NULL,
+  `disapproved_date` datetime DEFAULT NULL,
+  `requestor` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_asset_repair_request`
+--
+
+INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`) VALUES
+(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_asset_request`
+--
+
+CREATE TABLE `tbl_asset_request` (
+  `tbl_asset_request_id` int(11) NOT NULL,
+  `office_management_id` int(11) DEFAULT NULL,
+  `asset_category_id` int(11) DEFAULT NULL,
+  `qty` int(255) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `other_location` varchar(255) DEFAULT NULL,
+  `users_id` int(11) DEFAULT NULL,
+  `purpose` text DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` datetime DEFAULT NULL,
+  `date_need` datetime DEFAULT NULL,
+  `date_return` datetime DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 0,
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_date` datetime DEFAULT NULL,
+  `disapproved_by` int(11) DEFAULT NULL,
+  `disapproved_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_asset_request`
+--
+
+INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`) VALUES
+(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL),
+(12, 5, 1, 2, 4, '', 9, 'TEST1', 'TEST2', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 0, NULL, NULL, NULL, NULL),
+(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1486,7 +1560,9 @@ INSERT INTO `tbl_history` (`id`, `asset_id`, `current_custodian_id`, `previous_c
 (41, NULL, 6, NULL, 2, NULL, 'create', '2020-10-05 05:09:07', NULL, NULL, NULL, 0, 1, 30),
 (42, 33, 1, NULL, 2, NULL, 'create', '2020-10-20 22:22:58', NULL, NULL, NULL, 0, 1, NULL),
 (43, 34, 8, NULL, 2, NULL, 'create', '2020-10-22 02:37:18', NULL, NULL, NULL, 0, 1, NULL),
-(44, 30, 8, 8, 2, 2, 'update', '2020-09-28 04:32:09', '2020-10-22 02:41:00', NULL, NULL, 0, 1, NULL);
+(44, 30, 8, 8, 2, 2, 'update', '2020-09-28 04:32:09', '2020-10-22 02:41:00', NULL, NULL, 0, 1, NULL),
+(45, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:15', NULL, NULL, 0, 1, NULL),
+(46, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:48', NULL, NULL, 0, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1734,7 +1810,9 @@ INSERT INTO `users` (`users_id`, `screen_name`, `username`, `password`, `txt_pas
 (5, 'Dondon', 'user2', '$2y$10$GetAQ4qm7q8.d0YSYLWteeG1E3bFu7m0u94oENHugwmnOrGk060ja', '123456', '2020-04-25', NULL, 1, 'Baisac', 'Andolino', 'Gallardo', 4, 'baisac.andolino@gmail.com', 'Programmer', NULL, 0),
 (6, 'Robin', 'user3', '$2y$10$FYDYA..42Ex6w0xKy1NK0Ow2gCkCxxwZ2TEiXRdoC.rdKO6oYASwO', 'Asd_06', '2020-04-25', NULL, 0, 'Cardo', 'Dalisay', 'Mendoza', 2, 'robinpadilla@gmail.com', 'Staff', NULL, 0),
 (7, 'Mardyon', 'user4', '$2y$10$6373IZTPGcWskK/pY3gBWOrW7C5SCzxURVc7XjIWjpc5icQv.ZDqy', '12345678', '2020-04-29', NULL, 1, 'Congzon', 'Mardyon', 'G', 0, 'mardyon@gmail.com', 'Programmer', NULL, 0),
-(8, 'Peter', 'peteAdmin', '$2y$10$D/gp043WINZDAHrdSQOryu8gUfGbYBlv/fDMdkthgmJs3BoTAyKM6', '!@#QWEASDZXC', '2020-08-15', NULL, 0, 'Mora', 'Peter', 'BIllones', 0, 'peterbillonesmora@gmail.com', 'Programmer', NULL, 0);
+(8, 'Peter', 'peteAdmin', '$2y$10$D/gp043WINZDAHrdSQOryu8gUfGbYBlv/fDMdkthgmJs3BoTAyKM6', '!@#QWEASDZXC', '2020-08-15', NULL, 0, 'Mora', 'Peter', 'BIllones', 0, 'peterbillonesmora@gmail.com', 'Programmer', NULL, 0),
+(9, 'Dondon', 'pentavia6', '$2y$10$j73kucFVhisbDyQRW2llheGpPTo9I/J23Q6V.wMF6WqN/q14YRtRW', '123456', '2020-10-23', NULL, 0, 'Baisac', 'Andolino', 'Gallardo', 3, 'dpentavia@gmail.com', 'Administrator', NULL, 0),
+(10, 'Nonie', 'nonie', '$2y$10$msYIPfXgbQz7y/MtlQ9FOeOJMYCZxHfgMzMlMra17w8nK1fz9/GxG', '123456', '2020-10-24', NULL, 0, 'advincula', 'nonie', 'oowa', 2, 'mardyon.yongson1026@gmail.com', 'IT Dept.', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1828,6 +1906,7 @@ CREATE TABLE `v_asset` (
 ,`screen_name` text
 ,`office_name` text
 ,`region` varchar(255)
+,`property_tag` varchar(191)
 );
 
 -- --------------------------------------------------------
@@ -2397,6 +2476,72 @@ CREATE TABLE `v_pacs` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_portal_request`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_portal_request` (
+`tbl_asset_request_id` int(11)
+,`office_management_id` int(11)
+,`asset_category_id` int(11)
+,`qty` int(255)
+,`location_id` int(11)
+,`other_location` varchar(255)
+,`users_id` int(11)
+,`purpose` text
+,`remarks` text
+,`is_deleted` tinyint(1)
+,`entry_date` datetime
+,`date_need` datetime
+,`date_return` datetime
+,`status` tinyint(1)
+,`approved_by` text
+,`approved_date` datetime
+,`disapproved_by` text
+,`disapproved_date` datetime
+,`office_name` text
+,`category_name` varchar(50)
+,`location_name` varchar(191)
+,`screen_name` text
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_repair_request`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_repair_request` (
+`id` int(11)
+,`serial` varchar(191)
+,`asset_tag` text
+,`asset_category` varchar(50)
+,`asset_name` varchar(191)
+,`property_tag` text
+,`tbl_child_asset_id` text
+,`regkits_no` text
+,`custodian` int(11)
+,`date_reported` datetime
+,`problem_desc` text
+,`file_upload` text
+,`image_upload` text
+,`remarks` text
+,`is_deleted` tinyint(1)
+,`entry_date` datetime
+,`status` tinyint(1)
+,`approved_by` int(11)
+,`approved_date` datetime
+,`disapproved_by` int(11)
+,`disapproved_date` datetime
+,`requestor` int(11)
+,`custodian_name` text
+,`requestor_name` text
+,`approver_name` text
+,`disapprover_name` text
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_subsidiary`
 -- (See below for the actual view)
 --
@@ -2459,7 +2604,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_asset`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset`  AS  select `ta`.`id` AS `id`,`ta`.`name` AS `name`,`tc`.`name` AS `company`,`ta`.`asset_tag` AS `asset_tag`,`tm`.`name` AS `model`,`tsl`.`name` AS `status`,`ta`.`serial` AS `serial`,`ta`.`name` AS `asset_name`,`ta`.`purchase_date` AS `purchase_date`,`ts`.`name` AS `supplier`,`ta`.`order_number` AS `order_number`,`ta`.`purchase_cost` AS `purchase_cost`,`ta`.`warranty_months` AS `warranty_months`,`tl`.`name` AS `default_location`,`ta`.`notes` AS `notes`,`ta`.`requestable` AS `requestable`,`ta`.`is_deleted` AS `is_deleted`,`ta`.`status_id` AS `status_id`,`u`.`screen_name` AS `screen_name`,`om`.`office_name` AS `office_name`,`d`.`region` AS `region` from ((((((((`tbl_asset` `ta` left join `tbl_companies` `tc` on(`tc`.`id` = `ta`.`company_id`)) left join `tbl_models` `tm` on(`tm`.`id` = `ta`.`model_id`)) left join `tbl_status_labels` `tsl` on(`tsl`.`id` = `ta`.`status_id`)) left join `tbl_suppliers` `ts` on(`ts`.`id` = `ta`.`supplier_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `ta`.`checkout_user_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d` on(`d`.`departments_id` = `ta`.`departments_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset`  AS  select `ta`.`id` AS `id`,`ta`.`name` AS `name`,`tc`.`name` AS `company`,`ta`.`asset_tag` AS `asset_tag`,`tm`.`name` AS `model`,`tsl`.`name` AS `status`,`ta`.`serial` AS `serial`,`ta`.`name` AS `asset_name`,`ta`.`purchase_date` AS `purchase_date`,`ts`.`name` AS `supplier`,`ta`.`order_number` AS `order_number`,`ta`.`purchase_cost` AS `purchase_cost`,`ta`.`warranty_months` AS `warranty_months`,`tl`.`name` AS `default_location`,`ta`.`notes` AS `notes`,`ta`.`requestable` AS `requestable`,`ta`.`is_deleted` AS `is_deleted`,`ta`.`status_id` AS `status_id`,`u`.`screen_name` AS `screen_name`,`om`.`office_name` AS `office_name`,`d`.`region` AS `region`,`ta`.`property_tag` AS `property_tag` from ((((((((`tbl_asset` `ta` left join `tbl_companies` `tc` on(`tc`.`id` = `ta`.`company_id`)) left join `tbl_models` `tm` on(`tm`.`id` = `ta`.`model_id`)) left join `tbl_status_labels` `tsl` on(`tsl`.`id` = `ta`.`status_id`)) left join `tbl_suppliers` `ts` on(`ts`.`id` = `ta`.`supplier_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `ta`.`checkout_user_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d` on(`d`.`departments_id` = `ta`.`departments_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -2658,6 +2803,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `v_pacs`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_pacs`  AS  select `jm`.`j_master_id` AS `j_master_id`,`jm`.`j_type_id` AS `j_type_id`,`m`.`bank_account` AS `account_no`,`jm`.`journal_ref` AS `journal_ref`,`jm`.`check_voucher_no` AS `check_voucher_no`,`jm`.`check_no` AS `check_no`,`jm`.`reference_no` AS `reference_no`,`jm`.`payee_type` AS `payee_type`,`jm`.`payee_members_id` AS `payee_members_id`,`jm`.`payee` AS `payee`,concat(`m`.`last_name`,', ',`m`.`first_name`,' ',`m`.`middle_name`) AS `payee_member`,`om`.`office_name` AS `official_station`,`lc`.`col_period_start` AS `col_period_start`,`lc`.`col_period_end` AS `col_period_end`,`lc`.`monthly_amortization` AS `monthly_amortization`,`jm`.`date_posted` AS `date_posted`,`jm`.`journal_date` AS `journal_date`,sum(case when `jd`.`acct_code` = '101' then coalesce(`jd`.`credit`,0) else 0 end) AS `cash_on_hand_credit`,sum(case when `jd`.`acct_code` = '102' then coalesce(`jd`.`credit`,0) else 0 end) AS `cash_in_bank_lbp_credit`,sum(case when `jd`.`acct_code` = '104' then coalesce(`jd`.`credit`,0) else 0 end) AS `cash_in_bank_mbtc_credit`,sum(case when `jd`.`acct_code` = '201' then coalesce(`jd`.`credit`,0) else 0 end) AS `unearned_interest_credit`,sum(case when `jd`.`acct_code` = '500' then coalesce(`jd`.`credit`,0) else 0 end) AS `interest_income_credit`,sum(case when `jd`.`acct_code` = '200' then coalesce(`jd`.`credit`,0) else 0 end) AS `deferred_credits_credit`,sum(case when `jd`.`acct_code` = '301' then coalesce(`jd`.`credit`,0) else 0 end) AS `lri_credit`,sum(case when `jd`.`acct_code` = '108' then coalesce(`jd`.`credit`,0) else 0 end) AS `loan_receivable_credit`,sum(case when `jd`.`acct_code` = '500' then coalesce(`jd`.`credit`,0) else 0 end) AS `interest_credit`,sum(case when `jd`.`acct_code` = '501' then coalesce(`jd`.`credit`,0) else 0 end) AS `service_charge_credit`,sum(case when `jd`.`acct_code` = '108' then coalesce(`jd`.`debit`,0) else 0 end) AS `loan_receivable_debit`,sum(case when `jd`.`acct_code` = '500' then coalesce(`jd`.`debit`,0) else 0 end) AS `interest_income_debit`,sum(case when `jd`.`acct_code` = '200' then coalesce(`jd`.`debit`,0) else 0 end) AS `deferred_credits_debit`,sum(case when `jd`.`acct_code` = '202' then coalesce(`jd`.`debit`,0) else 0 end) AS `benefit_claim_debit`,sum(case when `jd`.`acct_code` = '300' then coalesce(`jd`.`debit`,0) else 0 end) AS `members_contribution_debit`,case when (`jd`.`subsidiary` <> '' and coalesce(`jd`.`credit`,0) > 0) then `am`.`main_desc` else NULL end AS `sundry_accounts_credit`,sum(case when `jd`.`subsidiary` <> '' then coalesce(`jd`.`credit`,0) else 0 end) AS `sundry_amount_credit`,case when (`jd`.`subsidiary` <> '' and coalesce(`jd`.`debit`,0) > 0) then `am`.`main_desc` else NULL end AS `sundry_accounts_debit`,sum(case when `jd`.`subsidiary` <> '' then coalesce(`jd`.`debit`,0) else 0 end) AS `sundry_amount_debit`,group_concat(distinct concat(ucase(`m2`.`last_name`),', ',ucase(`m2`.`first_name`),' ',ucase(`m2`.`middle_name`)),'|' separator ',') AS `comaker`,`jm`.`particulars` AS `remarks` from ((((((((`j_master` `jm` left join `j_details` `jd` on(`jd`.`j_master_id` = `jm`.`j_master_id`)) left join `account_subsidiary` `asb` on(`asb`.`sub_code` = `jd`.`subsidiary`)) left join `account_main` `am` on(`am`.`code` = `asb`.`code`)) left join `loan_computation` `lc` on(`lc`.`ref_no` = `jm`.`reference_no`)) left join `members` `m` on(`m`.`members_id` = `lc`.`members_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `m`.`office_management_id`)) left join `co_maker` `cmkr` on(`cmkr`.`members_id` = `m`.`members_id`)) left join `members` `m2` on(`m2`.`members_id` = `cmkr`.`co_maker_members_id`)) where `jm`.`j_type_id` = 4 group by `jm`.`journal_ref` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_portal_request`
+--
+DROP TABLE IF EXISTS `v_portal_request`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name` from ((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_repair_request`
+--
+DROP TABLE IF EXISTS `v_repair_request`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_repair_request`  AS  select `tar`.`id` AS `id`,`tar`.`serial` AS `serial`,`tar`.`asset_tag` AS `asset_tag`,`ac`.`name` AS `asset_category`,`ta`.`name` AS `asset_name`,`tar`.`property_tag` AS `property_tag`,`tar`.`tbl_child_asset_id` AS `tbl_child_asset_id`,`tar`.`regkits_no` AS `regkits_no`,`tar`.`custodian` AS `custodian`,`tar`.`date_reported` AS `date_reported`,`tar`.`problem_desc` AS `problem_desc`,`tar`.`file_upload` AS `file_upload`,`tar`.`image_upload` AS `image_upload`,`tar`.`remarks` AS `remarks`,`tar`.`is_deleted` AS `is_deleted`,`tar`.`entry_date` AS `entry_date`,`tar`.`status` AS `status`,`tar`.`approved_by` AS `approved_by`,`tar`.`approved_date` AS `approved_date`,`tar`.`disapproved_by` AS `disapproved_by`,`tar`.`disapproved_date` AS `disapproved_date`,`tar`.`requestor` AS `requestor`,`u1`.`screen_name` AS `custodian_name`,`u2`.`screen_name` AS `requestor_name`,`u3`.`screen_name` AS `approver_name`,`u3`.`screen_name` AS `disapprover_name` from ((((((`tbl_asset_repair_request` `tar` left join `tbl_asset` `ta` on(`ta`.`serial` = `tar`.`serial`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tar`.`asset_category_id`)) left join `users` `u1` on(`u1`.`users_id` = `tar`.`custodian`)) left join `users` `u2` on(`u2`.`users_id` = `tar`.`requestor`)) left join `users` `u3` on(`u3`.`users_id` = `tar`.`approved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tar`.`disapproved_by`)) ;
 
 -- --------------------------------------------------------
 
@@ -2932,6 +3095,18 @@ ALTER TABLE `tbl_asset`
   ADD KEY `assets_deleted_at_rtd_location_id_index` (`deleted_at`,`rtd_location_id`),
   ADD KEY `assets_deleted_at_asset_tag_index` (`deleted_at`,`asset_tag`),
   ADD KEY `assets_deleted_at_name_index` (`deleted_at`,`name`);
+
+--
+-- Indexes for table `tbl_asset_repair_request`
+--
+ALTER TABLE `tbl_asset_repair_request`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_asset_request`
+--
+ALTER TABLE `tbl_asset_request`
+  ADD PRIMARY KEY (`tbl_asset_request_id`);
 
 --
 -- Indexes for table `tbl_child_asset`
@@ -3217,6 +3392,18 @@ ALTER TABLE `tbl_asset`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
+-- AUTO_INCREMENT for table `tbl_asset_repair_request`
+--
+ALTER TABLE `tbl_asset_repair_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tbl_asset_request`
+--
+ALTER TABLE `tbl_asset_request`
+  MODIFY `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
 -- AUTO_INCREMENT for table `tbl_child_asset`
 --
 ALTER TABLE `tbl_child_asset`
@@ -3238,7 +3425,7 @@ ALTER TABLE `tbl_gps`
 -- AUTO_INCREMENT for table `tbl_history`
 --
 ALTER TABLE `tbl_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `tbl_locations`
@@ -3286,7 +3473,7 @@ ALTER TABLE `uploads`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

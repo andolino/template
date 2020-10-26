@@ -204,8 +204,8 @@ class MY_Controller extends CI_Controller{
 		public function generateQR($id){
 			if (!empty($_POST['tbl_asset_id'])) {
 				$encId 		  	= $this->encdec($id, 'e');
-				$apiKey       = "b48f35675096f35f703ee519dd293db8";
-				$apiUrl       = "https://mamary.qrd.by/api";
+				$apiKey       = "c7ed8171ec916e31a875e77c159efea7";
+				$apiUrl       = "https://philsys.qrd.by/api";
 				$action       = "short";
 				$url          = base_url() . "get-assets-child/" . $encId . '&gps=1';
 				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
@@ -220,8 +220,8 @@ class MY_Controller extends CI_Controller{
 																								));
 			} else {
 				$encId 		  	= $this->encdec($id, 'e');
-				$apiKey       = "b48f35675096f35f703ee519dd293db8";
-				$apiUrl       = "https://mamary.qrd.by/api";
+				$apiKey       = "c7ed8171ec916e31a875e77c159efea7";
+				$apiUrl       = "https://philsys.qrd.by/api";
 				$action       = "short";
 				$url          = base_url() . "get-assets/" . $encId . '&gps=1';
 				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
@@ -258,7 +258,6 @@ class MY_Controller extends CI_Controller{
 			return compact('miles','feet','yards','kilometers','meters'); 
 			
 		}
-
 	
 		public function createPdf($data, $param = array()){
 			$mpdf = new \Mpdf\Mpdf(['setAutoTopMargin' => 'stretch', 'setAutoBottomMargin' => 'stretch']);
@@ -273,5 +272,44 @@ class MY_Controller extends CI_Controller{
 			$mpdf->Output();
 		}
 
+		public function upload_image($name){
+			$config['upload_path'] 		= './assets/image/uploads';
+			$config['allowed_types'] 	= '*';
+			$config['max_size']  			= 0; // any size
+			$config['remove_spaces']	= true;
+			// $id 											= $this->input->post('asset_id');
+			$this->load->library('upload', $config);
+			// $this->load->library('image_lib');
+			$data = [];
+			if (!$this->upload->do_upload($name)) {
+				$data['error']	 = array('error' => $this->upload->display_errors());
+				$data['success'] = false;
+			} else {
+				$dImg = $this->upload->data();
+				$data['file_name'] = $dImg['file_name'];
+				$data['success'] = true;
+			}
+			return $data;
+		}
+
+		public function upload_file($name){
+			$config['upload_path'] 		= './assets/image/uploads';
+			$config['allowed_types'] 	= '*';
+			$config['max_size']  			= 0; // any size
+			$config['remove_spaces']	= true;
+			// $id 											= $this->input->post('asset_id');
+			$this->load->library('upload', $config);
+			// $this->load->library('image_lib');
+			$data = [];
+			if (!$this->upload->do_upload($name)) {
+				$data['error']	 = array('error' => $this->upload->display_errors());
+				$data['success'] = false;
+			} else {
+				$dImg = $this->upload->data();
+				$data['file_name'] = $dImg['file_name'];
+				$data['success'] = true;
+			}
+			return $data;
+		}
 
 }

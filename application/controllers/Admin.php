@@ -265,6 +265,47 @@ class Admin extends MY_Controller {
 		$this->adminContainer('admin/asset-request', $params);	
 	}
 
+	public function dispatch_request(){
+		$params['heading'] = 'DISPATCH REQUEST';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-request-dispatch', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
+	public function repair_request(){
+		$params['heading'] = 'REPAIR REQUEST';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-request-repair', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
+	public function reimbursement_request(){
+		$params['heading'] = 'REIMBURSEMENT REQUEST';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-request-reimbursement', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
+	public function portal_dispatch_request(){
+		$params['heading'] = 'DISPATCH REQUEST';
+		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['location'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['asset'] = $this->db->get_where('tbl_asset', array('is_deleted' => 0))->result();
+		$params['asset_category'] = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-portal-dispatch-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+
+	public function portal_repair_request(){
+		$params['heading'] = 'REPAIR REQUEST';
+		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['location'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['asset'] = $this->db->get_where('tbl_asset', array('is_deleted' => 0))->result();
+		$params['asset_category'] = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-portal-repair-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+
 	public function loanByMember(){
 		$params['heading'] 		 			= 'LOAN BY MEMBER';
 		$params['membersData'] 			= $this->db->get('v_members')->row();
@@ -347,18 +388,18 @@ class Admin extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = '<input type="checkbox" class="chk-const-list-tbl" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
-   		$data[] = $row->asset_name;
-   		$data[] = $row->asset_tag;
-   		$data[] = $row->model;
+   		$data[] = $row->asset_name; //
+   		$data[] = $row->asset_tag; //
+			$data[] = $row->property_tag; //
+			$data[] = $row->serial; //
+			$data[] = $row->screen_name; //custodian
+			$data[] =	$row->office_name; //office\
+			$data[] = $row->default_location;
 			$data[] = $row->status;
-			$data[] = $row->screen_name;
-   		$data[] =	$row->company;
    		$data[] = date('Y-m-d', strtotime($row->purchase_date));
 			$data[] = $row->supplier;
-			$data[] = $row->order_number;
 			$data[] = number_format($row->purchase_cost, 2);
 			$data[] = $row->warranty_months;
-			$data[] = $row->default_location;
    		
 			$data[] = '<a href="javascript:void(0);" 
 										id="loadPage" 
@@ -530,6 +571,147 @@ class Admin extends MY_Controller {
 		);
 
 		echo json_encode($output);
+	}
+
+	public function server_tbl_portal_request(){
+		$result 	= $this->AdminMod->get_output_portal_request();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+		$status = [0 => 'Pending', 1 => 'Approved', 2 => 'Disapproved', 3 =>'Cancelled', 4 => 'Closed'];
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			if ($row->status==0) {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->category_name;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
+				$data[] = '<button 
+										type="button" 
+										class="btn btn-xs font-12 btn-danger" id="cancel-portal-request" 
+										data-id="'.$row->tbl_asset_request_id.'">Cancel</button>';
+			} elseif ($row->status==1) {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->category_name;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = $row->approved_by;
+				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
+				$data[] = '';
+			} elseif($row->status==2) {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->category_name;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = $row->disapproved_by;
+				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} elseif($row->status==3){
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->category_name;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} else {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->category_name;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			}
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_portal_request(),
+			'recordsFiltered' => $this->AdminMod->count_filter_portal_request(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
+	public function server_tbl_repair_request(){
+		$result 	= $this->AdminMod->get_output_repair_request();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+		$status = [0=> 'Pending', 1=> 'Approved', 2=> 'Disapproved', 3=> 'Cancelled', 4=> 'Closed'];
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			if ($row->status==0) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->serial;
+				$data[] = $status[$row->status];
+				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
+				$data[] = '<button 
+										type="button" 
+										class="btn btn-xs font-12 btn-danger" id="cancel-portal-request" 
+										data-id="'.$row->id.'">Cancel</button>';
+			} elseif ($row->status==1) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->serial;
+				$data[] = $status[$row->status];
+				$data[] = $row->approved_by;
+				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
+				$data[] = '';
+			} elseif($row->status==2) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->serial;
+				$data[] = $status[$row->status];
+				$data[] = $row->disapproved_by;
+				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} elseif($row->status==3) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->serial;
+				$data[] = $status[$row->status];
+				$data[] = '';//cancelled by $row->disapproved_by;
+				$data[] = '';//cancelled date $row->disapproved_by;
+				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} else {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->serial;
+				$data[] = $status[$row->status];
+				$data[] = '';//Closed By $row->disapproved_by;
+				$data[] = '';//Closed date $row->disapproved_by;
+				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			}
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_repair_request(),
+			'recordsFiltered' => $this->AdminMod->count_filter_repair_request(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
+	public function cancelPortalRequest(){
+	 	$tbl = $this->input->post('tbl');
+	 	$field = $this->input->post('field');
+		$id = $this->input->post('id');
+		return $this->db->update($tbl, array('status'=>3), array($field=>$id)); 
 	}
 
 	public function add_asset(){
@@ -727,10 +909,78 @@ class Admin extends MY_Controller {
 		}
 
 		//update sibling parent
+		
 		$this->db->update('tbl_asset', array('sibling'=>$errors['id']), array('id'=>$this->input->post('siblings')));
 
 		echo json_encode($errors);
 
+	}
+
+	public function save_portal_request(){
+		$dataToSave = [];
+		foreach ($this->input->post() as $key => $value) {
+			if ($key == 'date_need' || $key == 'date_return') {
+				$dataToSave[$key] = date('Y-m-d H:i:s', strtotime($value));	
+			} else {
+				$dataToSave[$key] = $value;
+			}
+		}
+		$dataToSave['entry_date'] = date('Y-m-d H:i:s');
+		$q = $this->db->insert('tbl_asset_request', $dataToSave);
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
+	}
+
+	
+
+	public function saveRepairRequest(){
+		$uploadedImage = $this->upload_image('image_upload');
+		$uploadedFile = $this->upload_file('file_upload');
+		$dataToSave = array(
+			'asset_category_id'  => $this->input->post('asset_category_id'),
+			'asset_tag' 			   => $this->input->post('asset_tag'),
+			'date_reported' 		 => date('Y-m-d H:i:s', strtotime($this->input->post('date_reported'))),
+			'problem_desc' 			 => $this->input->post('problem_desc'), 
+			'property_tag' 			 => $this->input->post('property_tag'),
+			'remarks'            => $this->input->post('remarks'),
+			'requestor' 				 => $this->input->post('requestor'), 
+			'serial' 						 => $this->input->post('serial'),
+			'tbl_child_asset_id' => implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
+			'entry_date'				 => date('Y-m-d H:i:s'),
+			'file_upload' 			 => $uploadedFile['file_name'],
+			'image_upload'			 => $uploadedImage['file_name']
+		);
+		// echo json_encode(array('post'=>$_POST,'upload1'=>$res1,'upload2'=>$res2));
+
+		// foreach ($this->input->post() as $key => $value) {
+		// 	if ($key == 'date_need' || $key == 'date_return') {
+		// 		$dataToSave[$key] = date('Y-m-d H:i:s', strtotime($value));	
+		// 	} else {
+		// 		$dataToSave[$key] = $value;
+		// 	}
+		// }
+		// $dataToSave['entry_date'] = date('Y-m-d H:i:s');
+		$q = $this->db->insert('tbl_asset_repair_request', $dataToSave);
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
 	}
 
 	public function getAssetPrintFrm(){

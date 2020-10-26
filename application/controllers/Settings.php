@@ -402,6 +402,24 @@ class Settings extends MY_Controller {
 		$params['data'] = $this->db->get_where('asset_category', array('is_deleted' => 0,'asset_category_id' => $this->input->post('id')))->row();
 		$this->load->view('admin/settings/forms/frm-asset-category', $params);
 	}
+	
+	public function getSelectAssetRepair(){
+		$params['data'] = $this->db->get_where('tbl_asset', array('is_deleted' => 0,'asset_category_id' => $this->input->post('asset_category_id')))->result();
+		$this->load->view('admin/crud/asset-container-repair', $params);
+	}
+	
+	public function getTblAssetRow(){
+		$data			 									= $this->db->get_where('tbl_asset', array('is_deleted' => 0,'serial' => $this->input->post('serial_no')))->row();
+		$users				 							= $this->db->get_where('users', array('users_id' => $data->checkout_user_id, 'is_deleted'=>0))->row();
+		$childAsset 								= $this->db->get_where('tbl_child_asset', array('tbl_asset_id' => $data->id, 'is_deleted'=>0))->result();
+		$params['asset_tag'] 				= $data->asset_tag;
+		$params['property_tag'] 		= $data->property_tag;
+		$params['checkout_user_id'] = !empty($users) ? $users->screen_name : '';
+		if (count($childAsset) > 0) {
+			$params['html'] = $this->load->view('admin/crud/multiple-select-child-asset', array('childAsset' => $childAsset), TRUE);	
+		}
+		echo json_encode($params);
+	}
 
 	public function getOfficeFrm(){
 		$params['has_update'] = $this->input->post('id');

@@ -187,7 +187,15 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
+    #nav-tab a {
+      font-size: 9px !important;
+    }
+    .tbl-req-cont-8{
+      margin: 0 !important;
+      padding: 0 !important;
+    }
 }
+
 .none {
   display: none;
 }
@@ -419,8 +427,8 @@ label[id*="-error"] {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #9b4981;
-  border-color: #91427c;
+  background-color: #8bb182;
+  border-color: #8bb182;
 }
 
 .paginate_button.page-item a {

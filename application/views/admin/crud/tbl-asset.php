@@ -13,16 +13,16 @@
       <th scope="col"><input type="checkbox" id="chk-const-list-tbl-all" name="chk-const-list-tbl-all"></th>
       <th scope="col">ASSET NAME</th>
       <th scope="col">ASSET TAG</th>
-      <th scope="col">MODEL</th>
-      <th scope="col">STATUS</th>
+      <th scope="col">PROPERTY TAG</th>
+      <th scope="col">SERIAL NO.</th>
       <th scope="col">CUSTODIAN</th>
-      <th scope="col">COMPANY</th>
+      <th scope="col">OFFICE</th>
+      <th scope="col">CURRENT LOCATION</th>
+      <th scope="col">STATUS</th>
       <th scope="col">PURCHASED DATE</th>
       <th scope="col">SUPPLIER</th>
       <th scope="col">ORDER NUMBER</th>
       <th scope="col">PURCHASED COST</th>
-      <th scope="col">WARRANTY</th>
-      <th scope="col">DEFAULT LOCATION</th>
       <th scope="col">ACTION</th>
     </tr>
   </thead>

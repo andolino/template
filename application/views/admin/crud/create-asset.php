@@ -15,7 +15,7 @@
 				</div>
 				<div class="col-12 p-0 m-0"></div>
 				<!-- end -->
-				<div class="col-1">
+				<div class="col-2 pr-0">
 					<div class="form-check pt-2 pb-2">
 						<input class="form-check-input font-12" type="checkbox" value="1" id="requestable" name="requestable">
 						<label class="form-check-label font-12" for="requestable">
@@ -23,7 +23,7 @@
 						</label>
 					</div>
 				</div>
-				<div class="col-11">
+				<div class="col-10">
 					<?php if(!empty($asset_id)): ?>
 						<div class="row">
 							<div class="col-sm-5 col-md-1">
@@ -54,7 +54,7 @@
 								</div>
 							</div> -->
 							<div class="col-sm-12 col-md-12"></div>
-							<div class="col-sm-12 col-md-2 mt-1">
+							<div class="col-sm-12 col-md-4 mt-1 pb-2">
 								<label class="font-12" for="siblings">
 									Siblings Of :
 								</label>
@@ -88,6 +88,10 @@
 					<label for="asset_tag" class="font-12">Asset Tag</label>
 					<input type="text" class="form-control form-control-sm font-12" id="asset_tag" name="asset_tag" >
 				</div>
+				<div class="col-3 pl-0">
+					<label for="property_tag" class="font-12">Property Tag</label>
+					<input type="text" class="form-control form-control-sm font-12" id="property_tag" name="property_tag" >
+				</div>
 				<?php //echo !empty($asset_id) ? $asset_id : ''; ?>
 				<?php if(!empty($asset_id)): ?>
 					<div class="col-3 pl-0">
@@ -120,7 +124,7 @@
 				</div>
 				<div class="col-12 p-0 m-0"></div>
 				<div class="col-3 mt-2">
-					<label for="purchase_date" class="font-12">Purchase Date</label>
+					<label for="purchase_date" class="font-12">Acquired Date</label>
 					<input type="date" class="form-control form-control-sm font-12" id="purchase_date" name="purchase_date" >
 				</div>
 				<div class="col-3 mt-2 pl-0 rel-cont">
@@ -133,12 +137,12 @@
 					</select>
 				</div>
 				<div class="col-3 pl-0 mt-2">
-					<label for="order_number" class="font-12">Order Number</label>
+					<label for="order_number" class="font-12">PAR Number</label>
 					<input type="text" class="form-control form-control-sm font-12" id="order_number" name="order_number" >
 				</div>
 				<div class="col-12 p-0 m-0"></div>
 				<div class="col-3 mt-2">
-					<label for="purchase_cost" class="font-12">Purchase Cost</label>
+					<label for="purchase_cost" class="font-12">Cost Amount</label>
 					<input type="text" class="form-control form-control-sm font-12 isNum" id="purchase_cost" name="purchase_cost" >
 				</div>
 				<div class="col-3 mt-2 pl-0">

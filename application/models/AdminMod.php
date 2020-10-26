@@ -7,7 +7,8 @@ class AdminMod extends CI_Model {
 	//ASSET
 	var $tblAsset = 'v_asset';
 	var $tblAssetCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
-																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
+																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 
+																			'default_location', 'notes', 'requestable', 'is_deleted', 'property_tag');
 	var $tblAssetOrder = array('id' => 'desc');
 	
 	//ASSET CHILD
@@ -21,11 +22,28 @@ class AdminMod extends CI_Model {
 	var $tblAssetRequestCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
 																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 'default_location', 'notes', 'requestable', 'is_deleted');
 	var $tblAssetRequestOrder = array('id' => 'desc');
+	
+	//PORTAL REQUEST
+	var $tblPortalRequest = 'v_portal_request';
+	var $tblPortalRequestCollumn = array('tbl_asset_request_id', 'office_management_id', 'asset_category_id', 'qty', 'location_id', 
+																				'other_location', 'users_id', 'purpose', 'remarks', 'is_deleted', 'entry_date', 'date_need', 
+																				'date_return', 'status', 'office_name', 'category_name', 'location_name', 'screen_name', 
+																				'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date');
+	var $tblPortalRequestOrder = array('tbl_asset_request_id' => 'desc');
+	
+	
+
+	//REPAIR REQUEST
+	var $tblRepairRequest = 'v_repair_request';
+	var $tblRepairRequestCollumn = array('id', 'serial', 'asset_category', 'asset_tag', 'property_tag', 'tbl_child_asset_id', 'regkits_no', 
+																				'custodian', 'date_reported', 'problem_desc', 'file_upload', 'image_upload', 'remarks', 'is_deleted', 
+																				'entry_date', 'status', 'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'requestor', 
+																				'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name');
+	var $tblRepairRequestOrder = array('id' => 'desc');
 
 	// var $tblAssetLogs = 'v_asset_request';
 	// var $tblAssetLogsCollumn = array('asset_name', 'timestamp', 'device', 'os', 'country', 'lng', 'lat', 'user', 'email', 'mobile', 'type', 'is_deleted');
 	// var $tblAssetLogsOrder = array('timestamp' => 'desc');
-	
 
 	//LOAN SETTINGS
 	var $tblLoanSettings = 'v_loan_settings';
@@ -210,6 +228,109 @@ class AdminMod extends CI_Model {
 
 	public function count_filter_asset_request(){
 		$this->_que_tbl_asset_request();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+
+	//PORTAL REQUEST
+	private function _que_tbl_portal_request(){
+		$this->db->from($this->tblPortalRequest);
+		$status = $this->input->post('status');
+		$this->db->where('status', $status);
+		$this->db->where('is_deleted', '0');
+		$i = 0;
+		foreach ($this->tblPortalRequestCollumn as $item) {
+			if (!empty($_POST['search']['value'])) {
+				if ($i === 0) {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->like($item, strtolower($_POST['search']['value']));
+				} else {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->or_like($item, strtolower($_POST['search']['value']));
+				}
+			}
+			$column[$i] = $item;
+			$i++;
+		}
+		if (isset($_POST['order'])) {
+			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+		}elseif($this->tblPortalRequestOrder){
+			$order = $this->tblPortalRequestOrder;
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+		$this->db->order_by('tbl_asset_request_id', 'DESC');
+	}
+
+	public function get_output_portal_request(){
+		$this->_que_tbl_portal_request();
+		if (!empty($_POST['length']))
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function count_all_portal_request(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblPortalRequest);
+		return $this->db->count_all_results();
+	}
+
+	public function count_filter_portal_request(){
+		$this->_que_tbl_portal_request();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	//REPAIR REQUEST
+	private function _que_tbl_repair_request(){
+		$this->db->from($this->tblRepairRequest);
+		$status = $this->input->post('status');
+		$this->db->where('status', $status);
+		$this->db->where('is_deleted', '0');
+		$i = 0;
+		foreach ($this->tblRepairRequestCollumn as $item) {
+			if (!empty($_POST['search']['value'])) {
+				if ($i === 0) {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->like($item, strtolower($_POST['search']['value']));
+				} else {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->or_like($item, strtolower($_POST['search']['value']));
+				}
+			}
+			$column[$i] = $item;
+			$i++;
+		}
+		if (isset($_POST['order'])) {
+			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+		}elseif($this->tblRepairRequestOrder){
+			$order = $this->tblRepairRequestOrder;
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+		$this->db->order_by('id', 'DESC');
+	}
+
+	public function get_output_repair_request(){
+		$this->_que_tbl_repair_request();
+		if (!empty($_POST['length']))
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function count_all_repair_request(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblRepairRequest);
+		return $this->db->count_all_results();
+	}
+
+	public function count_filter_repair_request(){
+		$this->_que_tbl_repair_request();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
