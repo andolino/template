@@ -943,8 +943,10 @@ class Admin extends MY_Controller {
 	
 
 	public function saveRepairRequest(){
+
 		$uploadedImage = $this->upload_image('image_upload');
 		$uploadedFile = $this->upload_file('file_upload');
+
 		$dataToSave = array(
 			'asset_category_id'  => $this->input->post('asset_category_id'),
 			'asset_tag' 			   => $this->input->post('asset_tag'),
@@ -956,11 +958,10 @@ class Admin extends MY_Controller {
 			'serial' 						 => $this->input->post('serial'),
 			'tbl_child_asset_id' => implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
 			'entry_date'				 => date('Y-m-d H:i:s'),
-			'file_upload' 			 => $uploadedFile['file_name'],
-			'image_upload'			 => $uploadedImage['file_name']
+			'file_upload' 			 => $this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
+			'image_upload'			 => $this->input->post('image_upload') ? $uploadedImage['file_name'] : ''
 		);
 		// echo json_encode(array('post'=>$_POST,'upload1'=>$res1,'upload2'=>$res2));
-
 		// foreach ($this->input->post() as $key => $value) {
 		// 	if ($key == 'date_need' || $key == 'date_return') {
 		// 		$dataToSave[$key] = date('Y-m-d H:i:s', strtotime($value));	
