@@ -53,6 +53,7 @@
         <div class="col-12">
           <button type="submit" class="btn btn-info btn-md rounded-0 border float-right font-12"><i class="fas fa-save"></i> PRINT REPORT</button>
           <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printTransmitalSlip"><i class="fas fa-save"></i> PRINT TRANSMITAL SLIP</button>
+          <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printCheckList"><i class="fas fa-save"></i> PRINT PRINT CHECKLIST</button>
         </div>
       </div>
 

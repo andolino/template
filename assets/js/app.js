@@ -352,6 +352,26 @@ $(document).ready(function() {
     }
   });
   
+  $(document).on('click', '#printCheckList', function (e) {
+    // if ($('#custodian').val() == '') {
+      // Swal.fire(
+      //   'Oopps!',
+      //   'Please select custodian',
+      //   'info'
+      // );
+    // } else {
+      $.ajax({
+        type: "POST",
+        url: "get-print-checklist-report",
+        data: {},
+        dataType: "JSON",
+        success: function (res) {
+          window.open('print-checklist-slip/'+res.data+'/'+$('#date_generated').val());
+        }
+      });
+    // }
+  });
+  
   $(document).on('click', '#printAssetQr', function() {
     var d = [];
     $.each($('.chk-const-list-tbl'), function (i, el) { 

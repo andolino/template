@@ -1070,6 +1070,21 @@ class Admin extends MY_Controller {
 		echo json_encode(array('data'=> $this->encdec($where, 'e')));
 	}
 	
+	public function getPrintChecklistReport(){
+		$where = 'WHERE is_deleted = 0';
+		if($this->input->post('location_id') != ''){
+			$where .= ' AND location_id = ' . $this->input->post('location_id');
+		}
+		if ($this->input->post('custodian') != '') {
+			$where .= ' AND users_id = ' . $this->input->post('custodian');
+		}
+		if ($this->input->post('asset_type') == 1){
+			$where .= ' AND parent IS NOT NULL';
+		}
+		// echo json_encode(array('data'=> $this->encdec($where, 'e')));
+		echo json_encode(array('data'=> ''));
+	}
+	
 	public function printAssetReport(){
 		$where = $this->encdec($this->uri->segment(2), 'd');
 		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
@@ -1089,6 +1104,20 @@ class Admin extends MY_Controller {
 		$params['data_procces'] = $data_procces;
 		$params['motherCount'] = $this->convertNumberWithourCurrency($motherCount->tot_mother);
 		$this->createPdf('admin/crud/print-transmital-slip', $params);
+		// $this->output->enable_profiler(true);
+		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
+		// $this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
+	}
+	
+	public function printChecklist(){
+		$where = $this->encdec($this->uri->segment(2), 'd');
+		$data_procces = $this->uri->segment(3);
+		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
+		// $motherCount = $this->db->query("SELECT count(*) as tot_mother FROM v_asset_report " . $where . ' AND parent is not null AND sibling is null')->row();
+		$params['data'] = $res;
+		$params['data_procces'] = $data_procces;
+		// $params['motherCount'] = $this->convertNumberWithourCurrency($motherCount->tot_mother);
+		$this->createPdfWOHeadFoot('admin/crud/print-checklist', $params);
 		// $this->output->enable_profiler(true);
 		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
 		// $this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');

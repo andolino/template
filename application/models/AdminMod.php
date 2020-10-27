@@ -7,8 +7,8 @@ class AdminMod extends CI_Model {
 	//ASSET
 	var $tblAsset = 'v_asset';
 	var $tblAssetCollumn = array('id', 'name', 'asset_tag', 'company', 'model', 'status', 'serial', 'asset_name', 
-																			'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 
-																			'default_location', 'notes', 'requestable', 'is_deleted', 'property_tag');
+																'purchase_date', 'supplier', 'order_number', 'purchase_cost', 'warranty_months', 
+																'default_location', 'notes', 'requestable', 'is_deleted', 'property_tag');
 	var $tblAssetOrder = array('id' => 'desc');
 	
 	//ASSET CHILD

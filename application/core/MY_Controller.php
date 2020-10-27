@@ -272,6 +272,22 @@ class MY_Controller extends CI_Controller{
 			$mpdf->Output();
 		}
 
+		public function createPdfWOHeadFoot($data, $param = array()){
+			$mpdf = new \Mpdf\Mpdf([
+										// 'setAutoTopMargin' 		=> 'stretch', 
+										// 'setAutoBottomMargin' => 'stretch'
+									]);
+			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
+   		$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+			$ht = $this->load->view($data, $param, TRUE);
+			// $mpdf->defaultheaderline = 0;
+			// $mpdf->defaultfooterline = 0;
+			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
+			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
+			$mpdf->WriteHTML($ht);
+			$mpdf->Output();
+		}
+
 		public function upload_image($name){
 			$config['upload_path'] 		= './assets/image/uploads';
 			$config['allowed_types'] 	= '*';
