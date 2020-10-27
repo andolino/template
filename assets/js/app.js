@@ -18,6 +18,7 @@ var tbl_departments = [];
 var tbl_asset_category = [];
 var tbl_office = [];
 var tbl_history_logs = [];
+var tbl_request_repair_admin_pending = [];
 var tbl_portal_asset_pending = [];
 var tbl_portal_asset_approved = [];
 var tbl_portal_asset_disapproved = [];
@@ -112,6 +113,7 @@ $(document).ready(function() {
       initOfficeDataTables();
       initPortalRequestDataTables();
       initRepairRequestDataTables();
+      initAdminRepairRequestDataTables();
 
     });    
   });
@@ -128,6 +130,7 @@ $(document).ready(function() {
   initHistoryLogsDataTables();
   initPortalRequestDataTables();
   initRepairRequestDataTables();
+  initAdminRepairRequestDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -875,6 +878,49 @@ function initAssetRequestDataTables(){
         $(row).attr(myObjKeyLguConst);
     }
   });
+}
+
+//ADMIN REPAIR
+function initAdminRepairRequestDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-request-repair-admin-pending').DataTable().clear().destroy();
+  tbl_request_repair_admin_pending  = $("#tbl-request-repair-admin-pending").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-admin-repair-pending-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-request-repair-admin-pending").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  
 }
 
 //DISPATCH

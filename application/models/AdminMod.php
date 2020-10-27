@@ -30,6 +30,14 @@ class AdminMod extends CI_Model {
 																				'date_return', 'status', 'office_name', 'category_name', 'location_name', 'screen_name', 
 																				'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date');
 	var $tblPortalRequestOrder = array('tbl_asset_request_id' => 'desc');
+
+	//ADMIN REPAIR REQUEST
+	var $tblAdminRepairRequest = 'v_repair_request';
+	var $tblAdminRepairRequestCollumn = array('id', 'serial', 'asset_category', 'asset_tag', 'property_tag', 'tbl_child_asset_id', 'regkits_no', 
+																						'custodian', 'date_reported', 'problem_desc', 'file_upload', 'image_upload', 'remarks', 'is_deleted', 
+																						'entry_date', 'status', 'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'requestor', 
+																						'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name');
+	var $tblAdminRepairRequestOrder = array('id' => 'desc');
 	
 	
 
@@ -232,7 +240,57 @@ class AdminMod extends CI_Model {
 		return $query->num_rows();
 	}
 
+	//ADMIN REPAIR REQUEST
+	private function _que_tbl_admin_repair_request(){
+		$this->db->from($this->tblAdminRepairRequest);
+		$status = $this->input->post('status');
+		$this->db->where('status', $status);
+		$this->db->where('is_deleted', '0');
+		$i = 0;
+		foreach ($this->tblAdminRepairRequestCollumn as $item) {
+			if (!empty($_POST['search']['value'])) {
+				if ($i === 0) {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->like($item, strtolower($_POST['search']['value']));
+				} else {
+					$this->db->where('is_deleted', '0');
+					$this->db->where('status', $status);
+					$this->db->or_like($item, strtolower($_POST['search']['value']));
+				}
+			}
+			$column[$i] = $item;
+			$i++;
+		}
+		if (isset($_POST['order'])) {
+			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+		}elseif($this->tblAdminRepairRequestOrder){
+			$order = $this->tblAdminRepairRequestOrder;
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+		$this->db->order_by('id', 'DESC');
+	}
 
+	public function get_output_admin_repair_request(){
+		$this->_que_tbl_admin_repair_request();
+		if (!empty($_POST['length']))
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function count_all_admin_repair_request(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblAdminRepairRequest);
+		return $this->db->count_all_results();
+	}
+
+	public function count_filter_admin_repair_request(){
+		$this->_que_tbl_portal_request();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+	
 	//PORTAL REQUEST
 	private function _que_tbl_portal_request(){
 		$this->db->from($this->tblPortalRequest);

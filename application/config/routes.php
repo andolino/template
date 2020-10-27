@@ -70,6 +70,7 @@ $route['edit-child-asset'] 						= 'Admin/edit_child_asset';
 $route['server-tbl-asset'] 			= 'Admin/server_tbl_asset';
 $route['server-tbl-asset-child'] 			= 'Admin/server_tbl_asset_child';
 $route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
+$route['server-tbl-admin-repair-pending-request'] = 'Admin/server_tbl_admin_pending_repair_request';
 $route['server-tbl-portal-request'] = 'Admin/server_tbl_portal_request';
 $route['server-tbl-repair-request'] = 'Admin/server_tbl_repair_request';
 $route['server-tbl-activity-logs'] 			= 'Settings/server_tbl_activity_logs';

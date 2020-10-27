@@ -274,7 +274,7 @@ class Admin extends MY_Controller {
 	
 	public function repair_request(){
 		$params['heading'] = 'REPAIR REQUEST';
-		// $params['status'] = 4;
+		// $params['status'] = 0;
 		$params['tblMembers'] = $this->load->view('admin/crud/tbl-request-repair', $params, TRUE);
 		$this->adminContainer('admin/asset-request', $params);	
 	}
@@ -573,6 +573,72 @@ class Admin extends MY_Controller {
 		echo json_encode($output);
 	}
 
+	public function server_tbl_admin_pending_repair_request(){
+		$result 	= $this->AdminMod->get_output_admin_repair_request();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+		$status = [0 => 'Pending', 1 => 'Approved', 2 => 'Disapproved', 3 =>'Cancelled', 4 => 'Closed'];
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			if ($row->status==0) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = '';
+				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-check"></i></a> | 
+									 <a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-link"></i></a>';
+			} elseif ($row->status==1) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = $row->approved_by;
+				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
+				$data[] = '';
+			} elseif($row->status==2) {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = $row->disapproved_by;
+				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} elseif($row->status==3){
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			} else {
+				$data[] = $row->id;
+				$data[] = $row->asset_category;
+				$data[] = $row->qty;
+				$data[] = $status[$row->status];
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_by;
+				$data[] = '';//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
+			}
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_admin_repair_request(),
+			'recordsFiltered' => $this->AdminMod->count_filter_admin_repair_request(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
 	public function server_tbl_portal_request(){
 		$result 	= $this->AdminMod->get_output_portal_request();
 		$res 			= array();

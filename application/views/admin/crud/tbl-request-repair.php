@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row w-100">
-<div class="col-sm-8">
+<div class="col-sm-10">
 
 <nav class="pb-3">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -21,14 +21,15 @@
   <div class="tab-pane fade show active" id="repair-pending" role="tabpanel" aria-labelledby="repair-pending-tab">
     <div class="row">
       <div class="col-sm-12">
-        <table class="table font-12 w-100" id="tbl-request-repair-pending" data-status="<?php //echo $status ?>">
+        <table class="table font-12 w-100 condensed" id="tbl-request-repair-admin-pending" data-status="0">
           <thead>
             <tr>
-              <th scope="col">REQUEST #</th>
-              <th scope="col">ASSET CATEGORY </th>
-              <th scope="col">QTY</th>
-              <th scope="col">STATUS</th>
-              <th scope="col">REQUEST DATE</th>
+              <th scope="col">ASSET NAME</th>
+              <th scope="col">ASSET TAG </th>
+              <th scope="col">PROPERTY TAG</th>
+              <th scope="col">SERIAL NO</th>
+              <th scope="col">REQUEST BY</th>
+              <th scope="col">REQUEST DATE TIME</th>
               <th scope="col">ACTION</th>
             </tr>
           </thead>
@@ -39,7 +40,7 @@
     </div>
   </div>
   <div class="tab-pane fade" id="repair-approved" role="tabpanel" aria-labelledby="repair-approved-tab">
-    <table class="table font-12 w-100" id="tbl-request-repair-approved" data-status="<?php echo $status ?>">
+    <table class="table font-12 w-100" id="tbl-request-repair-approved" data-status="1">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
@@ -55,7 +56,7 @@
     </table>
   </div>
   <div class="tab-pane fade" id="repair-disapproved" role="tabpanel" aria-labelledby="repair-disapproved-tab">
-    <table class="table font-12 w-100" id="tbl-request-repair-disapproved" data-status="<?php echo $status ?>">
+    <table class="table font-12 w-100" id="tbl-request-repair-disapproved" data-status="<?php //echo $status ?>">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
