@@ -317,6 +317,34 @@ $(document).ready(function() {
     // console.log(myNewD);
     
   });
+  
+  $(document).on('click', '#printCheckListReport', function() {
+    // var d = [];
+    // $.each($('.chk-const-list-tbl'), function (i, el) { 
+    //   if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    // });
+    // var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    $('#custom-modal').modal('show');
+    $.get("get-checklist-print-frm", {}, function (data, textStatus, jqXHR) {
+      $('#custom-modal .modal-content').html(data);
+    });
+    // console.log(myNewD);
+    
+  });
+  
+  $(document).on('click', '#printTransmitalSummaryReport', function() {
+    // var d = [];
+    // $.each($('.chk-const-list-tbl'), function (i, el) { 
+    //   if ($(this).is(':checked')) { d[i] = $(el).val(); }
+    // });
+    // var myNewD = d.filter(function (el) { return el != null && el != ""; });
+    $('#custom-modal').modal('show');
+    $.get("get-transmittal-summary-print-frm", {}, function (data, textStatus, jqXHR) {
+      $('#custom-modal .modal-content').html(data);
+    });
+    // console.log(myNewD);
+    
+  });
 
   $(document).on('submit', '#frm-print-asset-report', function (e) {
     e.preventDefault();
@@ -360,13 +388,35 @@ $(document).ready(function() {
       //   'info'
       // );
     // } else {
+      var locationId = $('#location_id').val();
       $.ajax({
         type: "POST",
         url: "get-print-checklist-report",
-        data: {},
+        data: { 'location_id' : locationId },
         dataType: "JSON",
         success: function (res) {
-          window.open('print-checklist-slip/'+res.data+'/'+$('#date_generated').val());
+          window.open('print-checklist-slip/'+res.data);//+res.data+'/'+$('#date_generated').val());
+        }
+      });
+    // }
+  });
+  
+  $(document).on('click', '#printTransmitalSumm', function (e) {
+    // if ($('#custodian').val() == '') {
+      // Swal.fire(
+      //   'Oopps!',
+      //   'Please select custodian',
+      //   'info'
+      // );
+    // } else {
+      var locationId = $('#location_id').val();
+      $.ajax({
+        type: "POST",
+        url: "get-print-transmital-summ-report",
+        data: { 'location_id' : locationId },
+        dataType: "JSON",
+        success: function (res) {
+          window.open('print-transmital-summ-slip/'+res.data);//+res.data+'/'+$('#date_generated').val());
         }
       });
     // }
@@ -793,11 +843,11 @@ function initMembersDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,13]
+        targets              : [ 0, 13 ]
       },
       { 
         visible              : false, 
-        targets              : [9,10,11,12]
+        targets              : [ 9, 10, 11, 12 ]
       },
     ],
     "serverSide"               : true,

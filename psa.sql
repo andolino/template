@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 26, 2020 at 04:17 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.2.33
+-- Host: 127.0.0.1
+-- Generation Time: Oct 30, 2020 at 02:05 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1330,6 +1330,121 @@ INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purch
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_asset_checklist`
+--
+
+CREATE TABLE `tbl_asset_checklist` (
+  `idno` int(11) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `deviceid` varchar(100) NOT NULL,
+  `province` varchar(500) NOT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `contact_person` varchar(500) DEFAULT NULL,
+  `contact_no` varchar(500) DEFAULT NULL,
+  `email` varchar(500) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `lat_lon` varchar(200) DEFAULT NULL,
+  `luggage_kit` varchar(200) DEFAULT NULL,
+  `luggage_kit_manual` varchar(200) DEFAULT NULL,
+  `luggage_asset_tag` varchar(200) DEFAULT NULL,
+  `luggage_asset_tag_manual` varchar(200) DEFAULT NULL,
+  `laptop` varchar(200) DEFAULT NULL,
+  `laptop_manual` varchar(200) DEFAULT NULL,
+  `fingerprint_scanner` varchar(200) DEFAULT NULL,
+  `fingerprint_scanner_manual` varchar(200) DEFAULT NULL,
+  `iris_scanner` varchar(200) DEFAULT NULL,
+  `iris_scanner_manual` varchar(200) DEFAULT NULL,
+  `webcamera` varchar(200) DEFAULT NULL,
+  `webcamera_manual` varchar(200) DEFAULT NULL,
+  `document_scanner` varchar(200) DEFAULT NULL,
+  `document_scanner_manual` varchar(200) DEFAULT NULL,
+  `printer` varchar(200) DEFAULT NULL,
+  `printer_manual` varchar(200) DEFAULT NULL,
+  `extended_monitor` varchar(200) DEFAULT NULL,
+  `extended_monitor_manual` varchar(200) DEFAULT NULL,
+  `battery_pack` varchar(200) DEFAULT NULL,
+  `battery_pack_manual` varchar(200) DEFAULT NULL,
+  `photobooth_kit` varchar(200) DEFAULT NULL,
+  `photobooth_kit_manual` varchar(200) DEFAULT NULL,
+  `image` text DEFAULT NULL,
+  `chk_laptop` tinyint(1) NOT NULL,
+  `chk_fingerprint` tinyint(1) NOT NULL,
+  `chk_irisscanner` tinyint(1) NOT NULL,
+  `chk_webcamera` tinyint(1) NOT NULL,
+  `chk_document_scanner` tinyint(1) NOT NULL,
+  `chk_portable_monitor` tinyint(1) NOT NULL,
+  `chk_monochrome_printer` tinyint(1) NOT NULL,
+  `chk_batterypack` tinyint(1) NOT NULL,
+  `chk_mouse` tinyint(1) NOT NULL,
+  `chk_usbpowerhub` tinyint(1) NOT NULL,
+  `chk_luggage_foam` tinyint(1) NOT NULL,
+  `chk_thin_foam` tinyint(1) NOT NULL,
+  `chk_wrist_foam` tinyint(1) NOT NULL,
+  `chk_scannerpad` tinyint(1) NOT NULL,
+  `chk_padlock` tinyint(1) NOT NULL,
+  `chk_photobooth_bag` tinyint(1) NOT NULL,
+  `chk_car_charger` tinyint(1) NOT NULL,
+  `chk_hdmi_cable` tinyint(1) NOT NULL,
+  `chk_power_adapter` tinyint(1) NOT NULL,
+  `chk_power_cable` tinyint(1) NOT NULL,
+  `chk_usb_cable` tinyint(1) NOT NULL,
+  `chk_usb_converter` tinyint(1) NOT NULL,
+  `chk_lcd_stand` tinyint(1) NOT NULL,
+  `chk_lcd_base` tinyint(1) NOT NULL,
+  `chk_cablelock` tinyint(1) NOT NULL,
+  `chk_cablelock_key` tinyint(1) NOT NULL,
+  `chk_lenscover` tinyint(1) NOT NULL,
+  `chk_lamplights` tinyint(1) NOT NULL,
+  `chk_tripods` tinyint(1) NOT NULL,
+  `chk_dimmer_switch` tinyint(1) NOT NULL,
+  `chk_socket_power` tinyint(1) NOT NULL,
+  `chk_backdrop_cloth` tinyint(1) NOT NULL,
+  `chk_cloth_rod` tinyint(1) NOT NULL,
+  `chk_backdrop_stand` tinyint(1) NOT NULL,
+  `chk_clamps` tinyint(1) NOT NULL,
+  `chk_inktank` tinyint(1) NOT NULL,
+  `reg_client` tinyint(1) NOT NULL,
+  `anti_virus` tinyint(1) NOT NULL,
+  `bit_locker` tinyint(1) NOT NULL,
+  `philsys_account` tinyint(1) NOT NULL,
+  `psa_account` tinyint(1) NOT NULL,
+  `remarks` text DEFAULT NULL,
+  `audited_by` varchar(200) DEFAULT NULL,
+  `audited_datetime` datetime DEFAULT NULL,
+  `printed_by` int(11) DEFAULT NULL,
+  `printed_datetime` datetime DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_asset_checklist`
+--
+
+INSERT INTO `tbl_asset_checklist` (`idno`, `username`, `deviceid`, `province`, `location_id`, `contact_person`, `contact_no`, `email`, `address`, `lat_lon`, `luggage_kit`, `luggage_kit_manual`, `luggage_asset_tag`, `luggage_asset_tag_manual`, `laptop`, `laptop_manual`, `fingerprint_scanner`, `fingerprint_scanner_manual`, `iris_scanner`, `iris_scanner_manual`, `webcamera`, `webcamera_manual`, `document_scanner`, `document_scanner_manual`, `printer`, `printer_manual`, `extended_monitor`, `extended_monitor_manual`, `battery_pack`, `battery_pack_manual`, `photobooth_kit`, `photobooth_kit_manual`, `image`, `chk_laptop`, `chk_fingerprint`, `chk_irisscanner`, `chk_webcamera`, `chk_document_scanner`, `chk_portable_monitor`, `chk_monochrome_printer`, `chk_batterypack`, `chk_mouse`, `chk_usbpowerhub`, `chk_luggage_foam`, `chk_thin_foam`, `chk_wrist_foam`, `chk_scannerpad`, `chk_padlock`, `chk_photobooth_bag`, `chk_car_charger`, `chk_hdmi_cable`, `chk_power_adapter`, `chk_power_cable`, `chk_usb_cable`, `chk_usb_converter`, `chk_lcd_stand`, `chk_lcd_base`, `chk_cablelock`, `chk_cablelock_key`, `chk_lenscover`, `chk_lamplights`, `chk_tripods`, `chk_dimmer_switch`, `chk_socket_power`, `chk_backdrop_cloth`, `chk_cloth_rod`, `chk_backdrop_stand`, `chk_clamps`, `chk_inktank`, `reg_client`, `anti_virus`, `bit_locker`, `philsys_account`, `psa_account`, `remarks`, `audited_by`, `audited_datetime`, `printed_by`, `printed_datetime`, `is_deleted`) VALUES
+(2, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001624', NULL, '00089140', NULL, '89140\n', NULL, '00089140', NULL, '00089140', NULL, '89140', NULL, '00089140', NULL, '89140', NULL, '89140', NULL, '00089140', NULL, '00089140', NULL, '1603865576669.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aaron o niel s  banto', NULL, NULL, NULL, 0),
+(3, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001227', NULL, '00089304', NULL, '89304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '00089304', NULL, '1603867805889.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'edwin s  regalado', NULL, NULL, NULL, 0),
+(4, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001465', NULL, '00089072', NULL, '0089702', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '00089072', NULL, '1603868742417.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'clifford jay c  mamauag', NULL, NULL, NULL, 0),
+(5, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001800', NULL, '00089573', NULL, '0089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '00089573', NULL, '1603869620210.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aaron o niel s  banto', NULL, NULL, NULL, 0),
+(6, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001116', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '00089017', NULL, '1603869493938.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(7, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001908', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '00089653', NULL, '1603870394183.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aristophanes c  ramos', NULL, NULL, NULL, 0),
+(8, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001341', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '00089042', NULL, '1603870257166.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'edwin s  regalado', NULL, NULL, NULL, 0),
+(9, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001628', NULL, '00089144', NULL, '00089144', NULL, '55850711', NULL, '00089144', NULL, '00089144', NULL, '00089144', NULL, '00089144', NULL, '00089144', NULL, '00089144', NULL, '00089144', NULL, '1603870833858.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'edwin s  regalado', NULL, NULL, NULL, 0),
+(10, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001299', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '00089030', NULL, '1603940517265.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aaron o niel s  banto', NULL, NULL, NULL, 0),
+(11, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001434', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '00089052', NULL, '1603870983958.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'clifford jay c  mamauag', NULL, NULL, NULL, 0),
+(12, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001452', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '00089065', NULL, '1603940557937.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'clifford jay c  mamauag', NULL, NULL, NULL, 0),
+(13, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001402', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '00089046', NULL, '1603941140863.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'ian carhlo d  sablay', NULL, NULL, NULL, 0),
+(14, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001871', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '00089624', NULL, '1603941092955.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(15, 'jay101773', '08ac4234e599fbbb', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001534', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '00089091', NULL, '1603941561559.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aristophanes c  ramos', NULL, NULL, NULL, 0),
+(16, 'aaron101678', '4f7d1131f3f67b19', 'TAWI-TAWI', 3, 'Masil H. Mohammadsha', '(068) 268-1329; 09364486864; 09499962449', 'psa.twt0912@gmail.com', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', '5.07903 119.78236', 'PH201908POF0001597', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '00089114', NULL, '1603941594193.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'aaron o niel s  banto', NULL, NULL, NULL, 0),
+(17, 'jay101773', '08ac4234e599fbbb', 'DAVAO OCCIDENTAL', 5, 'Jessie A. Madulin', '0917138-9283; 09283945372', 'psadavao.occidental@gmail.com', 'Abbas Ext., Poblacion, Malita, Davao Occidental , Davao 8012', '7.06667 125.6', 'PH201908POF0001625', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '00089141', NULL, '1603955402541.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(18, 'jay101773', '08ac4234e599fbbb', 'DAVAO OCCIDENTAL', 5, 'Jessie A. Madulin', '0917138-9283; 09283945372', 'psadavao.occidental@gmail.com', 'Abbas Ext., Poblacion, Malita, Davao Occidental , Davao 8012', '7.06667 125.6', 'PH201908POF0002631', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '00089984', NULL, '1603956186404.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(19, 'jay101773', '08ac4234e599fbbb', 'DAVAO OCCIDENTAL', 5, 'Jessie A. Madulin', '0917138-9283; 09283945372', 'psadavao.occidental@gmail.com', 'Abbas Ext., Poblacion, Malita, Davao Occidental , Davao 8012', '7.06667 125.6', 'PH201908POF0001652', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '00089463', NULL, '1603956807530.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(20, 'jay101773', '08ac4234e599fbbb', 'DAVAO OCCIDENTAL', 5, 'Jessie A. Madulin', '0917138-9283; 09283945372', 'psadavao.occidental@gmail.com', 'Abbas Ext., Poblacion, Malita, Davao Occidental , Davao 8012', '7.06667 125.6', 'PH201908POF0001300', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '00089031', NULL, '1603957352285.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0),
+(21, 'jay101773', '08ac4234e599fbbb', 'DAVAO OCCIDENTAL', 5, 'Jessie A. Madulin', '0917138-9283; 09283945372', 'psadavao.occidental@gmail.com', 'Abbas Ext., Poblacion, Malita, Davao Occidental , Davao 8012', '7.06667 125.6', 'PH201908POF0001435', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '00089053', NULL, '1603964167720.jpg', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'john rey d  marcelino', NULL, NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_asset_repair_request`
 --
 
@@ -1447,21 +1562,23 @@ CREATE TABLE `tbl_child_asset` (
   `checkout_user_id` int(2) DEFAULT NULL,
   `office_management_id` int(11) DEFAULT NULL,
   `departments_id` int(11) DEFAULT NULL,
-  `asset_category_id` int(11) DEFAULT NULL
+  `asset_category_id` int(11) DEFAULT NULL,
+  `property_tag` varchar(191) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_child_asset`
 --
 
-INSERT INTO `tbl_child_asset` (`id`, `tbl_asset_id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `asset_category_id`) VALUES
-(6, 29, 'AORUS RTX Geforce 3090 Super Gaming', 'GPU 2080', 6, '526124', '2020-09-04', '45000.00', '56124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-09-27 16:00:00', 1, NULL, 1, 0, 48, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 5, 2, NULL),
-(7, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b450', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL),
-(8, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b456', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL),
-(9, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 3090', 8, '01065654', '2020-10-01', '35000.00', '9874987561', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 0, 6, 5, 2, NULL),
-(10, 29, 'NVIDIA GEFORCE RTX 2060', 'RTX 2060', 8, '51612125', '2020-09-17', '25000.00', '612512154', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, NULL, 0, 0, 0, 1, NULL, NULL, NULL, NULL),
-(11, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'Motherboard b550', 6, '6125125', '2020-09-04', '15000.00', '6212415', NULL, '', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, NULL),
-(12, 30, 'TEST', 'TEST1', 5, 'TEST', '2020-10-08', '2500.00', '5121245152', NULL, 'TEST', NULL, 1, '2020-10-04 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 5, 2, NULL);
+INSERT INTO `tbl_child_asset` (`id`, `tbl_asset_id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `asset_category_id`, `property_tag`) VALUES
+(6, 29, 'AORUS RTX Geforce 3090 Super Gaming', 'GPU 2080', 6, '526124', '2020-09-04', '45000.00', '56124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-09-27 16:00:00', 1, NULL, 1, 0, 48, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 5, 2, NULL, NULL),
+(7, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b450', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL, NULL),
+(8, 29, 'MSI Tomahawk Max B450 ATX', 'Motherboard b456', 5, '51251254', '2020-09-11', '25000.00', '16125125', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 1, 6, 1, 3, NULL, NULL),
+(9, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 3090', 8, '01065654', '2020-10-01', '35000.00', '9874987561', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 0, 6, 5, 2, NULL, NULL),
+(10, 29, 'NVIDIA GEFORCE RTX 2060', 'RTX 2060', 8, '51612125', '2020-09-17', '25000.00', '612512154', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, NULL, 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL),
+(11, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'Motherboard b550', 6, '6125125', '2020-09-04', '15000.00', '6212415', NULL, '', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, NULL, NULL),
+(12, 30, 'TEST', 'TEST1', 5, 'TEST', '2020-10-08', '2500.00', '5121245152', NULL, 'TEST', NULL, 1, '2020-10-04 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 5, 2, NULL, NULL),
+(13, 32, 'AORUS RTX Geforce 2080 Super Gaming', '5125124', 6, '124154', '2020-10-29', '15155.00', '525124', NULL, 'TEST', NULL, 1, '2020-10-29 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 3, 1, '141245');
 
 -- --------------------------------------------------------
 
@@ -1491,6 +1608,29 @@ INSERT INTO `tbl_companies` (`id`, `name`, `created_at`, `updated_at`, `image`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_custodian`
+--
+
+CREATE TABLE `tbl_custodian` (
+  `custodian_id` int(11) NOT NULL,
+  `custodian_name` varchar(500) NOT NULL,
+  `custodian_province` varchar(200) NOT NULL,
+  `custodian_position` varchar(200) NOT NULL,
+  `custodian_address` text NOT NULL,
+  `custodian_salutation` varchar(50) NOT NULL,
+  `location_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_custodian`
+--
+
+INSERT INTO `tbl_custodian` (`custodian_id`, `custodian_name`, `custodian_province`, `custodian_position`, `custodian_address`, `custodian_salutation`, `location_id`) VALUES
+(1, 'MASIL H. MOHAMMADSHA', 'TAWI-TAWI', 'Chief Statistical Specialist', 'Barms Building National Highway Bongao, Tawi-Tawi 7500', ' ', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_gps`
 --
 
@@ -1516,6 +1656,35 @@ CREATE TABLE `tbl_gps` (
   `is_deleted` tinyint(1) DEFAULT 0,
   `address` text DEFAULT NULL,
   `child_asset_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_gps_checklist`
+--
+
+CREATE TABLE `tbl_gps_checklist` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `event` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `timestamp` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `redirects` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `visitors` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `device` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `os` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lng` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lat` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `secrettoken` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1562,7 +1731,8 @@ INSERT INTO `tbl_history` (`id`, `asset_id`, `current_custodian_id`, `previous_c
 (43, 34, 8, NULL, 2, NULL, 'create', '2020-10-22 02:37:18', NULL, NULL, NULL, 0, 1, NULL),
 (44, 30, 8, 8, 2, 2, 'update', '2020-09-28 04:32:09', '2020-10-22 02:41:00', NULL, NULL, 0, 1, NULL),
 (45, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:15', NULL, NULL, 0, 1, NULL),
-(46, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:48', NULL, NULL, 0, 1, NULL);
+(46, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:48', NULL, NULL, 0, 1, NULL),
+(47, NULL, 8, NULL, 2, NULL, 'create', '2020-10-29 22:17:19', NULL, NULL, NULL, 0, 1, 32);
 
 -- --------------------------------------------------------
 
@@ -1578,6 +1748,7 @@ CREATE TABLE `tbl_locations` (
   `lat` varchar(255) DEFAULT NULL,
   `lng` varchar(255) DEFAULT NULL,
   `contact_person` text DEFAULT NULL,
+  `contact_position` varchar(255) NOT NULL,
   `contact_number` text DEFAULT NULL,
   `email` text DEFAULT NULL,
   `address` text DEFAULT NULL
@@ -1587,12 +1758,12 @@ CREATE TABLE `tbl_locations` (
 -- Dumping data for table `tbl_locations`
 --
 
-INSERT INTO `tbl_locations` (`id`, `name`, `image`, `is_deleted`, `lat`, `lng`, `contact_person`, `contact_number`, `email`, `address`) VALUES
-(1, 'Metro Manila', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'NATIONAL CAPITAL REGION', NULL, 0, '14.560344', '121.058747', 'Andolino', '09773656715', 'dondonpentavia@gmail.com', '129 T. Alonzo Ext West Rembo Makati City'),
-(3, 'REGION 5', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'REGION 5', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, '127 caimito st blk 5 west rembo makati city', NULL, 0, '14.563273', '121.050572', NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_locations` (`id`, `name`, `image`, `is_deleted`, `lat`, `lng`, `contact_person`, `contact_position`, `contact_number`, `email`, `address`) VALUES
+(1, 'Metro Manila', NULL, 1, NULL, NULL, NULL, '', NULL, NULL, NULL),
+(2, 'NATIONAL CAPITAL REGION', NULL, 0, '14.560344', '121.058747', 'Andolino', '', '09773656715', 'dondonpentavia@gmail.com', '129 T. Alonzo Ext West Rembo Makati City'),
+(3, 'TAWI TAWI', NULL, 0, NULL, NULL, 'Masil H. Mohammadsha', 'Chief Statistical Specialist', 'Chief Statistical Specialist', NULL, 'Barms Building National Highway Bongao, Tawi-Tawi ...'),
+(4, 'REGION 5', NULL, 0, NULL, NULL, NULL, '', NULL, NULL, NULL),
+(5, 'DAVAO OCCIDENTAL', NULL, 0, '14.563273', '121.050572', NULL, '', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1643,15 +1814,36 @@ CREATE TABLE `tbl_qrcodes` (
 --
 
 INSERT INTO `tbl_qrcodes` (`id`, `asset_id`, `qr_code`, `code`, `image`, `is_deleted`, `child_asset_id`) VALUES
-(12, 29, '{\"result\":{\"shorturl\":\"https:\\/\\/mbyongson.qrd.by\\/b98ix0\",\"qr\":\"https:\\/\\/mbyongson.qrd.by\\/i\\/b98ix0\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/MFRWc0R5RmpWaWk4WDA2MHNOUVRuZz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-28 12:29:10\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'b98ix0', NULL, 0, NULL),
-(13, 30, '{\"result\":{\"shorturl\":\"https:\\/\\/mbyongson.qrd.by\\/3wa1ro\",\"qr\":\"https:\\/\\/mbyongson.qrd.by\\/i\\/3wa1ro\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/cTRFaG5qZ1RtbmROYTlDUGgxdWZaZz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-28 12:32:09\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', '3wa1ro', NULL, 0, NULL),
-(14, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/mbyongson.qrd.by\\/n4i3z2\",\"qr\":\"https:\\/\\/mbyongson.qrd.by\\/i\\/n4i3z2\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/K3Z1Yko1RUg4emZ0c0g5VDIySXA1Zz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-28 12:33:23\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'n4i3z2', NULL, 0, 6),
-(15, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/mbyongson.qrd.by\\/tbk4i2\",\"qr\":\"https:\\/\\/mbyongson.qrd.by\\/i\\/tbk4i2\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/TnIwNlVUcEJVNkhkeG5JR3FxL0YyUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-28 13:27:31\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'tbk4i2', NULL, 0, 9),
 (16, 31, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/a6vomh\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/a6vomh\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/WTNVaXJYMjZIMjgwR1o2RWlhS0kzdz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-09-30 16:59:46\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'a6vomh', NULL, 0, NULL),
 (17, 32, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/doevz0\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/doevz0\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/K2t0YTVyYTdZQ0dxUy9CMGNia01Ndz09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-03 17:00:47\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'doevz0', NULL, 0, NULL),
 (18, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/r74nj6\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/r74nj6\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets-child\\/ZlRWaWd5L084NFQwb3JONlNsMVJSUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-05 13:09:06\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'r74nj6', NULL, 0, 12),
 (19, 33, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/f16m23\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/f16m23\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/eUNwZHlOTzRrU0JXT0VOZjMyV28vUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-21 06:22:59\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'f16m23', NULL, 0, NULL),
 (20, 34, '{\"result\":{\"shorturl\":\"https:\\/\\/mamary.qrd.by\\/1qv2yi\",\"qr\":\"https:\\/\\/mamary.qrd.by\\/i\\/1qv2yi\",\"url\":\"http:\\/\\/localhost\\/template\\/get-assets\\/L0IybVNoOGRabEtuQVNCVWNRZUtDQT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-22 10:37:18\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', '1qv2yi', NULL, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_qrcodes_checklist`
+--
+
+CREATE TABLE `tbl_qrcodes_checklist` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idno` int(11) NOT NULL,
+  `qr_code` text DEFAULT NULL,
+  `code` varchar(25) DEFAULT NULL,
+  `image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `location_id` int(11) DEFAULT NULL,
+  `received_by` int(11) DEFAULT NULL,
+  `date_received` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_qrcodes_checklist`
+--
+
+INSERT INTO `tbl_qrcodes_checklist` (`id`, `idno`, `qr_code`, `code`, `image`, `is_deleted`, `location_id`, `received_by`, `date_received`) VALUES
+(1, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/philsys.qrd.by\\/uf8kvg\",\"qr\":\"https:\\/\\/philsys.qrd.by\\/i\\/uf8kvg\",\"url\":\"http:\\/\\/localhost\\/template\\/scanned-checklist\\/S3dIb2g2S0hMSnNKVmRGZUdicmhFUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-10-29 17:33:59\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'uf8kvg', NULL, 0, 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1747,7 +1939,8 @@ INSERT INTO `tbl_uploads` (`uploads_id`, `asset_id`, `image_name`, `image_path`,
 (30, 0, '13-145-090-V01.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-09-28', 11),
 (31, 31, '3P.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-09-30', NULL),
 (32, 33, 'IMG_20200627_152512.jpg', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-21', NULL),
-(33, 34, '3P1.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-22', NULL);
+(33, 34, '3P1.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-22', NULL),
+(34, 0, 'cvn65y.png', 'X:/Localhost/htdocs/template/assets/image/uploads/', NULL, NULL, '2020-10-30', 13);
 
 -- --------------------------------------------------------
 
@@ -3097,6 +3290,12 @@ ALTER TABLE `tbl_asset`
   ADD KEY `assets_deleted_at_name_index` (`deleted_at`,`name`);
 
 --
+-- Indexes for table `tbl_asset_checklist`
+--
+ALTER TABLE `tbl_asset_checklist`
+  ADD PRIMARY KEY (`idno`);
+
+--
 -- Indexes for table `tbl_asset_repair_request`
 --
 ALTER TABLE `tbl_asset_repair_request`
@@ -3134,9 +3333,21 @@ ALTER TABLE `tbl_companies`
   ADD UNIQUE KEY `tbl_companies_name_unique` (`name`);
 
 --
+-- Indexes for table `tbl_custodian`
+--
+ALTER TABLE `tbl_custodian`
+  ADD PRIMARY KEY (`custodian_id`);
+
+--
 -- Indexes for table `tbl_gps`
 --
 ALTER TABLE `tbl_gps`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_gps_checklist`
+--
+ALTER TABLE `tbl_gps_checklist`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3162,6 +3373,12 @@ ALTER TABLE `tbl_models`
 -- Indexes for table `tbl_qrcodes`
 --
 ALTER TABLE `tbl_qrcodes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_qrcodes_checklist`
+--
+ALTER TABLE `tbl_qrcodes_checklist`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3392,6 +3609,12 @@ ALTER TABLE `tbl_asset`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
+-- AUTO_INCREMENT for table `tbl_asset_checklist`
+--
+ALTER TABLE `tbl_asset_checklist`
+  MODIFY `idno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
 -- AUTO_INCREMENT for table `tbl_asset_repair_request`
 --
 ALTER TABLE `tbl_asset_repair_request`
@@ -3407,7 +3630,7 @@ ALTER TABLE `tbl_asset_request`
 -- AUTO_INCREMENT for table `tbl_child_asset`
 --
 ALTER TABLE `tbl_child_asset`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbl_companies`
@@ -3416,16 +3639,28 @@ ALTER TABLE `tbl_companies`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
+-- AUTO_INCREMENT for table `tbl_custodian`
+--
+ALTER TABLE `tbl_custodian`
+  MODIFY `custodian_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tbl_gps`
 --
 ALTER TABLE `tbl_gps`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_gps_checklist`
+--
+ALTER TABLE `tbl_gps_checklist`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_history`
 --
 ALTER TABLE `tbl_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `tbl_locations`
@@ -3446,6 +3681,12 @@ ALTER TABLE `tbl_qrcodes`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
+-- AUTO_INCREMENT for table `tbl_qrcodes_checklist`
+--
+ALTER TABLE `tbl_qrcodes_checklist`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tbl_status_labels`
 --
 ALTER TABLE `tbl_status_labels`
@@ -3461,7 +3702,7 @@ ALTER TABLE `tbl_suppliers`
 -- AUTO_INCREMENT for table `tbl_uploads`
 --
 ALTER TABLE `tbl_uploads`
-  MODIFY `uploads_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `uploads_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `uploads`

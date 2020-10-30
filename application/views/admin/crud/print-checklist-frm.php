@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-body">
-    <form id="frm-print-asset-report">
+    <form id="frm-print-checklist-report">
       <div class="row">
         <!-- heading -->
         <div class="col-9 mb-3">
@@ -30,13 +30,13 @@
 						<?php endforeach; ?>
 					</select> 
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
 					<label for="custodian" class="font-12">Custodian</label>
 					<select class="custom-select custom-select  -sm font-12" id="custodian" name="custodian">
 						<option selected hidden value="">-SELECT-</option>
-						<?php foreach ($custodian as $row): ?>
-							<option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
-					  <?php endforeach; ?>
+						<?php //foreach ($custodian as $row): ?>
+							<option value="<?php //echo $row->users_id; ?>"><?php //echo $row->screen_name; ?></option>
+					  <?php //endforeach; ?>
 					</select> 
 				</div>
         <div class="col-3 mt-3">
@@ -54,14 +54,13 @@
         <div class="col-5 mt-3">
           <label for="date_generated" class="font-12">Date (For Remital Slip)</label>
           <input type="date" class="form-control form-control-sm font-12" id="date_generated">
-        </div>
+        </div> -->
       </div>
       <div class="line mt-3 mb-3 pt-0 pb-0"></div>
 
       <div class="row">
         <div class="col-12">
-          <button type="submit" class="btn btn-info btn-md rounded-0 border float-right font-12"><i class="fas fa-save"></i> PRINT REPORT</button>
-          <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printTransmitalSlip"><i class="fas fa-save"></i> PRINT TRANSMITAL SLIP</button>
+          <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printCheckList"><i class="fas fa-save"></i> PRINT CHECKLIST</button>
         </div>
       </div>
 

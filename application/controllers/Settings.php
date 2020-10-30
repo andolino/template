@@ -127,7 +127,7 @@ class Settings extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = date('Y-m-d H:m:s A', strtotime($row->created_at));
-   		$data[] = $row->screen_name == '' ? $row->screen_name2 : $row->screen_name;
+   		$data[] = $row->screen_name == '' ? $row->screen_name : $row->screen_name;
    		$data[] = $row->action_type;
    		$data[] = $row->asset_name == '' ? $row->asset_name2 : $row->asset_name;	
 			$data[] = $row->target == '' ? $row->target2 : $row->target;	

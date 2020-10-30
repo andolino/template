@@ -19,6 +19,18 @@ class MY_Controller extends CI_Controller{
 		$this->load->view($data, $param, $return);
 		$this->load->view('partials/adminFtr');	
 	}
+	
+	public function customContainer($data, $param = array(), $return = FALSE){
+		// if(!$this->session->userdata('users_id')){
+		//   redirect('login');
+		// }
+		// $param['go_logout'] = 'logout';
+		// $param['logged_in'] 	 = $this->db->get_where('users', array('users_id' => $this->session->users_id))->row();
+		$this->load->view('partials/adminHdr', $param);
+		// $this->load->view('partials/adminNav', $param);
+		$this->load->view($data, $param, $return);
+		$this->load->view('partials/adminFtr');	
+	}
 
 	function encdec( $string, $action) {
     // you may change these values to your own
@@ -66,7 +78,6 @@ class MY_Controller extends CI_Controller{
 			show_error($this->email->print_debugger());
 		}
   }
-
 
   function convertIntegerToWords($x) {
         $w = '';
@@ -237,6 +248,33 @@ class MY_Controller extends CI_Controller{
 			}
 		}
 
+		public function generateQRChecklist($id){
+				$encId 		  	= $this->encdec($id, 'e');
+				$apiKey       = "2bbd756624aaeee7945627b397b832bb";
+				$apiUrl       = "https://philsys.qrd.by/api";
+				$action       = "short";
+				$url          = base_url() . "scanned-checklist/" . $encId . '&gps=1';
+				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$json         = file_get_contents($jsonurl, 0, null, null);
+				$json_output  = json_decode($json);
+				$json_encoded = json_encode($json_output);
+				$code         = explode('/', $json_output->result->qr);
+				$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $id ORDER BY id DESC LIMIT 1")->row();
+				if ($existingQr->received_by == '' || $existingQr->date_received == '') {
+					return $this->db->update('tbl_qrcodes_checklist', array(
+																															'location_id' => $id,
+																															'qr_code'  		=> $json_encoded,
+																															'code'    	 	=> $code[4],
+																														), array('id' => $existingQr->id));
+				} else {
+					return $this->db->insert('tbl_qrcodes_checklist', array(
+																															'location_id' => $id,
+																															'qr_code'  		=> $json_encoded,
+																															'code'    	 	=> $code[4],
+																														));
+				}
+		}
+
 		public function save_action_logs($data){
 			return $this->db->insert('tbl_action_logs', $data);
 		}
@@ -272,17 +310,117 @@ class MY_Controller extends CI_Controller{
 			$mpdf->Output();
 		}
 
-		public function createPdfWOHeadFoot($data, $param = array()){
+		public function generatePdf($data, $param = array()){
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
 			$mpdf = new \Mpdf\Mpdf([
-										// 'setAutoTopMargin' 		=> 'stretch', 
-										// 'setAutoBottomMargin' => 'stretch'
-									]);
+								'fontDir' => array_merge($fontDirs, [
+									__DIR__ . '/fonts',
+							]),
+							'fontdata' => $fontData + [
+								'quicksand' => [
+										'R' => 'Quicksand-Regular.ttf',
+										'I' => 'Quicksand-Bold.ttf'
+								],
+								'serif' => [
+									'R' => 'OpenSans-Regular.ttf',
+									'I' => 'OpenSans-Semibold.ttf'
+								]
+							],
+							'default_font' => 'quicksand'
+						]);
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
    		$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
 			$ht = $this->load->view($data, $param, TRUE);
-			// $mpdf->defaultheaderline = 0;
-			// $mpdf->defaultfooterline = 0;
+			$mpdf->defaultheaderline = 0;
+			$mpdf->defaultfooterline = 0;
 			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
+			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
+			$mpdf->WriteHTML($ht);
+			$mpdf->Output();
+		}
+
+		public function createPdfTransmitalSummary($data, $param = array()){
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			$mpdf = new \Mpdf\Mpdf([
+								'fontDir' => array_merge($fontDirs, [
+									__DIR__ . '/fonts',
+							]),
+							'setAutoTopMargin' 		=> 'stretch', 
+							'setAutoBottomMargin' => 'stretch',
+							'fontdata' => $fontData + [
+								'quicksand' => [
+										'R' => 'Quicksand-Regular.ttf',
+										'I' => 'Quicksand-Bold.ttf'
+								],
+								'serif' => [
+									'R' => 'OpenSans-Regular.ttf',
+									'I' => 'OpenSans-Semibold.ttf'
+								]
+							],
+							'default_font' => 'quicksand'
+						]);
+			$mpdf->SetTitle('Checklist');
+			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
+			$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+			// $param['page_no'] = '{PAGENO} of {nbpg}';
+			// {nbpg} which prints the total number of pages considering page 
+			$param['intToWords'] = function($int){ return $this->convertNumberWithourCurrency($int); };
+			$ht = $this->load->view($data, $param, TRUE);
+			$ht2 = $this->load->view('admin/crud/regkits-summary', $param, TRUE);
+			// $header = $this->load->view('partials/checkListHeader', $param, TRUE);
+			$mpdf->defaultheaderline = 0;
+			$mpdf->defaultfooterline = 0;
+			// $mpdf->SetHeader($header);
+			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
+			$mpdf->WriteHTML($ht);
+			$mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
+
+			$mpdf->AddPage('L','','1','i','on');
+			$mpdf->WriteHTML($ht2);
+			$mpdf->SetFooter();	
+			$mpdf->Output();
+		}
+
+		public function createPdfWOHeadFoot($data, $param = array()){
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];
+
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			$mpdf = new \Mpdf\Mpdf([
+								'fontDir' => array_merge($fontDirs, [
+									__DIR__ . '/fonts',
+							]),
+							'setAutoTopMargin' 		=> 'stretch', 
+							'setAutoBottomMargin' => 'stretch',
+							'fontdata' => $fontData + [
+								'quicksand' => [
+										'R' => 'Quicksand-Regular.ttf',
+										'I' => 'Quicksand-Bold.ttf'
+								],
+								'serif' => [
+									'R' => 'OpenSans-Regular.ttf',
+									'I' => 'OpenSans-Semibold.ttf'
+								]
+							],
+							'default_font' => 'quicksand'
+						]);
+			$mpdf->SetTitle('Checklist');
+			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
+			$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+			// $param['page_no'] = '{PAGENO} of {nbpg}';
+			// {nbpg} which prints the total number of pages considering page 
+			$ht = $this->load->view($data, $param, TRUE);
+			// $header = $this->load->view('partials/checkListHeader', $param, TRUE);
+			$mpdf->defaultheaderline = 0;
+			// $mpdf->defaultfooterline = 0;
+			// $mpdf->SetHeader($header);
 			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
 			$mpdf->WriteHTML($ht);
 			$mpdf->Output();
@@ -327,5 +465,18 @@ class MY_Controller extends CI_Controller{
 			}
 			return $data;
 		}
+
+		function check_url($url) {
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, 1);
+			curl_setopt($ch , CURLOPT_RETURNTRANSFER, 1);
+			$data = curl_exec($ch);
+			$headers = curl_getinfo($ch);
+			curl_close($ch);
+	
+			return $headers['http_code'];
+	}
 
 }

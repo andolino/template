@@ -121,8 +121,11 @@ class AdminMod extends CI_Model {
 
 	public function get_output_asset(){
 		$this->_que_tbl_asset();
-		if (!empty($_POST['length']))
-		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		if (!empty($_POST['length'])){
+			if ($_POST['length'] < 0) {} else {
+				$this->db->limit($_POST['length'], $_POST['start']);
+			}
+		}
 		$query = $this->db->get();
 		return $query->result();
 	}

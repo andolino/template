@@ -371,6 +371,39 @@ class Admin extends MY_Controller {
 		$params['is_admin'] = $this->session->users_id; 
 		$this->adminContainer('admin/crud/view-asset', $params);
 	}
+	
+	public function view_checklist_mobile(){
+		$location_id 	  	 	  = $this->input->get('data');
+		// $params['data'] 	  = $this->AdminMod->getAssetRecord($location_id); 
+		$params['data']      = $this->db->get_where('tbl_asset_checklist', array('location_id' => $location_id))->row();
+		$params['countAssetChecklist']      = $this->db->get_where('tbl_asset_checklist', array('location_id' => $location_id))->result();
+		$url 							  = $this->db->get_where('tbl_qrcodes_checklist', array('location_id' => $location_id))->row();
+		$jsonQrData 			  = json_decode($url->qr_code);
+		$params['qrcode']   = $jsonQrData->result->qr;
+		// $this->load->view('admin/crud/view-asset', $params);
+		$params['heading']  = "CHECKLIST DETAILS"; 
+		$params['is_admin'] = $this->session->users_id; 
+		$params['id'] = $location_id; 
+		$params['qrCodesData'] = $url; 
+		$params['received_by'] 	= $url->date_received;
+		$this->customContainer('admin/crud/checklist-view-info', $params);
+	}
+	
+	public function view_checklist_mobile_catch(){
+		$location_id 	  	 	  = $this->input->get('data');
+		// $params['data'] 	  = $this->AdminMod->getAssetRecord($location_id); 
+		$params['data']      = $this->db->get_where('tbl_asset_checklist', array('location_id' => $location_id))->row();
+		$url 							  = $this->db->get_where('tbl_qrcodes_checklist', array('location_id' => $location_id))->row();
+		$jsonQrData 			  = json_decode($url->qr_code);
+		$params['qrcode']   = $jsonQrData->result->qr;
+		// $this->load->view('admin/crud/view-asset', $params);
+		$params['heading']  = "CHECKLIST DETAILS"; 
+		$params['is_admin'] = $this->session->users_id; 
+		$params['id'] = $location_id; 
+		$params['qrCodesData'] = $url; 
+		$params['received_by'] 					 = $this->db->get_where('users', array('users_id' => $url->received_by))->row();
+		$this->customContainer('admin/crud/checklist-view-info-catch', $params);
+	}
 
 	public function view_history(){
 		$asset_id 	  	 	 = $this->input->get('data');
@@ -1053,7 +1086,22 @@ class Admin extends MY_Controller {
 	public function getAssetPrintFrm(){
 		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
 		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
+		$params['checkList'] = $this->db->get_where('tbl_asset_checklist')->result();
 		$this->load->view('admin/crud/print-asset-frm', $params);
+	}
+	
+	public function getCheckListPrintFrm(){
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
+		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
+		$params['checkList'] = $this->db->get_where('tbl_asset_checklist')->result();
+		$this->load->view('admin/crud/print-checklist-frm', $params);
+	}
+	
+	public function getTransmittalSummaryPrintFrm(){
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
+		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
+		$params['checkList'] = $this->db->get_where('tbl_asset_checklist')->result();
+		$this->load->view('admin/crud/print-transmital-summary-frm', $params);
 	}
 
 	public function getPrintAssetReport(){
@@ -1071,18 +1119,20 @@ class Admin extends MY_Controller {
 	}
 	
 	public function getPrintChecklistReport(){
-		$where = 'WHERE is_deleted = 0';
+		$where = 'is_deleted = 0';
 		if($this->input->post('location_id') != ''){
 			$where .= ' AND location_id = ' . $this->input->post('location_id');
 		}
-		if ($this->input->post('custodian') != '') {
-			$where .= ' AND users_id = ' . $this->input->post('custodian');
+		echo json_encode(array('data'=> $this->encdec($where, 'e')));
+	}
+	
+	public function getPrintTransmitalSummReport(){
+		$where = 'is_deleted = 0';
+		if($this->input->post('location_id') != ''){
+			$where .= ' AND location_id = ' . $this->input->post('location_id');
 		}
-		if ($this->input->post('asset_type') == 1){
-			$where .= ' AND parent IS NOT NULL';
-		}
-		// echo json_encode(array('data'=> $this->encdec($where, 'e')));
-		echo json_encode(array('data'=> ''));
+		$this->generateQRChecklist($this->input->post('location_id'));
+		echo json_encode(array('data'=> $this->encdec($where, 'e')));
 	}
 	
 	public function printAssetReport(){
@@ -1112,15 +1162,32 @@ class Admin extends MY_Controller {
 	public function printChecklist(){
 		$where = $this->encdec($this->uri->segment(2), 'd');
 		$data_procces = $this->uri->segment(3);
-		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
+		// $res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
 		// $motherCount = $this->db->query("SELECT count(*) as tot_mother FROM v_asset_report " . $where . ' AND parent is not null AND sibling is null')->row();
-		$params['data'] = $res;
+		// $params['data'] = $res;
 		$params['data_procces'] = $data_procces;
+		$params['dataChkList'] = $this->db->get_where('tbl_asset_checklist', $where)->result();
+		// $params['page_no'] = '123';//$this->convertNumberWithourCurrency($motherCount->tot_mother);//'{PAGENO} of {nbpg}';
 		// $params['motherCount'] = $this->convertNumberWithourCurrency($motherCount->tot_mother);
-		$this->createPdfWOHeadFoot('admin/crud/print-checklist', $params);
 		// $this->output->enable_profiler(true);
+		$this->createPdfWOHeadFoot('admin/crud/print-checklist', $params);
 		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
 		// $this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
+	}
+	
+	public function printTransmitalSummary(){
+		$where = $this->encdec($this->uri->segment(2), 'd');
+		$locationsWhere = explode('AND', $where)[1];
+		$location_id = explode(' = ', $locationsWhere)[1];
+		$data_procces = $this->uri->segment(3);
+		$params['data_procces'] = $data_procces;
+		$params['dataChkList'] = $this->db->get_where('tbl_asset_checklist', $where)->result();
+		$params['tbl_locations'] = $this->db->get_where('tbl_locations', array('id'=>$location_id))->row();
+		//QR Code
+		$url 							 				= $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $location_id ORDER BY id desc LIMIT 1")->row();
+		$jsonQrData 			 				= json_decode($url->qr_code);
+		$params['qrcode']  				= $jsonQrData->result->qr;
+		$this->createPdfTransmitalSummary('admin/crud/print-transmital-summary', $params);
 	}
 
 	public function upload_const_dp($id){
@@ -1269,6 +1336,24 @@ class Admin extends MY_Controller {
 		}
 	}
 	
+	public function get_data_checklist(){
+		// header("Access-Control-Allow-Origin: *");
+		// header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+		// header("Content-type: application/json charset=UTF-8");
+		// $request_body = file_get_contents('php://input');
+		// $requestData 	= json_decode($request_body);
+		$d = $this->uri->segment(2);
+		$dec_un = $this->encdec($d, 'd');
+		$res = $this->db->get_where('tbl_locations', array('id' => $dec_un))->row();
+		$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $dec_un ORDER BY id DESC LIMIT 1")->row();
+		if ($existingQr->received_by == '' || $existingQr->date_received == '') {
+			redirect(base_url() . 'mobile-view-checklist-catch?data=' . $dec_un);
+		} else {
+			redirect(base_url() . 'mobile-view-checklist?data=' . $dec_un);
+		}
+		
+	}
+	
 	public function get_data_assets_child(){
 		// header("Access-Control-Allow-Origin: *");
 		// header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
@@ -1304,8 +1389,10 @@ class Admin extends MY_Controller {
 		$data = json_decode($enc_ai);
 		$data = implode(',',$data);
 		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
+		$params['check_url'] = function($url){ return $this->check_url($url); };
 		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
 		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
+		// $this->generatePdf('admin/crud/print-qrcode-per-page', $params);
 	}
 	
 	public function printChildAssetQr(){
@@ -1385,6 +1472,56 @@ class Admin extends MY_Controller {
 		}
 
 	}
+	
+	public function saveCreatedQrChecklist(){
+		// Webhook
+		// if JSON is submitted
+		$json = json_decode(file_get_contents('php://input'));
+		$qrData = $this->db->get_where('tbl_qrcodes_checklist', array('code' => $this->input->post('code')))->row();
+		$dataChecklist = $this->db->get_where('tbl_asset_checklist', array('location_id' => $qrData->location_id))->row();
+		$lat = explode(' ', $dataChecklist->lat_lon)[0];
+		$long = explode(' ', $dataChecklist->lat_lon)[1];
+		$address = $this->getaddress($this->input->post('lat'), $this->input->post('lng'));
+		$this->db->insert('tbl_gps_checklist', array(
+																	'location_id' => $qrData->location_id,
+																	'event' 			=> $this->input->post('event'), 
+																	'timestamp' 	=> $this->input->post('timestamp'), 
+																	'redirects' 	=> $this->input->post('redirects'), 
+																	'visitors' 		=> $this->input->post('visitors'), 
+																	'device' 			=> $this->input->post('device'), 
+																	'os' 					=> $this->input->post('os'), 
+																	'country' 		=> $this->input->post('country'), 
+																	'lng' 				=> $this->input->post('lng'), 
+																	'lat' 				=> $this->input->post('lat'), 
+																	'user' 				=> $this->input->post('user'), 
+																	'email' 			=> $this->input->post('email'), 
+																	'mobile' 			=> $this->input->post('mobile'), 
+																	'type' 				=> $this->input->post('type'), 
+																	'code' 				=> $this->input->post('code'), 
+																	'secrettoken' => $this->input->post('secrettoken'),
+																	'address' 	  => $address->results[0]->formatted_address . ' asd ' . $_POST['lat'] . ' - ' . $_POST['lng'] . ' - ' . $lat . ' - ' . $long //$address->result->formatted_address
+																));
+		$distance_diff = $this->getDistanceBetweenPoints($_POST['lat'], $_POST['lng'], $lat, $long);
+		//if distance from near location is less than 100 meters
+		// if ($distance_diff['meters'] <= 250) {	
+			$location_id = $this->db->get_where('tbl_locations', array('id' => $qrData->location_id))->row();
+			$this->db->update('tbl_qrcodes_checklist', array(
+					'date_received' => date('Y-m-d H:i:s', strtotime($this->input->post('timestamp'))),
+					'received_by' => $location_id->id
+				), array('code' => $this->input->post('code')));
+			// $this->save_action_logs(array(
+			// 	'user_id' 			=> $this->session->users_id,
+			// 	'action_type' 	=> 'scanned asset to deploy',
+			// 	'target_id' 		=> $qrData->child_asset_id != '' ? 0 : $qrData->asset_id,
+			// 	'target_type' 	=> 'asset',
+			// 	// 'item_type' 	=>  'Asset',
+			// 	// 'item_id' 		=>  $updateID,
+			// 	'created_at' 		=> date('Y-m-d H:i:s'),
+			// 	'target_child_id' => $qrData->child_asset_id != '' ? $qrData->child_asset_id : null
+			// ));
+		
+		// }
+	}
 
 	function getaddress($lat, $lng){
 	  $url  = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&key=AIzaSyAco3UcgCfxQooiSwgePlHlW-qM8FJkRMY&sensor=false';
@@ -1403,6 +1540,8 @@ class Admin extends MY_Controller {
 	}
 
 	public function test_api(){
-		$this->getaddress('14.56091', '121.0583');
+		// $this->getaddress('14.56091', '121.0583');
+		$distance_diff = $this->getDistanceBetweenPoints('14.5603435', '121.0586144', '5.07903', '119.78236');
+		print_r($distance_diff);
 	}
 }	
