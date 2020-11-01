@@ -33,7 +33,7 @@
 <br>
 <table style="font-size: 12px;">
   <tr>
-    <td>Dear Sir / Ma’am:</td>
+    <td>Dear Sir / Madam:</td>
   </tr>
   <tr>
     <td></td>

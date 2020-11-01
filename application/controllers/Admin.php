@@ -404,6 +404,11 @@ class Admin extends MY_Controller {
 		$params['received_by'] 					 = $this->db->get_where('users', array('users_id' => $url->received_by))->row();
 		$this->customContainer('admin/crud/checklist-view-info-catch', $params);
 	}
+	
+	public function viewRepairApprovalPending(){
+		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'is_deleted' => 0, 'status' => 0 ))->row();
+		$this->customContainer('admin/crud/view-repair-asset-request');
+	}
 
 	public function view_history(){
 		$asset_id 	  	 	 = $this->input->get('data');
@@ -618,16 +623,16 @@ class Admin extends MY_Controller {
 			if ($row->status==0) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
-				$data[] = $row->qty;
+				$data[] = $row->property_tag;
 				$data[] = $status[$row->status];
 				$data[] = '';
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
 				$data[] = '<a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-check"></i></a> | 
-									 <a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-link"></i></a>';
+									 <a href="'.base_url() . 'view-repair-approval-pending' .'" target="_blank" class="text-dark" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-link"></i></a>';
 			} elseif ($row->status==1) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
-				$data[] = $row->qty;
+				$data[] = $row->property_tag;
 				$data[] = $status[$row->status];
 				$data[] = $row->approved_by;
 				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));

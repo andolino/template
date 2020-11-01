@@ -327,9 +327,13 @@ class MY_Controller extends CI_Controller{
 								'serif' => [
 									'R' => 'OpenSans-Regular.ttf',
 									'I' => 'OpenSans-Semibold.ttf'
+								],
+								'arial' => [
+									'R' => 'ArialCE.ttf',
+									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'quicksand'
+							'default_font' => 'arial'
 						]);
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
    		$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
@@ -361,9 +365,13 @@ class MY_Controller extends CI_Controller{
 								'serif' => [
 									'R' => 'OpenSans-Regular.ttf',
 									'I' => 'OpenSans-Semibold.ttf'
+								],
+								'arial' => [
+									'R' => 'ArialCE.ttf',
+									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'quicksand'
+							'default_font' => 'arial'
 						]);
 			$mpdf->SetTitle('Checklist');
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
@@ -407,9 +415,13 @@ class MY_Controller extends CI_Controller{
 								'serif' => [
 									'R' => 'OpenSans-Regular.ttf',
 									'I' => 'OpenSans-Semibold.ttf'
+								],
+								'arial' => [
+									'R' => 'ArialCE.ttf',
+									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'quicksand'
+							'default_font' => 'arial'
 						]);
 			$mpdf->SetTitle('Checklist');
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
