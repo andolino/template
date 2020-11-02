@@ -406,8 +406,9 @@ class Admin extends MY_Controller {
 	}
 	
 	public function viewRepairApprovalPending(){
-		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'is_deleted' => 0, 'status' => 0 ))->row();
-		$this->customContainer('admin/crud/view-repair-asset-request');
+		$id = $this->input->get('id');
+		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0, 'status' => 0 ))->row();
+		$this->customContainer('admin/crud/view-repair-asset-request', $params);
 	}
 
 	public function view_history(){
@@ -628,7 +629,9 @@ class Admin extends MY_Controller {
 				$data[] = '';
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
 				$data[] = '<a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-check"></i></a> | 
-									 <a href="'.base_url() . 'view-repair-approval-pending' .'" target="_blank" class="text-dark" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-link"></i></a>';
+									 <a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+									 target="_blank" class="text-dark" data-toggle="tooltip" 
+									 data-placement="top" title="View"><i class="fas fa-link"></i></a>';
 			} elseif ($row->status==1) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;

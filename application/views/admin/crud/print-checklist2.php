@@ -31,12 +31,7 @@ input[type="checkbox"]{
   transform: scale(1.5);
 }
 </style>
-<?php 
-ini_set("pcre.backtrack_limit", "5000000");
-$ctrl = 1;
-
-
- ?>
+<?php $ctrl = 1; ?>
 <?php foreach($dataChkList as $row): ?>
     <table style="width:100%;border:0.2px solid #000;">
       <tr>
@@ -44,45 +39,45 @@ $ctrl = 1;
         <td>
           <table style="width:100%;">
             <tr>
-              <td style="text-align:center;font-size:11px;">Philippine Statistics Authority</td>
+              <td style="text-align:center;font-size:10px;">Philippine Statistics Authority</td>
             </tr>
             <tr>
-              <td style="text-align:center;font-size:11px;"><strong>Quality Management System</strong></td>
+              <td style="text-align:center;font-size:10px;">Quality Management System</td>
             </tr>
             <tr>
-              <td style="text-align:center;font-size:11px;">REGISTRATION KIT CHECKLIST FORM</td>
+              <td style="text-align:center;font-size:10px;">REGISTRATION KIT CHECKLIST FORM</td>
             </tr>
           </table>
         </td>
         <td style="border-left: 0.2px solid #000;">
           <table style="width:100%;">
             <tr>
-              <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Doc Ref No.</td>
+              <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Doc Ref No.</td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Effective Date</td>
+              <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Effective Date</td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Revision No.</td>
+              <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Revision No.</td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:left;">Page No.</td>
+              <td style="font-size:10px;text-align:left;">Page No.</td>
             </tr>
           </table>
         </td>
         <td style="width:25%;border-left: 0.2px solid #000;">
           <table style="width:100%;">
             <tr>
-              <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;">20RSMS02-10-186</td>
+              <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;">20RSMS02-10-186</td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;"><?php echo "26 October 2020"; ?></td>
+              <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;"><?php echo date('Y-m-d'); ?></td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;">0</td>
+              <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;">0</td>
             </tr>
             <tr>
-              <td style="font-size:11px;text-align:center;">Page <?php echo '1 of 2';//$ctrl . ' of ' . count($dataChkList);//$page_no; ?></td>
+              <td style="font-size:10px;text-align:center;">Page <?php echo '1 of 2';//$ctrl . ' of ' . count($dataChkList);//$page_no; ?></td>
             </tr>
           </table>
         </td>
@@ -91,30 +86,29 @@ $ctrl = 1;
     
     <p style="text-align:center;font-size:10px;"> <strong style="font-style: normal;">INFRASTRUCTURE AND SYSTEMS MANAGEMENT DIVISION (ISMD)</strong> <br>
     <span style="font-weight:500;">Registration and Systems Management Service – PHILSYS REGISTRY OFFICE</span> </p>
-      <p style="text-align:center;font-size:11px;">
+      <p style="text-align:center;font-size:10px;">
         REGISTRATION KIT CHEKLIST FORM
       </p>
-      <ul style="list-style-type: none;padding:0;font-size:11px;">
+      <ul style="list-style-type: none;padding:0;font-size:10px;">
         <li style="padding:0;margin:0">Provincial Statistics Office: <span> <strong><?php echo strtoupper($row->province); ?></strong></span></li>
         <li style="padding:0;margin:0">Registration Kit Count: <span><strong><?php echo $ctrl . ' of ' . count($dataChkList); ?></strong></span></li>
         <li style="padding:0;margin:0">Asset Tag: 
         <span>
           <?php if($row->luggage_asset_tag_manual=='' || $row->luggage_asset_tag < 1): ?>
-          <strong><?php echo $row->luggage_asset_tag; ?></strong>
-           <?php else: ?>
-             <strong><?php echo $row->luggage_asset_tag_manual; ?></strong>
+            <?php else: ?>
+            <?php echo $row->luggage_asset_tag; ?>
           <?php endif; ?>
         </span></li>
       </ul>
       <br>
       <table style="width:100%;font-size:10px;" id="customers">
         <tr>
-          <td style="width:30%;padding:3px;font-size:11px;background-color:#eef;border: 1px solid #000;"><strong>Registration Kit Luggage No.</strong></td>
-          <td style="padding:3px;font-size:11px;background-color:#eef;border: 1px solid #000;" colspan="3">&nbsp;&nbsp; <span>
+          <td style="width:30%;padding:3px;font-size:10px;background-color:#eef;border: 1px solid #000;"><strong>Registration Kit Luggage No.</strong></td>
+          <td style="padding:3px;font-size:10px;background-color:#eef;border: 1px solid #000;" colspan="3">&nbsp;&nbsp; <span>
           <?php if(str_replace(' ', '', $row->luggage_kit_manual)==''): ?>
-            <strong><?php echo $row->luggage_kit; ?></strong>
+            <?php echo $row->luggage_kit; ?>
             <?php else: ?>
-           <strong><?php echo $row->luggage_kit_manual; ?></strong>
+            <?php echo $row->luggage_kit_manual; ?>
           <?php endif; ?>
           </span></td>
         </tr>
@@ -535,42 +529,42 @@ $ctrl = 1;
             <td>
               <table style="width:100%;">
                 <tr>
-                  <td style="text-align:center;font-size:11px;">Philippine Statistics Authority</td>
+                  <td style="text-align:center;font-size:10px;">Philippine Statistics Authority</td>
                 </tr>
                 <tr>
-                  <td style="text-align:center;font-size:11px;"><strong>Quality Management System</strong></td>
+                  <td style="text-align:center;font-size:10px;">Quality Management System</td>
                 </tr>
                 <tr>
-                  <td style="text-align:center;font-size:11px;">REGISTRATION KIT CHECKLIST FORM</td>
+                  <td style="text-align:center;font-size:10px;">REGISTRATION KIT CHECKLIST FORM</td>
                 </tr>
               </table>
             </td>
             <td style="border-left: 0.2px solid #000;">
               <table style="width:100%;">
                 <tr>
-                  <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Doc Ref No.</td>
+                  <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Doc Ref No.</td>
                 </tr>
                 <tr>
-                  <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Effective Date</td>
+                  <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Effective Date</td>
                 </tr>
                 <tr>
-                  <td style="font-size:11px;text-align:left;border-bottom:0.2px solid #000;">Revision No.</td>
+                  <td style="font-size:10px;text-align:left;border-bottom:0.2px solid #000;">Revision No.</td>
                 </tr>
                 <tr>
-                  <td style="font-size:11px;text-align:left;">Page No.</td>
+                  <td style="font-size:10px;text-align:left;">Page No.</td>
                 </tr>
               </table>
             </td>
             <td style="width:25%;border-left: 0.2px solid #000;">
               <table style="width:100%;">
                 <tr>
-                  <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;">20RSMS02-10-186</td>
+                  <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;">20RSMS02-10-186</td>
                 </tr>
                 <tr>
-                  <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;"><?php echo "26 October 2020"; ?></td>
+                  <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;"><?php echo date('Y-m-d'); ?></td>
                 </tr>
                 <tr>
-                  <td style="font-size:11px;text-align:center;border-bottom:0.2px solid #000;">0</td>
+                  <td style="font-size:10px;text-align:center;border-bottom:0.2px solid #000;">0</td>
                 </tr>
                 <tr>
                   <td style="font-size:10px;text-align:center;">Page <?php echo '2' . ' of ' . '2';//count($dataChkList);//$page_no; ?></td>
@@ -584,12 +578,12 @@ $ctrl = 1;
         <br>
       <table style="width:100%;font-size:10px;" id="customers">
         <tr>
-          <td style="width:30%;padding:3px;font-size:11px;background-color:#eef;border: 1px solid #000;"><strong>Photobooth Kit Asset Tag No.</strong></td>
-          <td style="padding:3px;font-size:11px;background-color:#eef;border: 1px solid #000;" colspan="3">&nbsp;&nbsp; <span>
-            <?php if(str_replace(' ', '', $row->photobooth_kit_manual)==''): ?>
-              <strong><?php echo $row->photobooth_kit; ?></strong>
+          <td style="width:30%;padding:3px;font-size:10px;background-color:#eef;border: 1px solid #000;"><strong>Photo booth Kit</strong></td>
+          <td style="padding:3px;font-size:10px;background-color:#eef;border: 1px solid #000;" colspan="3">&nbsp;&nbsp; <span>
+            <?php if(str_replace(' ', '', $row->photobooth_kit)==''): ?>
+              <?php echo $row->photobooth_kit_manual; ?>
             <?php else: ?>
-              <strong><?php echo $row->photobooth_kit_manual; ?></strong>
+              <?php echo $row->photobooth_kit; ?>
             <?php endif; ?>
           </span></td>
         </tr>
@@ -772,19 +766,14 @@ $ctrl = 1;
           <td style="font-size: 12px;">Remarks: </td>
         </tr>
         <tr>
-          <td style="font-size: 12px;"> <?php echo strtoupper($row->remarks == '' ? '' : $row->remarks); ?></td>
+          <td style="font-size: 12px;"> <?php echo strtoupper($row->remarks == '' ? '--' : $row->remarks); ?></td>
         </tr>
       </table>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
       <br>
       <p style="font-size: 12px;">Checked and Audited by: </p>
       <br>
       <br>
-      <table style="width:100%;font-size:11px;">
+      <table style="width:100%;font-size:10px;">
         <tr>
           <td style="width:30%;text-align:center;"><strong><?php echo strtoupper($row->audited_by); ?></strong></td>
           <td style="width:20%;"></td>
@@ -799,10 +788,9 @@ $ctrl = 1;
       </table>
       <br>
       <br>
-      <table style="width:100%;font-size:11px;">
-        <tr><td>&nbsp;</td></tr>
+      <table style="width:100%;font-size:10px;">
         <tr>
-          <td style="width:30%;text-align:center;"><div align="center" style="text-align: center; padding-left:30px; padding-top: 30px; vertical-align: middle; font-size:11px; z-index: -1; position: absolute;"><strong>RODERICK R. MALLANNAO</strong></div><img style="padding-top:-30px; padding-left:10px; position:absolute; z-index: -1;" src="<?php echo base_url('assets/image/misc/signature.png'); ?>" width="70"/></td>
+          <td style="width:30%;text-align:center;"><strong>RODERICK R. MALLANNAO</strong></td>
           <td style="width:20%;"></td>
           <td style="width:30%;text-align:center;"><?php //echo date('M j, Y h:i A', strtotime($row->audited_datetime)); ?> </td>
           <td></td>
@@ -858,7 +846,7 @@ $ctrl = 1;
     </div> -->
 
       <?php $ctrl+=1; ?>
-      </pagebreak>
+      <pagebreak/>
 <?php endforeach; ?>
 
 </body>

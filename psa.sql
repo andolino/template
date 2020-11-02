@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 30, 2020 at 02:05 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.3.23
+-- Host: localhost
+-- Generation Time: Nov 02, 2020 at 06:55 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1477,7 +1477,8 @@ CREATE TABLE `tbl_asset_repair_request` (
 --
 
 INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`) VALUES
-(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10);
+(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10),
+(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'test2', 0, '2020-10-31 20:01:41', 0, NULL, NULL, NULL, NULL, 10);
 
 -- --------------------------------------------------------
 
@@ -2730,6 +2731,10 @@ CREATE TABLE `v_repair_request` (
 ,`requestor_name` text
 ,`approver_name` text
 ,`disapprover_name` text
+,`supplier_name` varchar(191)
+,`office_name` text
+,`warranty_months` int(11)
+,`date_expire` date
 );
 
 -- --------------------------------------------------------
@@ -3013,7 +3018,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_repair_request`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_repair_request`  AS  select `tar`.`id` AS `id`,`tar`.`serial` AS `serial`,`tar`.`asset_tag` AS `asset_tag`,`ac`.`name` AS `asset_category`,`ta`.`name` AS `asset_name`,`tar`.`property_tag` AS `property_tag`,`tar`.`tbl_child_asset_id` AS `tbl_child_asset_id`,`tar`.`regkits_no` AS `regkits_no`,`tar`.`custodian` AS `custodian`,`tar`.`date_reported` AS `date_reported`,`tar`.`problem_desc` AS `problem_desc`,`tar`.`file_upload` AS `file_upload`,`tar`.`image_upload` AS `image_upload`,`tar`.`remarks` AS `remarks`,`tar`.`is_deleted` AS `is_deleted`,`tar`.`entry_date` AS `entry_date`,`tar`.`status` AS `status`,`tar`.`approved_by` AS `approved_by`,`tar`.`approved_date` AS `approved_date`,`tar`.`disapproved_by` AS `disapproved_by`,`tar`.`disapproved_date` AS `disapproved_date`,`tar`.`requestor` AS `requestor`,`u1`.`screen_name` AS `custodian_name`,`u2`.`screen_name` AS `requestor_name`,`u3`.`screen_name` AS `approver_name`,`u3`.`screen_name` AS `disapprover_name` from ((((((`tbl_asset_repair_request` `tar` left join `tbl_asset` `ta` on(`ta`.`serial` = `tar`.`serial`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tar`.`asset_category_id`)) left join `users` `u1` on(`u1`.`users_id` = `tar`.`custodian`)) left join `users` `u2` on(`u2`.`users_id` = `tar`.`requestor`)) left join `users` `u3` on(`u3`.`users_id` = `tar`.`approved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tar`.`disapproved_by`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_repair_request`  AS  select `tar`.`id` AS `id`,`tar`.`serial` AS `serial`,`tar`.`asset_tag` AS `asset_tag`,`ac`.`name` AS `asset_category`,`ta`.`name` AS `asset_name`,`tar`.`property_tag` AS `property_tag`,`tar`.`tbl_child_asset_id` AS `tbl_child_asset_id`,`tar`.`regkits_no` AS `regkits_no`,`tar`.`custodian` AS `custodian`,`tar`.`date_reported` AS `date_reported`,`tar`.`problem_desc` AS `problem_desc`,`tar`.`file_upload` AS `file_upload`,`tar`.`image_upload` AS `image_upload`,`tar`.`remarks` AS `remarks`,`tar`.`is_deleted` AS `is_deleted`,`tar`.`entry_date` AS `entry_date`,`tar`.`status` AS `status`,`tar`.`approved_by` AS `approved_by`,`tar`.`approved_date` AS `approved_date`,`tar`.`disapproved_by` AS `disapproved_by`,`tar`.`disapproved_date` AS `disapproved_date`,`tar`.`requestor` AS `requestor`,`u1`.`screen_name` AS `custodian_name`,`u2`.`screen_name` AS `requestor_name`,`u3`.`screen_name` AS `approver_name`,`u3`.`screen_name` AS `disapprover_name`,`tbs`.`name` AS `supplier_name`,`om`.`office_name` AS `office_name`,`ta`.`warranty_months` AS `warranty_months`,`ta`.`purchase_date` + interval `ta`.`warranty_months` month AS `date_expire` from ((((((((`tbl_asset_repair_request` `tar` left join `tbl_asset` `ta` on(`ta`.`serial` = `tar`.`serial`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tar`.`asset_category_id`)) left join `tbl_suppliers` `tbs` on(`tbs`.`id` = `ta`.`supplier_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `users` `u1` on(`u1`.`users_id` = `tar`.`custodian`)) left join `users` `u2` on(`u2`.`users_id` = `tar`.`requestor`)) left join `users` `u3` on(`u3`.`users_id` = `tar`.`approved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tar`.`disapproved_by`)) ;
 
 -- --------------------------------------------------------
 
@@ -3618,7 +3623,7 @@ ALTER TABLE `tbl_asset_checklist`
 -- AUTO_INCREMENT for table `tbl_asset_repair_request`
 --
 ALTER TABLE `tbl_asset_repair_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_asset_request`

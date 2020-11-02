@@ -17,18 +17,16 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <ul style="list-style-type: none;padding-left:0">
-                          <li>REQUEST NO. :</li>
-                          <li>REQUESTER : </li>
-                          <li>OFFICE</li>
-                          <li>REPAIR FILE : [ link ] else [ no attachment ]</li>
+                          <li>REQUEST NO. : <strong><?php echo $dataRequest->id; ?></strong></li>
+                          <li>REQUESTER : <strong><?php echo $dataRequest->requestor_name; ?></strong></li>
+                          <li>OFFICE: <strong><?php echo $dataRequest->office_name; ?></strong></li>
+                          <li>REPAIR FILE: <?php echo $dataRequest->file_upload == '' ? '' : '[<a href="'.base_url().'assets/image/uploads/'.$dataRequest->file_upload.'" class="text-info" download> Download Attachment </a>]'; ?></li>
                         </ul>
                       </div>
                       <div class="col-lg-6">
                         <label for="">PICTURE</label>
                         <div class="row">
-                          <div class="col-xs-4 pl-3"><img src="..." alt="..." class="img-thumbnail"></div>
-                          <div class="col-xs-4 pl-3"><img src="..." alt="..." class="img-thumbnail"></div>
-                          <div class="col-xs-4 pl-3"><img src="..." alt="..." class="img-thumbnail"></div>
+                        <?php echo $dataRequest->image_upload == '' ? '' : '<div class="col-xs-4 pl-3"><img src="'.base_url().'assets/image/uploads/'.$dataRequest->image_upload.'" width="250" class="img-thumbnail"></div>'; ?>
                         </div>
                       </div>
                     </div>
@@ -36,18 +34,22 @@
                   <div class="col-lg-12"></div>
                   <div class="col-lg-6">
                     <label for="" class="font-12">DESCRIPTION OF THE PROBLEM</label>
-                    <p class="font-12">Lorem ipsum dolor sit amet consectetur adipisicing elit. A</p>
+                    <p class="font-12"><?php echo $dataRequest->problem_desc; ?></p>
                   </div>
                   <div class="col-lg-6">
                     <label for="" class="font-12">REMARKS</label>
-                    <p class="font-12">Lorem ipsum dolor sit amet consectetur adipisicing elit. A</p>
+                    <p class="font-12"><?php echo $dataRequest->remarks; ?></strong></p>
                   </div>
                   <div class="col-lg-6 font-12">
                     <ul style="list-style-type: none;padding-left:0">
-                      <li>WARRANTY PERIOD: </li>
+                      <li>WARRANTY PERIOD: <?php echo $dataRequest->warranty_months; ?> Months</li>
+                      <li>UNDER WARRANTY: <?php echo date('Y-m-d', strtotime($dataRequest->date_expire)) == date('Y-m-d') ? '<i class="fas fa-times text-danger"></i>' : '<i class="fas fa-check text-success"></i>'; ?> </li>
                     </ul>
+                    
                   </div>
-                  
+                  <pre>
+                    <?php print_r($dataRequest); ?>
+                  </pre>
 								</div>
 							</div>
 						</div>
