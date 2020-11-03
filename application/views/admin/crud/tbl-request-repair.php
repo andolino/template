@@ -40,14 +40,15 @@
     </div>
   </div>
   <div class="tab-pane fade" id="repair-approved" role="tabpanel" aria-labelledby="repair-approved-tab">
-    <table class="table font-12 w-100" id="tbl-request-repair-approved" data-status="1">
+    <table class="table font-12 w-100 condensed" id="tbl-request-repair-approved" data-status="1">
       <thead>
         <tr>
-          <th scope="col">REQUEST #</th>
-          <th scope="col">ASSET CATEGORY </th>
-          <th scope="col">QTY</th>
-          <th scope="col">STATUS</th>
-          <th scope="col">REQUEST DATE</th>
+          <th scope="col">ASSET NAME</th>
+          <th scope="col">ASSET TAG </th>
+          <th scope="col">PROPERTY TAG</th>
+          <th scope="col">SERIAL NO</th>
+          <th scope="col">REQUEST BY</th>
+          <th scope="col">REQUEST DATE TIME</th>
           <th scope="col">ACTION</th>
         </tr>
       </thead>
@@ -56,14 +57,15 @@
     </table>
   </div>
   <div class="tab-pane fade" id="repair-disapproved" role="tabpanel" aria-labelledby="repair-disapproved-tab">
-    <table class="table font-12 w-100" id="tbl-request-repair-disapproved" data-status="<?php //echo $status ?>">
+    <table class="table font-12 w-100 condensed" id="tbl-request-repair-disapproved" data-status="2">
       <thead>
         <tr>
-          <th scope="col">REQUEST #</th>
-          <th scope="col">ASSET CATEGORY </th>
-          <th scope="col">QTY</th>
-          <th scope="col">STATUS</th>
-          <th scope="col">REQUEST DATE</th>
+          <th scope="col">ASSET NAME</th>
+          <th scope="col">ASSET TAG </th>
+          <th scope="col">PROPERTY TAG</th>
+          <th scope="col">SERIAL NO</th>
+          <th scope="col">REQUEST BY</th>
+          <th scope="col">REQUEST DATE TIME</th>
           <th scope="col">ACTION</th>
         </tr>
       </thead>

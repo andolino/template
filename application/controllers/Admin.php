@@ -408,7 +408,43 @@ class Admin extends MY_Controller {
 	public function viewRepairApprovalPending(){
 		$id = $this->input->get('id');
 		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0, 'status' => 0 ))->row();
+		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
 		$this->customContainer('admin/crud/view-repair-asset-request', $params);
+	}
+
+	public function submitApprovalRepairRequest(){
+		if ($this->input->post('is_approved') == 'ap') {
+			$data = array(
+				'status' => 1, 
+				'tech_support_id' => $this->input->post('tech_support_id')
+			);
+			if ($this->input->post('repair_date')) {
+				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			}
+			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+		} else {
+			$data = array(
+				'status' => 2, 
+				'remarks' => $this->input->post('remarks'), 
+				'tech_support_id' => $this->input->post('tech_support_id')
+			);
+			if ($this->input->post('repair_date')) {
+				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			}
+			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+		}
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
+		// $q = $this->db->insert('tbl_asset_request', $dataToSave);
 	}
 
 	public function view_history(){
@@ -643,7 +679,7 @@ class Admin extends MY_Controller {
 			} elseif($row->status==2) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
-				$data[] = $row->qty;
+				$data[] = $row->property_tag;
 				$data[] = $status[$row->status];
 				$data[] = $row->disapproved_by;
 				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
@@ -651,7 +687,7 @@ class Admin extends MY_Controller {
 			} elseif($row->status==3){
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
-				$data[] = $row->qty;
+				$data[] = $row->property_tag;
 				$data[] = $status[$row->status];
 				$data[] = '';//$row->disapproved_by;
 				$data[] = '';//$row->disapproved_by;
@@ -660,7 +696,7 @@ class Admin extends MY_Controller {
 			} else {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
-				$data[] = $row->qty;
+				$data[] = $row->property_tag;
 				$data[] = $status[$row->status];
 				$data[] = '';//$row->disapproved_by;
 				$data[] = '';//$row->disapproved_by;

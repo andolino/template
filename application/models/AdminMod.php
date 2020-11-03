@@ -246,20 +246,20 @@ class AdminMod extends CI_Model {
 	//ADMIN REPAIR REQUEST
 	private function _que_tbl_admin_repair_request(){
 		$this->db->from($this->tblAdminRepairRequest);
-		$status = $this->input->post('status');
-		$this->db->where('status', $status);
+		// $status = $this->input->post('status');
+		$this->db->where('status', $this->input->post('status'));
 		$this->db->where('is_deleted', '0');
 		$i = 0;
 		foreach ($this->tblAdminRepairRequestCollumn as $item) {
 			if (!empty($_POST['search']['value'])) {
 				if ($i === 0) {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $this->input->post('status'));
 				} else {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $this->input->post('status'));
 				}
 			}
 			$column[$i] = $item;
@@ -305,12 +305,12 @@ class AdminMod extends CI_Model {
 			if (!empty($_POST['search']['value'])) {
 				if ($i === 0) {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
 				} else {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
 				}
 			}
 			$column[$i] = $item;
@@ -356,12 +356,12 @@ class AdminMod extends CI_Model {
 			if (!empty($_POST['search']['value'])) {
 				if ($i === 0) {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
 				} else {
 					$this->db->where('is_deleted', '0');
-					$this->db->where('status', $status);
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
 				}
 			}
 			$column[$i] = $item;

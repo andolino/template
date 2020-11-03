@@ -19,6 +19,10 @@ var tbl_asset_category = [];
 var tbl_office = [];
 var tbl_history_logs = [];
 var tbl_request_repair_admin_pending = [];
+var tbl_request_repair_admin_approved = [];
+var tbl_request_repair_admin_disapproved = [];
+var tbl_request_repair_admin_cancelled = [];
+var tbl_request_repair_admin_closed = [];
 var tbl_portal_asset_pending = [];
 var tbl_portal_asset_approved = [];
 var tbl_portal_asset_disapproved = [];
@@ -420,6 +424,81 @@ $(document).ready(function() {
         }
       });
     // }
+  });
+
+  $(document).on('change', '#select-tech-support', function () {
+    animateSingleIn('.warranty_cont', 'fadeIn');
+  });
+
+  $(document).on('click', '#btnApproveRepairRequest', function (e) {
+    e.preventDefault();
+    var frm = $('#frm-request-repair-approval').serializeArray();
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Approve Request?', 'question'], 
+      function(){
+        frm.push({name: 'is_approved', value: 'ap'});
+        $.ajax({
+          type: "POST",
+          url: "submit-approval-repair-request",
+          data: frm,
+          dataType: "json",
+          success: function (res) {
+            Swal.fire(
+              res.param1,
+              res.param2,
+              res.param3
+            );
+            window.location.reload();
+          }
+        });
+      }, function(){
+        // console.log('Fail');
+    });
+  });
+  
+  $(document).on('click', '#btnDisapproveRepairRequest', function (e) {
+    e.preventDefault();
+    var remarks = $('#remarks').val();
+    if (remarks == '') {
+      Swal.fire(
+        'Oopps!',
+        'Please input remarks!',
+        'warning'
+      );
+    } else {
+      var frm = $('#frm-request-repair-approval').serializeArray();
+      customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Approve Request?', 'question'], 
+        function(){
+          frm.push({name: 'is_approved', value: 'dp'});
+          $.ajax({
+            type: "POST",
+            url: "submit-approval-repair-request",
+            data: frm,
+            dataType: "json",
+            success: function (res) {
+              console.log(res);
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              window.location.reload();
+            }
+          });
+        }, function(){
+          // console.log('Fail');
+      });
+      
+    }
   });
   
   $(document).on('click', '#printAssetQr', function() {
@@ -972,7 +1051,7 @@ function initAdminRepairRequestDataTables(){
     "scrollX": true,
     "bInfo": false,
     "serverSide"               : true,
-    "processing"               : true,
+    // "processing"               : true,
     "ajax"                     : {
         "url"                  : 'server-tbl-admin-repair-pending-request',
         "type"                 : 'POST',
@@ -989,7 +1068,85 @@ function initAdminRepairRequestDataTables(){
       //   $(row).attr(myObjKeyLguConst);
     }
   });
-  
+
+  $('#tbl-request-repair-approved').DataTable().clear().destroy();
+  tbl_request_repair_admin_approved  = $("#tbl-request-repair-approved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-admin-repair-pending-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-request-repair-approved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  $('#tbl-request-repair-disapproved').DataTable().clear().destroy();
+  tbl_request_repair_admin_disapproved  = $("#tbl-request-repair-disapproved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-admin-repair-pending-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-request-repair-disapproved").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  setInterval(function() {
+    tbl_request_repair_admin_pending.rows().invalidate().draw(); 
+    tbl_request_repair_admin_approved.rows().invalidate().draw(); 
+    tbl_request_repair_admin_disapproved.rows().invalidate().draw(); 
+  }, 1000 );
   
 }
 
