@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 03, 2020 at 04:15 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.2.33
+-- Host: 127.0.0.1
+-- Generation Time: Nov 03, 2020 at 04:51 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1469,16 +1469,18 @@ CREATE TABLE `tbl_asset_repair_request` (
   `approved_date` datetime DEFAULT NULL,
   `disapproved_by` int(11) DEFAULT NULL,
   `disapproved_date` datetime DEFAULT NULL,
-  `requestor` int(11) DEFAULT NULL
+  `requestor` int(11) DEFAULT NULL,
+  `tech_support_id` int(11) DEFAULT NULL,
+  `repair_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset_repair_request`
 --
 
-INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`) VALUES
-(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10),
-(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'test2', 0, '2020-10-31 20:01:41', 0, NULL, NULL, NULL, NULL, 10);
+INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`, `tech_support_id`, `repair_date`) VALUES
+(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10, NULL, NULL),
+(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST', 0, '2020-10-31 20:01:41', 1, NULL, NULL, NULL, NULL, 10, 6, NULL);
 
 -- --------------------------------------------------------
 
