@@ -36,7 +36,7 @@ class AdminMod extends CI_Model {
 	var $tblAdminRepairRequestCollumn = array('id', 'serial', 'asset_category', 'asset_tag', 'property_tag', 'tbl_child_asset_id', 'regkits_no', 
 																						'custodian', 'date_reported', 'problem_desc', 'file_upload', 'image_upload', 'remarks', 'is_deleted', 
 																						'entry_date', 'status', 'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'requestor', 
-																						'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name');
+																						'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name', 'closed_by', 'closed_date');
 	var $tblAdminRepairRequestOrder = array('id' => 'desc');
 	
 	
@@ -46,7 +46,7 @@ class AdminMod extends CI_Model {
 	var $tblRepairRequestCollumn = array('id', 'serial', 'asset_category', 'asset_tag', 'property_tag', 'tbl_child_asset_id', 'regkits_no', 
 																				'custodian', 'date_reported', 'problem_desc', 'file_upload', 'image_upload', 'remarks', 'is_deleted', 
 																				'entry_date', 'status', 'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'requestor', 
-																				'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name');
+																				'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name', 'closed_by', 'closed_date');
 	var $tblRepairRequestOrder = array('id' => 'desc');
 
 	// var $tblAssetLogs = 'v_asset_request';
@@ -351,6 +351,9 @@ class AdminMod extends CI_Model {
 		$status = $this->input->post('status');
 		$this->db->where('status', $status);
 		$this->db->where('is_deleted', '0');
+		if ($this->input->post('is_tech') == 'yes') {
+			$this->db->where('tech_support_id', $this->session->users_id);
+		}
 		$i = 0;
 		foreach ($this->tblRepairRequestCollumn as $item) {
 			if (!empty($_POST['search']['value'])) {
@@ -362,6 +365,9 @@ class AdminMod extends CI_Model {
 					$this->db->where('is_deleted', '0');
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
 					$this->db->where('status', $status);
+				}
+				if ($this->input->post('is_tech') == 'yes') {
+					$this->db->where('tech_support_id', $this->session->users_id);
 				}
 			}
 			$column[$i] = $item;

@@ -43,12 +43,13 @@
     <table class="table font-12 w-100 condensed" id="tbl-request-repair-approved" data-status="1">
       <thead>
         <tr>
+          <th scope="col">REQUEST NO.</th>
           <th scope="col">ASSET NAME</th>
           <th scope="col">ASSET TAG </th>
           <th scope="col">PROPERTY TAG</th>
           <th scope="col">SERIAL NO</th>
-          <th scope="col">REQUEST BY</th>
-          <th scope="col">REQUEST DATE TIME</th>
+          <th scope="col">APPROVED BY</th>
+          <th scope="col">APPROVED DATE</th>
           <th scope="col">ACTION</th>
         </tr>
       </thead>
@@ -60,12 +61,13 @@
     <table class="table font-12 w-100 condensed" id="tbl-request-repair-disapproved" data-status="2">
       <thead>
         <tr>
+          <th scope="col">REQUEST NO.</th>
           <th scope="col">ASSET NAME</th>
           <th scope="col">ASSET TAG </th>
           <th scope="col">PROPERTY TAG</th>
           <th scope="col">SERIAL NO</th>
-          <th scope="col">REQUEST BY</th>
-          <th scope="col">REQUEST DATE TIME</th>
+          <th scope="col">DISAPPROVED BY</th>
+          <th scope="col">DISAPPROVED DATE</th>
           <th scope="col">ACTION</th>
         </tr>
       </thead>

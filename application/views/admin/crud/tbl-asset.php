@@ -7,6 +7,7 @@
     <button type="button" class="btn btn-info btn-md rounded-0 font-12" id="printCheckListReport"><i class="fas fa-print"></i> Print Checklist Report</button>
     <button type="button" class="btn btn-info btn-md rounded-0 font-12" id="printTransmitalSummaryReport"><i class="fas fa-print"></i> Print Transmital Summary Report</button>
     <button type="button" class="btn btn-c-success btn-md rounded-0 font-12" id="printAssetQr"><i class="fas fa-print"></i> Print QR</button>
+    <button type="button" class="btn btn-info btn-md rounded-0 font-12" id="printDispatchSummary"><i class="fas fa-print"></i> Print Total Count Summary</button>
   </div>
 </div>
 <table class="table font-12 w-100" id="tbl-asset-list" data-page="tbl-members">

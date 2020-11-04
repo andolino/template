@@ -58,6 +58,7 @@ $route['repair-request'] 					= 'Admin/repair_request';
 $route['reimbursement-request'] 	= 'Admin/reimbursement_request';
 $route['portal-dispatch-request'] 	= 'Admin/portal_dispatch_request';
 $route['portal-repair-request'] 	= 'Admin/portal_repair_request';
+$route['portal-repair-request-tech'] 	= 'Admin/portal_repair_request_tech';
 $route['settings'] 								 		= 'Admin/show_settings';
 $route['add-asset'] 							= 'Admin/add_asset';
 $route['view-asset'] 						= 'Admin/view_asset';
@@ -74,7 +75,9 @@ $route['server-tbl-asset-child'] 			= 'Admin/server_tbl_asset_child';
 $route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
 $route['server-tbl-admin-repair-pending-request'] = 'Admin/server_tbl_admin_pending_repair_request';
 $route['view-repair-approval-pending'] = 'Admin/viewRepairApprovalPending';
+$route['get-repair-parent-child-asset'] = 'Admin/getRepairParentChildAsset';
 $route['submit-approval-repair-request'] = 'Admin/submitApprovalRepairRequest';
+$route['submit-close-repair-request'] = 'Admin/submitCloseRepairRequest';
 $route['server-tbl-portal-request'] = 'Admin/server_tbl_portal_request';
 $route['server-tbl-repair-request'] = 'Admin/server_tbl_repair_request';
 $route['server-tbl-activity-logs'] 			= 'Settings/server_tbl_activity_logs';
@@ -123,6 +126,7 @@ $route['server-office'] 	= 'Settings/server_office';
 $route['server-history'] 	= 'Settings/server_history';
 $route['get-office-frm'] 	= 'Settings/getOfficeFrm';
 $route['show-map-scanned'] 	= 'Settings/showMapScanned';
+$route['show-add-tech-notes'] 	= 'Settings/showAddTechNotes';
 $route['show-scanned-user'] 	= 'Settings/showScannedUser';
 $route['get-chkd-asset'] 	= 'Admin/getChkdAsset';
 $route['get-chkd-child-asset'] 	= 'Admin/getChkdChildAsset';
@@ -147,6 +151,7 @@ $route['print-transmital-summ-slip/(:any)/(:any)'] 	= 'Admin/printTransmitalSumm
 $route['cancel-portal-request'] 	= 'Admin/cancelPortalRequest';
 $route['get-select-asset-rep'] 	= 'Settings/getSelectAssetRepair';
 $route['get-tbl-asset-row'] 	= 'Settings/getTblAssetRow';
+$route['save-tech-notes'] 	= 'Settings/saveTechNotes';
 
 
 
@@ -352,8 +357,8 @@ $route['print-official-receipt/(:any)'] = 'Reports/printOR';
 $route['print-pacs-report/(:any)/(:any)'] = 'Reports/pacsSummaryReport';
 $route['print-cdj-report/(:any)/(:any)'] = 'Reports/cdjSummaryReport';
 $route['print-gj-report/(:any)/(:any)'] = 'Reports/gjSummaryReport';
-
-
+$route['get-chkd-summary-dispatch']     = 'Admin/getChkSummaryDispatch';
+$route['print-summary-dispatch/(:any)']  = 'Admin/printSummaryDispatch';
 
 
 $route['404_override'] 					= '';

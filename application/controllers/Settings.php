@@ -434,6 +434,27 @@ class Settings extends MY_Controller {
 		$this->load->view('admin/crud/show-map', $params);
 	}
 	
+	public function showAddTechNotes(){
+		$params['id'] = $this->input->post('id');
+		$this->load->view('admin/crud/show-notes-tech', $params);
+	}
+
+	public function saveTechNotes(){
+		$id = $this->input->post('id');
+		$q = $this->db->update('tbl_asset_repair_request', array('tech_notes'=>$this->input->post('tech_ndtes')), array('id'=>$id));
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Successfully Saved!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
+	}
+	
 	public function showScannedUser(){
 		$params['code'] = $this->input->post('code');
 		$params['lat'] = $this->input->post('lat');

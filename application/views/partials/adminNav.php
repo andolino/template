@@ -65,9 +65,12 @@
           <li>
             <a href="<?php echo base_url(); ?>portal-dispatch-request"><i class="fas fa-edit"></i> Dispatch Request</a>
           </li>
-        <?php elseif($logged_in->level == 2): ?>
           <li>
             <a href="<?php echo base_url(); ?>portal-repair-request"><i class="fas fa-edit"></i> Repair Request</a>
+          </li>
+        <?php elseif($logged_in->level == 2): ?>
+          <li>
+            <a href="<?php echo base_url(); ?>portal-repair-request-tech"><i class="fas fa-edit"></i> Repair Request</a>
           </li>
         <?php endif; ?>  
         <li>

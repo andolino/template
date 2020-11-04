@@ -448,11 +448,14 @@ $(document).ready(function() {
           dataType: "json",
           success: function (res) {
             Swal.fire(
-              res.param1,
-              res.param2,
-              res.param3
+              res.msg.param1,
+              res.msg.param2,
+              res.msg.param3
             );
-            window.location.reload();
+            $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+              $('.cont-parent-child-repair').html(data);
+            });
+            // window.location.reload();
           }
         });
       }, function(){
@@ -485,13 +488,16 @@ $(document).ready(function() {
             data: frm,
             dataType: "json",
             success: function (res) {
-              console.log(res);
+              // console.log(res);
               Swal.fire(
-                res.param1,
-                res.param2,
-                res.param3
+                res.msg.param1,
+                res.msg.param2,
+                res.msg.param3
               );
-              window.location.reload();
+              $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+                $('.cont-parent-child-repair').html(data);
+              });
+              // window.location.reload();
             }
           });
         }, function(){
@@ -499,6 +505,72 @@ $(document).ready(function() {
       });
       
     }
+  });
+  
+  $(document).on('click', '#btnCloseRepairRequest', function (e) {
+    e.preventDefault();
+    var remarks = $('#remarks').val();
+    var frm = $('#frm-request-repair-approval').serializeArray();
+      customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Close this Request?', 'question'], 
+        function(){
+          // frm.push({name: 'is_approved', value: 'dp'});
+          $.ajax({
+            type: "POST",
+            url: "submit-close-repair-request",
+            data: frm,
+            dataType: "json",
+            success: function (res) {
+              // console.log(res);
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+                $('.cont-parent-child-repair').html(data);
+              });
+              // window.location.reload();
+            }
+          });
+        }, function(){
+          // console.log('Fail');
+      });
+  });
+  
+  $(document).on('click', '#addNotesTechSupport', function () {
+    var id = $(this).attr('data-id');
+    $('#custom-modal').modal('show'); 
+    $.ajax({
+      type: "POST",
+      url: "show-add-tech-notes",
+      data: { 'id' : id },
+      success: function (res) {
+        $('#custom-modal .modal-content').html(res);
+      }
+    });
+  });
+
+  $(document).on('submit', '#frm-add-notes-tech', function (e) {
+    e.preventDefault();
+    var frm = $(this).serialize();
+    $.post("save-tech-notes", frm,
+      function (data, textStatus, jqXHR) {
+        Swal.fire(
+          data.param1,
+          data.param2,
+          data.param3
+        );
+        setTimeout(function(){
+          window.location.reload();
+        }, 1000)
+      },
+      "JSON"
+    );
   });
   
   $(document).on('click', '#printAssetQr', function() {
@@ -840,6 +912,19 @@ $(document).ready(function() {
           });
         }, function(){
           console.log('Fail');
+    });
+  });
+
+  $(document).on('click', '#printDispatchSummary', function() {
+    var myNewD = 1;
+    $.ajax({
+      type: "POST",
+      url: "get-chkd-summary-dispatch",
+      data: {'data': myNewD},
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-summary-dispatch/'+res.data);
+      }
     });
   });
 
@@ -1366,7 +1451,8 @@ function initRepairRequestDataTables(){
         "url"                  : 'server-tbl-repair-request',
         "type"                 : 'POST',
         "data"                 : { 
-                                "status" : $("#tbl-portal-repair-pending").attr('data-status')
+                                "status" : $("#tbl-portal-repair-pending").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1403,7 +1489,8 @@ function initRepairRequestDataTables(){
         "url"                  : 'server-tbl-repair-request',
         "type"                 : 'POST',
         "data"                 : { 
-                                "status" : $("#tbl-portal-repair-approved").attr('data-status')
+                                "status" : $("#tbl-portal-repair-approved").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1440,7 +1527,8 @@ function initRepairRequestDataTables(){
         "url"                  : 'server-tbl-repair-request',
         "type"                 : 'POST',
         "data"                 : { 
-                                "status" : $("#tbl-portal-repair-disapproved").attr('data-status')
+                                "status" : $("#tbl-portal-repair-disapproved").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1477,7 +1565,8 @@ function initRepairRequestDataTables(){
         "url"                  : 'server-tbl-repair-request',
         "type"                 : 'POST',
         "data"                 : { 
-                                "status" : $("#tbl-portal-repair-cancelled").attr('data-status')
+                                "status" : $("#tbl-portal-repair-cancelled").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1514,7 +1603,8 @@ function initRepairRequestDataTables(){
         "url"                  : 'server-tbl-repair-request',
         "type"                 : 'POST',
         "data"                 : { 
-                                "status" : $("#tbl-portal-repair-closed").attr('data-status')
+                                "status" : $("#tbl-portal-repair-closed").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {

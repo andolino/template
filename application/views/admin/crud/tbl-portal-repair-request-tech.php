@@ -4,7 +4,7 @@
     <!-- <button type="button" class="btn btn-default btn-md rounded-0 font-12" id="add-contribution-by-type"><i class="fas fa-user-plus"></i> Add Contribution</button>
     <button type="button" class="btn btn-default btn-md rounded-0 font-12" id="add-payments-by-type"><i class="fas fa-user-plus"></i> Add Loan Payments</button>
     <!-- <button type="button" class="btn btn-purple btn-md rounded-0 font-12" id="printMemberDocs"><i class="fas fa-print"></i> Print Docx</button> -->
-    <button type="button" class="btn btn-success btn-md rounded-0 font-12" id="add-portal-request"><i class="fas fa-plus"></i> Add Request</button>
+    <!-- <button type="button" class="btn btn-success btn-md rounded-0 font-12" id="add-portal-request"><i class="fas fa-plus"></i> Add Request</button> -->
   </div>
 </div>
 <div class="row w-100">
@@ -12,7 +12,7 @@
 
 <nav class="pb-3 pt-3 tbl-req-cont-8">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-link active font-12" id="nav-home-tab" onclick="setTimeout(function(){ tbl_repair_asset_pending.draw(); },300)" data-toggle="tab" href="#portal-pending" role="tab" aria-controls="portal-pending" aria-selected="true">Pending</a>
+    <!-- <a class="nav-link active font-12" id="nav-home-tab" onclick="setTimeout(function(){ tbl_repair_asset_pending.draw(); },300)" data-toggle="tab" href="#portal-pending" role="tab" aria-controls="portal-pending" aria-selected="true">Pending</a> -->
     <a class="nav-link font-12" id="nav-profile-tab" onclick="setTimeout(function(){ tbl_repair_asset_approved.draw(); },300)" data-toggle="tab" href="#portal-approved" role="tab" aria-controls="portal-approved" aria-selected="false">Approved</a>
     <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_repair_asset_disapproved.draw(); },300)" data-toggle="tab" href="#portal-disapproved" role="tab" aria-controls="portal-disapproved" aria-selected="false">Disapproved</a>
     <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_repair_asset_cancelled.draw(); },300)" data-toggle="tab" href="#portal-cancelled" role="tab" aria-controls="portal-cancelled" aria-selected="false">Cancelled</a>
@@ -21,10 +21,10 @@
 </nav>
 
 <div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane fade show active pt-3" id="portal-pending" role="tabpanel" aria-labelledby="repair-pending-tab">
+  <!-- <div class="tab-pane fade show active pt-3" id="portal-pending" role="tabpanel" aria-labelledby="repair-pending-tab">
     <div class="row">
       <div class="col-sm-12">
-        <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-pending" data-status="0" data-is-tech="no">
+        <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-pending" data-status="0" data-is-tech="yes">
           <thead>
             <tr>
               <th scope="col">REQUEST # </th>
@@ -40,9 +40,9 @@
         </table>
       </div>
     </div>
-  </div>
-  <div class="tab-pane fade pt-3" id="portal-approved" role="tabpanel" aria-labelledby="repair-approved-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-approved" data-status="1" data-is-tech="no">
+  </div> -->
+  <div class="tab-pane fade show active pt-3" id="portal-approved" role="tabpanel" aria-labelledby="repair-approved-tab">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-approved" data-status="1" data-is-tech="yes">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
@@ -59,12 +59,12 @@
     </table>
   </div>
   <div class="tab-pane fade pt-3" id="portal-disapproved" role="tabpanel" aria-labelledby="repair-disapproved-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-disapproved" data-status="2" data-is-tech="no">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-disapproved" data-status="2" data-is-tech="yes">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
           <th scope="col">ASSET CATEGORY </th>
-          <th scope="col">PROPERTY CATEGORY CATEGORY </th>
+          <th scope="col">QTY</th>
           <th scope="col">STATUS</th>
           <th scope="col">DISAPPROVED BY</th>
           <th scope="col">DISAPPROVED DATE</th>
@@ -77,7 +77,7 @@
     </table>
   </div>
   <div class="tab-pane fade pt-3" id="portal-cancelled" role="tabpanel" aria-labelledby="repair-cancelled-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-cancelled" data-status="3" data-is-tech="no">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-cancelled" data-status="3" data-is-tech="yes">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
@@ -95,7 +95,7 @@
     </table>
   </div>
   <div class="tab-pane fade pt-3" id="portal-closed" role="tabpanel" aria-labelledby="repair-closed-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-closed" data-status="4" data-is-tech="no">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-repair-closed" data-status="4" data-is-tech="yes">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>

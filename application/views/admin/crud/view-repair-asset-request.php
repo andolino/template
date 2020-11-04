@@ -7,7 +7,7 @@
 							<h6 class="mb-0"><i class="fas fa-user-cog"></i> REPAIR REQUEST</h6>
 						</div>
 					</div>
-					<div class="col-sm-6 mt-2">
+					<div class="col-sm-8 mt-2">
             
             <?php if(!empty($dataRequest)): ?>
             <div class="card">
@@ -53,6 +53,16 @@
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="col-lg-6">
+                    <?php if($this->session->level == 2): ?>
+                      <?php if($dataRequest->status == 1): ?>
+                        <ul style="list-style-type: none;padding-left:0;" class="font-12">
+                          <li>REPAIRED DATE. : <?php echo $dataRequest->repair_date == '' ? '--' : date('F j, Y', strtotime($dataRequest->repair_date));  ?></li>
+                          <li>STATUS : <strong>FOR REPAIR</strong></li>
+                          <li>NOTES: <br> <strong><?php echo $dataRequest->tech_notes; ?></strong> [ <strong><a href="#" id="addNotesTechSupport" data-id="<?php echo $dataRequest->id; ?>" class="text-info"><?php echo $dataRequest->tech_notes==''?'ADD NOTES':'UPDATE NOTES'; ?></a></strong> ]</li>
+                        </ul>
+                      <?php endif; ?>
+
+                    <?php else: ?>
                     <select class="custom-select form-control-sm font-12" name="tech_support_id" id="select-tech-support" required>
                       <option selected value="" hidden>Select Technician / Tech support</option>
                       <option value="" disabled></option>
@@ -60,6 +70,7 @@
                       <option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
                       <?php endforeach; ?>
                     </select>
+                    <?php endif; ?>
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="warranty_cont none">
@@ -81,9 +92,21 @@
                     </div>
                   </div>
                   <div class="col-lg-4 offset-lg-8">
-                    <button type="button" id="btnDisapproveRepairRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
-                    <button type="button" id="btnApproveRepairRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
+                    <?php if($this->session->level == 2): ?>
+                      <button type="button" id="btnCloseRepairRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Close This Request</button>
+                      <?php else: ?>
+                      <?php if($dataRequest->status == 0): ?>
+                        <button type="button" id="btnDisapproveRepairRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
+                        <button type="button" id="btnApproveRepairRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
+                      <?php elseif($dataRequest->status == 1): ?>
+                        <div class="alert alert-success font-12 text-center">Approved For Repair</div>
+                      <?php elseif($dataRequest->status == 2): ?>
+                        <div class="alert alert-danger font-12 text-center">Disapproved</div>
+                      <?php endif; ?>
+                    <?php endif; ?>
+
                   </div>
+
                   <!-- <pre>
                     <?php //print_r($dataRequest); ?>
                   </pre> -->
@@ -91,8 +114,75 @@
                 </form>
 							</div>
 						</div>
+            <div class="card mt-2">
+              <div class="card-body cont-parent-child-repair">
+                <?php 
+                  $status = [0 => 'Pending', 1 => 'For Repair', 2 => 'Disapproved', 3 =>'Cancelled', 4 => 'Closed'];
+                ?>
+                <h4>PARENT ASSET</h4>
+                <table class="table font-12 w-100"  id="" data-status="1">
+                  <thead>
+                    <tr>
+                      <th scope="col">ASSET NAME</th>
+                      <th scope="col">ASSET TAG </th>
+                      <th scope="col">PROPERTY TAG</th>
+                      <th scope="col">SERIAL NO</th>
+                      <th scope="col">OFFICE</th>
+                      <th scope="col">REMARKS</th>
+                      <th scope="col">STATUS</th>
+                      <th scope="col">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><?php echo $dataRequest->asset_name; ?></td>
+                      <td><?php echo $dataRequest->asset_tag; ?></td>
+                      <td><?php echo $dataRequest->property_tag; ?></td>
+                      <td><?php echo $dataRequest->serial; ?></td>
+                      <td><?php echo $dataRequest->office_name; ?></td>
+                      <td><?php echo $dataRequest->remarks; ?></td>
+                      <td><?php echo $status[$dataRequest->status]; ?></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h4>CHILD ASSET</h4>
+                <!-- <pre>
+                    <?php //print_r($childAsset); ?>
+                </pre> -->
+                <table class="table font-12 w-100"  id="" data-status="1">
+                  <thead>
+                    <tr>
+                      <th scope="col">ASSET NAME</th>
+                      <th scope="col">ASSET TAG </th>
+                      <th scope="col">PROPERTY TAG</th>
+                      <th scope="col">SERIAL NO</th>
+                      <th scope="col">OFFICE</th>
+                      <th scope="col">REMARKS</th>
+                      <th scope="col">STATUS</th>
+                      <th scope="col">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php foreach($childAsset as $row): ?>
+                    <tr>
+                      <td><?php echo $row->name; ?></td>
+                      <td><?php echo $row->asset_tag; ?></td>
+                      <td><?php echo $row->property_tag; ?></td>
+                      <td><?php echo $row->serial; ?></td>
+                      <td><?php echo $row->office_name; ?></td>
+                      <td><?php $dataRequest->remarks; ?></td>
+                      <td><?php echo $status[$dataRequest->status]; ?></td>
+                      <td><?php //echo $row-> ?></td>
+                      <td></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <?php endif; ?>
-
 
 					</div>
 					<!-- end -->

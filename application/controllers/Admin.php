@@ -305,6 +305,16 @@ class Admin extends MY_Controller {
 		$params['tblMembers'] = $this->load->view('admin/crud/tbl-portal-repair-request', $params, TRUE);
 		$this->adminContainer('admin/asset-request', $params);	
 	}
+	
+	public function portal_repair_request_tech(){
+		$params['heading'] = 'REPAIR REQUEST';
+		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['location'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['asset'] = $this->db->get_where('tbl_asset', array('is_deleted' => 0))->result();
+		$params['asset_category'] = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-portal-repair-request-tech', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
 
 	public function loanByMember(){
 		$params['heading'] 		 			= 'LOAN BY MEMBER';
@@ -407,8 +417,14 @@ class Admin extends MY_Controller {
 	
 	public function viewRepairApprovalPending(){
 		$id = $this->input->get('id');
-		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0, 'status' => 0 ))->row();
+		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0 ))->row();
 		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
+		if ($params['dataRequest']) {
+			$dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
+			$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
+																							LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
+																							WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
+		}
 		$this->customContainer('admin/crud/view-repair-asset-request', $params);
 	}
 
@@ -416,7 +432,9 @@ class Admin extends MY_Controller {
 		if ($this->input->post('is_approved') == 'ap') {
 			$data = array(
 				'status' => 1, 
-				'tech_support_id' => $this->input->post('tech_support_id')
+				'tech_support_id' => $this->input->post('tech_support_id'),
+				'approved_by' => $this->session->users_id,
+				'approved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
@@ -426,7 +444,9 @@ class Admin extends MY_Controller {
 			$data = array(
 				'status' => 2, 
 				'remarks' => $this->input->post('remarks'), 
-				'tech_support_id' => $this->input->post('tech_support_id')
+				'tech_support_id' => $this->input->post('tech_support_id'),
+				'disapproved_by' => $this->session->users_id,
+				'disapproved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
@@ -443,8 +463,39 @@ class Admin extends MY_Controller {
 			$res['param2'] = 'Error Encountered Saved';
 			$res['param3'] = 'warning';
 		}
+		echo json_encode(array('msg'=>$res,'repair_request_id'=>$this->input->post('id')));
+		// $q = $this->db->insert('tbl_asset_request', $dataToSave);
+	}
+	
+	public function submitCloseRepairRequest(){
+		$data = array(
+			'status'      => 4, 
+			'closed_by'   => $this->session->users_id,
+			'closed_date' => date('Y-m-d h:i:s')
+		);
+		$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
 		echo json_encode($res);
 		// $q = $this->db->insert('tbl_asset_request', $dataToSave);
+	}
+
+	public function getRepairParentChildAsset(){
+		$id = $this->input->get('id');
+		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0))->row();
+		$dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
+		$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
+																							LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
+																							WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
+		$this->load->view('admin/crud/view-parent-child-repair-asset', $params);
 	}
 
 	public function view_history(){
@@ -664,26 +715,31 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = '';
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
-				$data[] = '<a href="#" class="text-dark" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-check"></i></a> | 
-									 <a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+				$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
 									 target="_blank" class="text-dark" data-toggle="tooltip" 
-									 data-placement="top" title="View"><i class="fas fa-link"></i></a>';
+									 data-placement="top"><i class="fas fa-link"></i></a>';
 			} elseif ($row->status==1) {
 				$data[] = $row->id;
+				$data[] = $row->asset_name;
 				$data[] = $row->asset_category;
 				$data[] = $row->property_tag;
-				$data[] = $status[$row->status];
+				$data[] = $row->serial;
 				$data[] = $row->approved_by;
 				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
-				$data[] = '';
+				$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+										target="_blank" class="text-dark" data-toggle="tooltip" 
+										data-placement="top"><i class="fas fa-link"></i></a>';
 			} elseif($row->status==2) {
 				$data[] = $row->id;
+				$data[] = $row->asset_name;
 				$data[] = $row->asset_category;
 				$data[] = $row->property_tag;
-				$data[] = $status[$row->status];
+				$data[] = $row->serial;
 				$data[] = $row->disapproved_by;
 				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
-				$data[] = '';
+				$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+									target="_blank" class="text-dark" data-toggle="tooltip" 
+									data-placement="top"><i class="fas fa-link"></i></a>';
 			} elseif($row->status==3){
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
@@ -809,7 +865,13 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = $row->approved_by;
 				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
-				$data[] = '';
+				if ($this->session->level == 	2) {
+					$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+											target="_blank" class="text-dark" data-toggle="tooltip" 
+											data-placement="top"><i class="fas fa-link"></i></a>';
+				} else {
+					$data[] = '';
+				}
 			} elseif($row->status==2) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
@@ -829,13 +891,19 @@ class Admin extends MY_Controller {
 				$data[] = '';
 			} else {
 				$data[] = $row->id;
-				$data[] = $row->asset_category;
+				$data[] = $row->asset_name;
+				$data[] = $row->asset_tag;
+				$data[] = $row->property_tag;
 				$data[] = $row->serial;
-				$data[] = $status[$row->status];
-				$data[] = '';//Closed By $row->disapproved_by;
-				$data[] = '';//Closed date $row->disapproved_by;
-				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
-				$data[] = '';
+				$data[] = $row->closed_by;
+				$data[] = $row->closed_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->closed_date));
+				if ($this->session->level == 	2) {
+					$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+											target="_blank" class="text-dark" data-toggle="tooltip" 
+											data-placement="top"><i class="fas fa-link"></i></a>';
+				} else {
+					$data[] = '';
+				}
 			}
 			$res[] = $data;
 		}
@@ -1587,5 +1655,22 @@ class Admin extends MY_Controller {
 		// $this->getaddress('14.56091', '121.0583');
 		$distance_diff = $this->getDistanceBetweenPoints('14.5603435', '121.0586144', '5.07903', '119.78236');
 		print_r($distance_diff);
+	}
+
+	public function printSummaryDispatch(){
+		//$arr_asset_id = $this->uri->segment(2);
+		//$enc_ai = $this->encdec($arr_asset_id, 'd');
+		//$data = json_decode($enc_ai);
+		//$data = implode(',',$data);
+		$params['data'] = $this->db->query("SELECT * FROM v_regkit_count")->result();
+		$params['check_url'] = function($url){ return $this->check_url($url); };
+		$html = $this->load->view('admin/crud/print-summary-dispatch', $params, TRUE);
+		$this->AdminMod->pdf($html, 'Total Count Summary', false, 'LEGAL', false, false, false, 'Total Count Summary', '');
+		// $this->generatePdf('admin/crud/print-qrcode-per-page', $params);
+	}
+
+	public function getChkSummaryDispatch(){
+		$arr_asset_id = $this->input->post('data');
+		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
 	}
 }	
