@@ -360,6 +360,16 @@ $route['print-gj-report/(:any)/(:any)'] = 'Reports/gjSummaryReport';
 $route['get-chkd-summary-dispatch']     = 'Admin/getChkSummaryDispatch';
 $route['print-summary-dispatch/(:any)']  = 'Admin/printSummaryDispatch';
 
+//dyon
+
+$route['location-dashboard']             = 'Admin/locationDashboard';
+$route['get-gatepass-print-frm'] 	= 'Admin/getGatePassPrintFrm';
+$route['get-print-gatepass-report'] = 'Admin/getPrintGatePassReport';
+
+$route['print-gatepass-slip'] 	                = 'Admin/printGatePass';
+$route['print-gatepass-slip/(:any)'] 	        = 'Admin/printGatePass';
+$route['print-gatepass-slip/(:any)/(:any)'] 	= 'Admin/printGatePass';
+
 
 $route['404_override'] 					= '';
 $route['translate_uri_dashes'] 	= FALSE;

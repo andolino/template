@@ -1235,6 +1235,11 @@ class Admin extends MY_Controller {
 		if($this->input->post('location_id') != ''){
 			$where .= ' AND location_id = ' . $this->input->post('location_id');
 		}
+		if($this->input->post('status') == 1){
+			$where .= ' AND status = 1';
+		} else {
+			$where .= ' AND status = 0';
+		}
 		echo json_encode(array('data'=> $this->encdec($where, 'e')));
 	}
 	
@@ -1242,6 +1247,11 @@ class Admin extends MY_Controller {
 		$where = 'is_deleted = 0';
 		if($this->input->post('location_id') != ''){
 			$where .= ' AND location_id = ' . $this->input->post('location_id');
+		}
+		if($this->input->post('status') == 1){
+			$where .= ' AND status = 1';
+		} else {
+			$where .= ' AND status = 0';
 		}
 		$this->generateQRChecklist($this->input->post('location_id'));
 		echo json_encode(array('data'=> $this->encdec($where, 'e')));
@@ -1673,4 +1683,57 @@ class Admin extends MY_Controller {
 		$arr_asset_id = $this->input->post('data');
 		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
 	}
+	
+	
+	//dyon
+	
+	
+	
+	
+	
+		public function getPrintGatePassReport(){
+
+				$where = 'is_deleted = 0';
+				$person_id = $this->input->post('personnel_id');
+				$plate_no  = $this->input->post('plate_no');
+				$status  = $this->input->post('status');
+
+		if($this->input->post('location_id') != ''){
+			$where .= ' AND location_id = ' . $this->input->post('location_id');
+		}
+		if ($this->input->post('status') == 1) {
+			$where .= ' AND status = 1';
+		} else {
+			$where .= ' AND status = 0';
+		}
+		echo json_encode(array(
+				'data'      => $this->encdec($where, 'e'),
+				'params' => $this->encdec($person_id . '-' . $plate_no, 'e')
+		));
+	}
+
+
+
+	public function printGatePass(){
+		$where = $this->encdec($this->uri->segment(2), 'd');
+		$data_procces = $this->uri->segment(3);
+		$dec_data_process = $this->encdec($data_procces, 'd');
+		$params['data_procces'] = explode('-', $dec_data_process);
+		$params['dataChkList'] = $this->db->get_where('tbl_asset_checklist', $where)->result();
+		if ($params['dataChkList']) {
+			$this->createPdfWOHeadFoot('admin/crud/print-gatepass-slip', $params);	
+		} else {
+			echo "<script>alert('No data found')</script>";
+		}
+
+	}
+	
+public function getGatePassPrintFrm(){
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
+		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
+		$params['checkList'] = $this->db->get_where('tbl_asset_checklist')->result();
+		$this->load->view('admin/crud/print-gatepass-frm', $params);
+	}
+	
+	
 }	

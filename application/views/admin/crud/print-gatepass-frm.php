@@ -14,9 +14,7 @@
       <div class="row">
         <div class="col-6">
           <label for="" class="font-12"></label>
-          <input type="checkbox" id="ready-to-deploy"><span class="font-12"> Ready to Deploy only</span>
-        </div>
-        <div class="col-6">
+          <input type="checkbox" id="ready-to-deploy"><span class="font-12"> Ready to Deploy only</span> <br>
           <label for="location_id" class="font-12">Location</label>
           <select class="custom-select custom-select-sm font-12" id="location_id" name="location_id">
 						<option selected hidden value="">-SELECT-</option>
@@ -24,6 +22,10 @@
 							<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
 						<?php endforeach; ?>
 					</select> 
+          <label for="" class="font-12">Name of Personnel:</label>
+          <input type="text" name="person_id" class="form-control form-control-sm font-12" id="person_id">
+          <label for="" class="font-12">Plate No.</label>
+           <input type="text" name="plate_no" class="form-control form-control-sm font-12" id="plate_no">
         </div>
         
       </div>
@@ -31,7 +33,7 @@
 
       <div class="row">
         <div class="col-12">
-          <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printTransmitalSumm"><i class="fas fa-save"></i> PRINT</button>
+          <button type="button" class="btn btn-info btn-md rounded-0 border float-right font-12" id="printGatePassForm"><i class="fas fa-save"></i> PRINT GATEPASS</button>
         </div>
       </div>
 

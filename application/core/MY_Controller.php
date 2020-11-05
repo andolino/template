@@ -257,8 +257,11 @@ class MY_Controller extends CI_Controller{
 				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
 				$json         = file_get_contents($jsonurl, 0, null, null);
 				$json_output  = json_decode($json);
-				$json_encoded = json_encode($json_output);
 				$code         = explode('/', $json_output->result->qr);
+				$checkListData = $this->db->query("SELECT count(*) as count_per_prov, province FROM tbl_asset_checklist WHERE location_id = $id")->row();
+				$json_output->result->shorturl = 'https://philsys.qrd.by/'.$code[4].'?q=' . $checkListData->count_per_prov . '&l=' . $checkListData->province;
+				$json_encoded = json_encode($json_output);
+
 				$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $id ORDER BY id DESC LIMIT 1")->row();
 				if ($existingQr->received_by == '' || $existingQr->date_received == '') {
 					return $this->db->update('tbl_qrcodes_checklist', array(

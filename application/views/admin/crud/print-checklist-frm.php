@@ -22,6 +22,10 @@
 					</select> 
         </div> -->
         <div class="col-6">
+          <label for="" class="font-12"></label>
+          <input type="checkbox" id="ready-to-deploy"><span class="font-12"> Ready to Deploy only</span>
+        </div>
+        <div class="col-6">
           <label for="location_id" class="font-12">Location</label>
           <select class="custom-select custom-select-sm font-12" id="location_id" name="location_id">
 						<option selected hidden value="">-SELECT-</option>

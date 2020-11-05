@@ -1,36 +1,29 @@
 
+<img style="margin-top: -25px;" src="<?php echo base_url('assets/image/misc/img-logo-header.png'); ?>">
+<br>
+<br>
 
-<img src="<?php echo base_url('assets/image/misc/psa-logo.png'); ?>" width="450" style="float:left;margin-bottom:20px;">
-<br>
-<table>
-<tr>
-  <td style="padding:0px;width:10%;font-size: 10x !important;line-height:1.9;text-align: right;"><strong>TRANSMITTAL SLIP</strong></td>
-</tr>
-</table>
-<br>
-<br>
-<br>
-<table style="font-size: 12px;">
-  <tr>
-    <td><strong><?php echo date('d F Y'); ?></strong></td>
-  </tr>
-  <tr>
-    <td></td>
+<table border="0" align="left"  style="font-size: 12px;">
+  
+    <td width="50%"></td>
   </tr>
 </table>
 <br>
-<table style="font-size: 12px;width:35%">
+<table style="font-size: 12px;width:45%">
+  <tr><td><?php echo  date('d F Y');?></td></tr>
+  <tr><td>&nbsp;</td></tr>
   <tr>
     <td><strong><?php echo strtoupper($tbl_locations->contact_person); ?></strong></td>
   </tr>
   <tr>
-    <td>Chief Statistical Specialist – <strong><?php echo strtoupper($tbl_locations->name); ?></strong></td>
+    <td>Chief Statistical Specialist – <?php echo strtoupper($tbl_locations->name); ?></td>
   </tr>
   <tr>
-    <td><strong><?php echo ucfirst($tbl_locations->address); ?></strong></td>
+    <td><?php echo ucfirst($tbl_locations->address); ?></td>
   </tr>
 </table>
 <br>
+
 <table style="font-size: 12px;">
   <tr>
     <td>Dear Sir / Madam:</td>
@@ -38,7 +31,7 @@
   <tr>
     <td></td>
   </tr>
-  <tr>
+<tr>
     <td>We are transmitting herewith <?php echo $intToWords(count($dataChkList)); ?> (<?php echo count($dataChkList); ?>) units of Registration Kit (luggage kit and photo booth kit) to be used for the implementation of the Philippine Identification System (PhilSys). Please see the following attachments for the details.</td>
   </tr>
   <tr>
@@ -48,10 +41,10 @@
     <td></td>
   </tr>
   <tr>
-    <td>	Summary of Registration Kits</td>
+    <td> * Summary of Registration Kits</td>
   </tr>
   <tr>
-    <td>	Registration Kit Checklist Form</td>
+    <td> * Registration Kit Checklist Form</td>
   </tr>
 </table>
 <br>
@@ -73,9 +66,11 @@
   </tr>
 </table>
 <br>
+<br>
 <table style="font-size: 12px;width:100%;">
   <tr>
-    <td style="padding:0px;width:30%;"><strong>EDGAR M. FAJUTAGANA </strong></td>
+    <td style="padding:0px;width:30%;"><div align="center" style="text-align: center; padding-left:2px; padding-top: -3px; vertical-align: middle; font-size:11px; z-index: -1; position: absolute;"><strong>EDGAR M. FAJUTAGANA </strong></div><img style="padding-top:-35px; padding-left:30px; position:absolute; z-index: -1;" src="<?php echo base_url('assets/image/misc/edfa-sign.png'); ?>" width="70"/></td>
+
     <td style="padding:0px;width:10%;" rowspan="6"><img src="<?php echo $qrcode; ?>" width="80"></td>
   </tr>
   <tr>
@@ -160,7 +155,7 @@
         $acronym .= $w[0];
       }
     ?>
-    Attachment of Transmittal Letter to <strong><?php echo strtoupper($acronym); ?></strong>
+    Attachment of Transmittal Letter to <strong><?php echo strtoupper($acronym) . " - " . strtoupper($tbl_locations->contact_person); ?></strong>
   </td>
 </tr>
 </table>

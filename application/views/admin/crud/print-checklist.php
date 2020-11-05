@@ -788,7 +788,7 @@ $ctrl = 1;
         <tr>
           <td style="width:30%;text-align:center;"><strong><?php echo strtoupper($row->audited_by); ?></strong></td>
           <td style="width:20%;"></td>
-          <td style="width:30%;text-align:center;"><?php echo date('M j, Y  h:i:s A', strtotime($row->audited_datetime)); ?></td>
+          <td style="width:30%;text-align:center;"><?php echo date('F j, Y  h:i:s A', strtotime($row->audited_datetime)); ?></td>
         </tr>
         <tr>
           <td style="border-top:0.2px solid #000;text-align:center;">ISMD Personnel <br> (Printed name and signature)</td>
@@ -804,13 +804,13 @@ $ctrl = 1;
         <tr>
           <td style="width:30%;text-align:center;"><div align="center" style="text-align: center; padding-left:30px; padding-top: 30px; vertical-align: middle; font-size:11px; z-index: -1; position: absolute;"><strong>RODERICK R. MALLANNAO</strong></div><img style="padding-top:-30px; padding-left:10px; position:absolute; z-index: -1;" src="<?php echo base_url('assets/image/misc/signature.png'); ?>" width="70"/></td>
           <td style="width:20%;"></td>
-          <td style="width:30%;text-align:center;"><?php //echo date('M j, Y h:i A', strtotime($row->audited_datetime)); ?> </td>
+          <td style="width:30%;text-align:center;"><?php echo date('F j, Y'); ?> </td>
           <td></td>
         </tr>
         <tr>
           <td style="border-top:0.2px solid #000;text-align:center;">Information Systems Analyst II <br> ISMD, RSMS - PRO</td>
           <td></td>
-          <td style="border-top:0.2px solid #000;text-align:center;">Date/Time </td>
+          <td style="border-top:0.2px solid #000;text-align:center;">Date</td>
         </tr>
       </table>
       
