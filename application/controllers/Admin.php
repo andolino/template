@@ -1006,14 +1006,14 @@ class Admin extends MY_Controller {
 		if ($this->input->post('model_id')) {
 			$this->form_validation->set_rules('model_id', 'Model', 'required');
 		}
-		$this->form_validation->set_rules('status_id', 'Status', 'required');
-		$this->form_validation->set_rules('serial', 'Serial', 'required');
-		$this->form_validation->set_rules('name', 'Asset Name', 'required');
-		$this->form_validation->set_rules('purchase_date', 'Purchase Date', 'required');
-		$this->form_validation->set_rules('supplier_id', 'Supplier', 'required');
-		$this->form_validation->set_rules('order_number', 'Order Number', 'required');
-		$this->form_validation->set_rules('purchase_cost', 'Purchase Cost', 'required');
-		$this->form_validation->set_rules('warranty_months', 'Warranty', 'required');
+		//$this->form_validation->set_rules('status_id', 'Status', 'required');
+		//$this->form_validation->set_rules('serial', 'Serial', 'required');
+		//$this->form_validation->set_rules('name', 'Asset Name', 'required');
+		//$this->form_validation->set_rules('purchase_date', 'Purchase Date', 'required');
+		//$this->form_validation->set_rules('supplier_id', 'Supplier', 'required');
+		//$this->form_validation->set_rules('order_number', 'Order Number', 'required');
+		//$this->form_validation->set_rules('purchase_cost', 'Purchase Cost', 'required');
+		//$this->form_validation->set_rules('warranty_months', 'Warranty', 'required');
 
 		// if (array_key_exists('pwd_id', $_POST)) {
 		// 	$this->form_validation->set_rules('pwd_id', 'PWD ID', 'trim|required');
@@ -1100,6 +1100,30 @@ class Admin extends MY_Controller {
 						$this->generateQR($errors['id']);
 					}
 				} else {
+				    
+				    
+				    //fast track muna
+				    
+				    
+				//   $asset_array = array();
+
+
+    //                 for($x=0;$x<count($asset_array);$x++){
+                    
+    //                 $dataField = "";
+                    
+    //                 $asset_tag_values = $asset_array[$x];
+
+    //                 $dataField = array('asset_tag'=>$asset_tag_values,'status_id'=>1, 'location_id'=>6);
+
+
+				// 	$this->db->insert('tbl_asset', $dataField);
+				// 	$errors['id'] = $this->db->insert_id();
+				// 	$this->upload_const_dp($errors['id']);
+				// 	$this->generateQR($errors['id']);
+
+				// 	}
+				    
 					$this->db->insert('tbl_asset', $dataField);
 					$errors['id'] = $this->db->insert_id();
 					$this->upload_const_dp($errors['id']);
@@ -1734,6 +1758,15 @@ public function getGatePassPrintFrm(){
 		$params['checkList'] = $this->db->get_where('tbl_asset_checklist')->result();
 		$this->load->view('admin/crud/print-gatepass-frm', $params);
 	}
+	
+		public function locationDashboard(){
+		$params['heading'] = 'DASHBOARD - LOCATION';
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-asset', $params, TRUE);
+		$params['data'] = $this->db->query("SELECT * FROM v_regkit_count")->result();
+		//$params['check_url'] = function($url){ return $this->check_url($url); };
+		$this->adminContainer('admin/location-dashboard', $params);	
+	}
+
 	
 	
 }	

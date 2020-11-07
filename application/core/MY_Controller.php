@@ -215,11 +215,15 @@ class MY_Controller extends CI_Controller{
 		public function generateQR($id){
 			if (!empty($_POST['tbl_asset_id'])) {
 				$encId 		  	= $this->encdec($id, 'e');
-				$apiKey       = "c7ed8171ec916e31a875e77c159efea7";
+				//philsysuser1 - c7ed8171ec916e31a875e77c159efea7
+				//phlysuser2   - 39ff6e7963d9998e276aff08b0ef77b6
+				//philsysuser3 -aaa106e3d88bfb566a174458a41f820d
+				
+				$apiKey       = "4db2f0309359c12aff273006b80ed3f3";
 				$apiUrl       = "https://philsys.qrd.by/api";
 				$action       = "short";
 				$url          = base_url() . "get-assets-child/" . $encId . '&gps=1';
-				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$jsonurl      = "$apiUrl/$action?secretkey=$apiKey&url=$url";
 				$json         = file_get_contents($jsonurl, 0, null, null);
 				$json_output  = json_decode($json);
 				$json_encoded = json_encode($json_output);
@@ -230,12 +234,17 @@ class MY_Controller extends CI_Controller{
 																									'code'     => $code[4],
 																								));
 			} else {
+			    
+			    //c7ed8171ec916e31a875e77c159efea7 - philsys user1
+			    //39ff6e7963d9998e276aff08b0ef77b6 - philsys user2
+			    //philsysuser3-aaa106e3d88bfb566a174458a41f820d
+	
 				$encId 		  	= $this->encdec($id, 'e');
-				$apiKey       = "c7ed8171ec916e31a875e77c159efea7";
+				$apiKey       = "4db2f0309359c12aff273006b80ed3f3";
 				$apiUrl       = "https://philsys.qrd.by/api";
 				$action       = "short";
 				$url          = base_url() . "get-assets/" . $encId . '&gps=1';
-				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$jsonurl      = "$apiUrl/$action?secretkey=$apiKey&url=$url";
 				$json         = file_get_contents($jsonurl, 0, null, null);
 				$json_output  = json_decode($json);
 				$json_encoded = json_encode($json_output);
@@ -249,18 +258,29 @@ class MY_Controller extends CI_Controller{
 		}
 
 		public function generateQRChecklist($id){
+				// $encId 		  	= $this->encdec($id, 'e');
+				// $apiKey       = "3a4ac1b7935403575faf413c82dbeb28";
+				// $apiUrl       = "https://philsys.qrd.by/api";
+				// $action       = "short";
+				// $url          = base_url() . "scanned-checklist/" . $encId . '&gps=1';
+				// $jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				// $json         = file_get_contents($jsonurl, 0, null, null);
+				// $json_output  = json_decode($json);
+				// $code         = explode('/', $json_output->result->qr);
+				// $checkListData = $this->db->query("SELECT count(*) as count_per_prov, province FROM tbl_asset_checklist WHERE location_id = $id")->row();
+				// $json_output->result->shorturl = 'https://philsys.qrd.by/'.$code[4].'?q=' . $checkListData->count_per_prov . '&l=' . $checkListData->province;
+				// $json_encoded = json_encode($json_output);
+
 				$encId 		  	= $this->encdec($id, 'e');
-				$apiKey       = "2bbd756624aaeee7945627b397b832bb";
+				$apiKey       = "f19971bf976f75057d4291c5419c8dda";
 				$apiUrl       = "https://philsys.qrd.by/api";
 				$action       = "short";
 				$url          = base_url() . "scanned-checklist/" . $encId . '&gps=1';
-				$jsonurl      = "$apiUrl/$action?key=$apiKey&url=$url";
+				$jsonurl      = "$apiUrl/$action?secretkey=$apiKey&url=$url";
 				$json         = file_get_contents($jsonurl, 0, null, null);
 				$json_output  = json_decode($json);
-				$code         = explode('/', $json_output->result->qr);
-				$checkListData = $this->db->query("SELECT count(*) as count_per_prov, province FROM tbl_asset_checklist WHERE location_id = $id")->row();
-				$json_output->result->shorturl = 'https://philsys.qrd.by/'.$code[4].'?q=' . $checkListData->count_per_prov . '&l=' . $checkListData->province;
 				$json_encoded = json_encode($json_output);
+				$code         = explode('/', $json_output->result->qr);
 
 				$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $id ORDER BY id DESC LIMIT 1")->row();
 				if ($existingQr->received_by == '' || $existingQr->date_received == '') {

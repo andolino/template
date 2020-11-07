@@ -1,4 +1,4 @@
-
+<?php ini_set("pcre.backtrack_limit", "5000000"); ?>
 <img style="margin-top: -25px;" src="<?php echo base_url('assets/image/misc/img-logo-header.png'); ?>">
 <br>
 <br>

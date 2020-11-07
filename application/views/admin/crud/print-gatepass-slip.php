@@ -26,7 +26,13 @@
 
 
 <?php $location_val = array(); ?>
-<?php $loc = array(); ?>
+<?php 
+
+$loc = array();
+$pso = array();
+
+
+?>
 
       <?php foreach($dataChkList as $row): ?>
 
@@ -36,7 +42,10 @@
 
           $cnt = count($dataChkList);
 
-          $loc[] = $row->province;
+          $loc[] = $row->address;
+          $pso[] = $row->province;
+          
+          
 
      endforeach;
 
@@ -59,7 +68,7 @@
     </tr>
     <tr><td>&nbsp;</td></tr>
     <tr>
-      <td style="line-height: 25px; font-size: 12px;">Please allow <strong><?php echo $data_procces[0]; ?></strong>,with following Plate No. <strong><?php echo $data_procces[1]; ?></strong> to take out the property listed below from the office of the <strong>PRO-ISMD WAREHOUSE</strong></td>
+      <td style="line-height: 25px; font-size: 12px;">Please allow <strong><?php echo $data_procces[0]; ?></strong>,with vehicle plate No. <strong><?php echo $data_procces[1]; ?></strong> to take out the property listed below from the PRO Warehouse, 901 Great East Industrial Corporation, EDSA</td>
     </tr>
 
     </table>
@@ -78,7 +87,7 @@
 
       <td width="60%" style="line-height: 40px;">&nbsp;<?php echo count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
       &nbsp;<?php echo count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
-      <td align="center" width="20%"><?php echo $loc[0]; ?></td>
+      <td align="center" width="20%"><?php echo "<strong>".$pso[0] . "</strong><br>".  $loc[0]; ?></td>
       <td width="15%">&nbsp;</td>
 
 
@@ -124,7 +133,7 @@
     <tr><td>&nbsp;</td></tr>
     <tr>
     
-      <td style="line-height: 25px; font-size: 12px;">Please allow <strong><?php echo $data_procces[0]; ?></strong>,with following Plate No. <strong><?php echo $data_procces[1]; ?></strong> to take out the property listed below from the office of the <strong>PRO-ISMD WAREHOUSE</strong></td>
+      <td style="line-height: 25px; font-size: 12px;">Please allow <strong><?php echo $data_procces[0]; ?></strong>,with vehicle plate No. <strong><?php echo $data_procces[1]; ?></strong> to take out the property listed below from the PRO Warehouse, 901 Great East Industrial Corporation, EDSA</td>
     
     </tr>
 
@@ -143,7 +152,7 @@
 
  <td width="60%" style="line-height: 40px;">&nbsp;<?php echo count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
       &nbsp;<?php echo count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
-      <td align="center" width="20%"><?php echo $loc[0]; ?></td>
+     <td align="center" width="20%"><?php echo "<strong>".$pso[0] . "</strong><br>".  $loc[0]; ?></td>
       <td width="15%">&nbsp;</td>
 
 

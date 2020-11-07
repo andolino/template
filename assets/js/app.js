@@ -930,6 +930,33 @@ $(document).ready(function() {
     });
   });
 
+  
+  //dyon
+  $(document).on('click', '#printGatePassForm', function (e) {
+    var locationId = $('#location_id').val();
+    var personnel_id = $('#person_id').val();
+    var plate_no     = $('#plate_no').val();
+    var status = ($('#ready-to-deploy').is(':checked') ? 1 : 0);
+
+    $.ajax({
+      type: "POST",
+      url: "get-print-gatepass-report",
+      data: { 'location_id' : locationId, 'personnel_id' : personnel_id, 'plate_no' : plate_no, 'status' : status },
+      dataType: "JSON",
+      success: function (res) {
+        window.open('print-gatepass-slip/'+res.data+'/'+res.params);//+res.data+'/'+$('#date_generated').val());
+      }
+    });
+    // }
+  });
+
+  $(document).on('click', '#printGatePass', function() {
+    $('#custom-modal').modal('show');
+    $.get("get-gatepass-print-frm", {}, function (data, textStatus, jqXHR) {
+      $('#custom-modal .modal-content').html(data);
+    });
+  });
+
 });//ready
 
 
@@ -1621,39 +1648,6 @@ function initRepairRequestDataTables(){
 }
 
 
-
-//dyon
- $(document).on('click', '#printGatePassForm', function (e) {
-
-      var locationId = $('#location_id').val();
-      var personnel_id = $('#person_id').val();
-      var plate_no     = $('#plate_no').val();
-      var status = ($('#ready-to-deploy').is(':checked') ? 1 : 0);
-
-      $.ajax({
-        type: "POST",
-        url: "get-print-gatepass-report",
-        data: { 'location_id' : locationId, 'personnel_id' : personnel_id, 'plate_no' : plate_no, 'status' : status },
-        dataType: "JSON",
-        success: function (res) {
-          window.open('print-gatepass-slip/'+res.data+'/'+res.params);//+res.data+'/'+$('#date_generated').val());
-        }
-      });
-    // }
-  });
-
-
-
-    $(document).on('click', '#printGatePass', function() {
-
-  
-    $('#custom-modal').modal('show');
-    $.get("get-gatepass-print-frm", {}, function (data, textStatus, jqXHR) {
-      $('#custom-modal .modal-content').html(data);
-    });
-
-    
-  });
 
 function initActivityLogsDataTables(){
   var myObjKeyLguConst = {};
