@@ -321,7 +321,11 @@ class MY_Controller extends CI_Controller{
 		}
 	
 		public function createPdf($data, $param = array()){
-			$mpdf = new \Mpdf\Mpdf(['setAutoTopMargin' => 'stretch', 'setAutoBottomMargin' => 'stretch']);
+			$mpdf = new \Mpdf\Mpdf([
+											'setAutoTopMargin' => 'stretch', 
+											'setAutoBottomMargin' => 'stretch',
+											'useSubstitutions' => true
+									]);
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
    		$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
 			$ht = $this->load->view($data, $param, TRUE);
@@ -356,13 +360,15 @@ class MY_Controller extends CI_Controller{
 									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'arial'
+							'default_font' => 'arial',
+							'useSubstitutions' => true
 						]);
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";
    		$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
 			$ht = $this->load->view($data, $param, TRUE);
 			$mpdf->defaultheaderline = 0;
 			$mpdf->defaultfooterline = 0;
+
 			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
 			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
 			$mpdf->WriteHTML($ht);
@@ -394,7 +400,8 @@ class MY_Controller extends CI_Controller{
 									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'arial'
+							'default_font' => 'arial',
+							'useSubstitutions' => true
 						]);
 			$mpdf->SetTitle('Checklist');
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
@@ -444,7 +451,8 @@ class MY_Controller extends CI_Controller{
 									'I' => 'ArialCEItalic.ttf'
 								]
 							],
-							'default_font' => 'arial'
+							'default_font' => 'arial',
+							'useSubstitutions' => true
 						]);
 			$mpdf->SetTitle('Checklist');
 			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	

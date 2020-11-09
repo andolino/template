@@ -1278,7 +1278,7 @@ class Admin extends MY_Controller {
 			$where .= ' AND status = 0';
 		}
 		$this->generateQRChecklist($this->input->post('location_id'));
-		echo json_encode(array('data'=> $this->encdec($where, 'e')));
+		echo json_encode(array('data'=> $this->encdec($where, 'e')));	
 	}
 	
 	public function printAssetReport(){
@@ -1536,9 +1536,9 @@ class Admin extends MY_Controller {
 		$data = implode(',',$data);
 		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
 		$params['check_url'] = function($url){ return $this->check_url($url); };
-		$html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
-		$this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
-		// $this->generatePdf('admin/crud/print-qrcode-per-page', $params);
+		// $html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
+		// $this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
+		$this->generatePdf('admin/crud/print-qrcode-per-page', $params);
 	}
 	
 	public function printChildAssetQr(){
