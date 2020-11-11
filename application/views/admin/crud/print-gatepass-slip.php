@@ -24,7 +24,6 @@
 </style>
 
 
-
 <?php $location_val = array(); ?>
 <?php 
 

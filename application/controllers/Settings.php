@@ -152,6 +152,124 @@ class Settings extends MY_Controller {
 		echo json_encode($output);
 	}
 
+	public function server_tbl_print_logs_transmittal(){
+		$result 	= $this->Table->getOutput('v_print_logs', ['id', 'name_of_personnel', 'plate_no', 'print_by', 
+																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by'], ['id' => 'asc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->id;
+   		$data[] = $row->name_of_personnel;
+   		$data[] = date('Y-m-d', strtotime($row->entry_date));
+   		$data[] = $row->location_name;	
+			$data[] = $row->asset;	
+			$data[] = $row->qty;	
+			$data[] = $row->file_dir;	
+			$data[] = $row->received_by;	
+			$data[] = $row->date_received;	
+			$data[] = '';	
+			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
+			$res[] = $data;
+		}
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+		echo json_encode($output);
+	}
+
+	public function server_tbl_print_logs_gatepass(){
+		$result 	= $this->Table->getOutput('v_print_logs', ['id', 'name_of_personnel', 'plate_no', 'print_by', 
+																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by'], ['id' => 'asc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			$data[] = $row->id;
+			$data[] = $row->print_by;	
+   		$data[] = date('Y-m-d', strtotime($row->entry_date));
+   		$data[] = $row->name_of_personnel;
+			$data[] = $row->plate_no;	
+			$data[] = $row->file_dir;	
+			$data[] = $row->date_received;	
+			$data[] = '';	
+			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
+			$res[] = $data;
+		}
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+		echo json_encode($output);
+	}
+
+	public function server_tbl_print_logs_checklist(){
+		$result 	= $this->Table->getOutput('v_print_logs', ['id', 'name_of_personnel', 'plate_no', 'print_by', 
+																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by'], ['id' => 'asc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->id;
+   		$data[] = $row->name_of_personnel;
+   		$data[] = date('Y-m-d', strtotime($row->entry_date));
+   		$data[] = $row->location_name;	
+			$data[] = $row->asset;	
+			$data[] = $row->qty;	
+			$data[] = $row->file_dir;	
+			$data[] = $row->received_by;	
+			$data[] = $row->date_received;	
+			$data[] = '';	
+			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
+			$res[] = $data;
+		}
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+		echo json_encode($output);
+	}
+
+	public function server_tbl_print_logs_qrcodes(){
+		$result 	= $this->Table->getOutput('v_print_logs', ['id', 'name_of_personnel', 'plate_no', 'print_by', 
+																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by'], ['id' => 'asc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->id;
+   		$data[] = $row->name_of_personnel;
+   		$data[] = date('Y-m-d', strtotime($row->entry_date));
+   		$data[] = $row->location_name;	
+			$data[] = $row->asset;	
+			$data[] = $row->qty;	
+			$data[] = $row->file_dir;	
+			$data[] = $row->received_by;	
+			$data[] = $row->date_received;	
+			$data[] = '';	
+			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
+			$res[] = $data;
+		}
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+		echo json_encode($output);
+	}
+
 	public function server_companies(){
 		$result 	= $this->Table->getOutput('tbl_companies', ['id', 'name', 'image', 'is_deleted'], ['id' => 'desc']);
 		$res 			= array();

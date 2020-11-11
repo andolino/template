@@ -33,6 +33,7 @@ var tbl_repair_asset_approved = [];
 var tbl_repair_asset_disapproved = [];
 var tbl_repair_asset_cancelled = [];
 var tbl_repair_asset_closed = [];
+var tbl_print_logs_transmittal = [];
 
 $(document).ready(function() {
   //init plugin
@@ -118,6 +119,7 @@ $(document).ready(function() {
       initPortalRequestDataTables();
       initRepairRequestDataTables();
       initAdminRepairRequestDataTables();
+      initPrintLogsDataTables();
 
     });    
   });
@@ -135,6 +137,7 @@ $(document).ready(function() {
   initPortalRequestDataTables();
   initRepairRequestDataTables();
   initAdminRepairRequestDataTables();
+  initPrintLogsDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -1684,6 +1687,154 @@ function initActivityLogsDataTables(){
         $(row).attr(myObjKeyLguConst);
     }
   });
+}
+
+function initPrintLogsDataTables(){
+  var myObjKeyLguConst = {};
+
+  //transmittal
+  $('#tbl-print-logs-transmittal').DataTable().clear().destroy();
+  tbl_print_logs_transmittal  = $("#tbl-print-logs-transmittal").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4,5,6,7,8,9] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-print-logs-transmittal',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "print_logs_tbl" : $("#tbl-print-logs-transmittal").attr('data-tbl')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  //gatepass
+  $('#tbl-print-logs-gatepass').DataTable().clear().destroy();
+  tbl_print_logs_transmittal  = $("#tbl-print-logs-gatepass").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4,5,6,7] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-print-logs-gatepass',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "print_logs_tbl" : $("#tbl-print-logs-gatepass").attr('data-tbl')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  //checklist
+  $('#tbl-print-logs-checklist').DataTable().clear().destroy();
+  tbl_print_logs_transmittal  = $("#tbl-print-logs-checklist").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4,5,6,7,8,9] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-print-logs-checklist',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "print_logs_tbl" : $("#tbl-print-logs-checklist").attr('data-tbl')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+
+  //qrcodes
+  $('#tbl-print-logs-qrcodes').DataTable().clear().destroy();
+  tbl_print_logs_transmittal  = $("#tbl-print-logs-qrcodes").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4,5,6,7,8,9] 
+      }
+    ],
+    "serverSide"               : true,
+    // "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-print-logs-qrcodes',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "print_logs_tbl" : $("#tbl-print-logs-qrcodes").attr('data-tbl')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-lgu-const-id'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+
+
 }
 
 //init datatables END =====================================================>

@@ -368,10 +368,20 @@ class MY_Controller extends CI_Controller{
 			$ht = $this->load->view($data, $param, TRUE);
 			$mpdf->defaultheaderline = 0;
 			$mpdf->defaultfooterline = 0;
-
 			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
 			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
 			$mpdf->WriteHTML($ht);
+			$last_insert_id = strtotime(date('Y-m-d h:i:s'));
+			$this->db->insert('tbl_print_logs', array(
+				'users_id' => $this->session->users_id,
+				'location_id' => $param['data'][0]->location_id,
+				'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_qrcodes.pdf',
+				'report_type' => 'qrcodes',
+				'qty' => count($param['data']),
+				'entry_date' => date('Y-m-d h:i:s'),
+				'scanned_by' => $param['data'][0]->screen_name
+			));
+			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_qrcodes.pdf','F');
 			$mpdf->Output();
 		}
 
@@ -422,7 +432,17 @@ class MY_Controller extends CI_Controller{
 			$mpdf->AddPage('L','','1','i','on');
 			$mpdf->WriteHTML($ht2);
 			$mpdf->SetFooter();	
+			$this->db->insert('tbl_print_logs', array(
+				'users_id' => $this->session->users_id,
+				'location_id' => $location_id,
+				'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_transmital.pdf',
+				'report_type' => 'transmittal',
+				'entry_date' => date('Y-m-d h:i:s'),
+				'tbl_qrcodes_checklist_id' => $last_insert_id
+			));
+			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_transmital.pdf','F');
 			$mpdf->Output();
+			
 		}
 
 		public function createPdfWOHeadFoot($data, $param = array()){
@@ -466,6 +486,32 @@ class MY_Controller extends CI_Controller{
 			// $mpdf->SetHeader($header);
 			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
 			$mpdf->WriteHTML($ht);
+			//for gatepass
+			if ($param['type']=='gatepass') {
+				$last_insert_id = $param['dataChkList'][0]->deviceid;
+				$this->db->insert('tbl_print_logs', array(
+					'users_id' => $this->session->users_id,
+					'entry_date' => date('Y-m-d h:i:s'),
+					'name_of_personnel' => $param['data_procces'][0],
+					'plate_no' => $param['data_procces'][1],
+					'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_gatepass.pdf',
+					'report_type' => 'gatepass'
+				));
+				$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_gatepass.pdf','F');
+			} else {
+				$last_insert_id = $param['dataChkList'][0]->deviceid;
+				$this->db->insert('tbl_print_logs', array(
+					'users_id' => $this->session->users_id,
+					'entry_date' => date('Y-m-d h:i:s'),
+					'location_id' => $param['dataChkList'][0]->location_id,
+					// 'name_of_personnel' => $param['data_procces'][0],
+					// 'plate_no' => $param['data_procces'][1],
+					'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_checklist.pdf',
+					'report_type' => 'checklist'
+				));
+				$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_checklist.pdf','F');
+			}
+
 			$mpdf->Output();
 		}
 

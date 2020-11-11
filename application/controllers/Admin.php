@@ -272,6 +272,34 @@ class Admin extends MY_Controller {
 		$this->adminContainer('admin/asset-request', $params);	
 	}
 	
+	public function print_logs_transmittal(){
+		$params['heading'] = 'PRINT LOGS TRANSMITTAL';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-print-logs-transmittal', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+
+	public function print_logs_gatepass(){
+		$params['heading'] = 'PRINT LOGS GATE PASS';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-print-logs-gatepass', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+
+	public function print_logs_checklist(){
+		$params['heading'] = 'PRINT LOGS CHECKLIST';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-print-logs-checklist', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+
+	public function print_logs_qrcodes(){
+		$params['heading'] = 'PRINT LOGS QR CODES';
+		// $params['status'] = 4;
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-print-logs-qrcodes', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
 	public function repair_request(){
 		$params['heading'] = 'REPAIR REQUEST';
 		// $params['status'] = 0;
@@ -1316,6 +1344,7 @@ class Admin extends MY_Controller {
 		// $params['page_no'] = '123';//$this->convertNumberWithourCurrency($motherCount->tot_mother);//'{PAGENO} of {nbpg}';
 		// $params['motherCount'] = $this->convertNumberWithourCurrency($motherCount->tot_mother);
 		// $this->output->enable_profiler(true);
+		$params['type'] = 'checklist';
 		$this->createPdfWOHeadFoot('admin/crud/print-checklist', $params);
 		// $html = $this->load->view('admin/crud/print-transmital-slip', $params, TRUE);
 		// $this->AdminMod->pdfToTransmital($html, 'Transmital Slip', false, 'LEGAL', false, false, false, 'Transmital Slip', '');
@@ -1329,10 +1358,12 @@ class Admin extends MY_Controller {
 		$params['data_procces'] = $data_procces;
 		$params['dataChkList'] = $this->db->get_where('tbl_asset_checklist', $where)->result();
 		$params['tbl_locations'] = $this->db->get_where('tbl_locations', array('id'=>$location_id))->row();
+		
 		//QR Code
 		$url 							 				= $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $location_id ORDER BY id desc LIMIT 1")->row();
 		$jsonQrData 			 				= json_decode($url->qr_code);
 		$params['qrcode']  				= $jsonQrData->result->qr;
+		$params['last_insert_id'] = $this->db->insert_id();
 		$this->createPdfTransmitalSummary('admin/crud/print-transmital-summary', $params);
 	}
 
@@ -1534,7 +1565,11 @@ class Admin extends MY_Controller {
 		$enc_ai = $this->encdec($arr_asset_id, 'd');
 		$data = json_decode($enc_ai);
 		$data = implode(',',$data);
-		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag FROM tbl_qrcodes tq left join tbl_asset ta on ta.id = tq.asset_id WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
+		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag, ta.location_id, u.screen_name
+																				FROM tbl_qrcodes tq 
+																				left join tbl_asset ta on ta.id = tq.asset_id 
+																				left join users u on u.users_id = ta.user_id
+																				WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
 		$params['check_url'] = function($url){ return $this->check_url($url); };
 		// $html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
 		// $this->AdminMod->pdf($html, 'QR Code List', false, 'LEGAL', false, false, false, 'QR CODE', '');
@@ -1744,6 +1779,7 @@ class Admin extends MY_Controller {
 		$dec_data_process = $this->encdec($data_procces, 'd');
 		$params['data_procces'] = explode('-', $dec_data_process);
 		$params['dataChkList'] = $this->db->get_where('tbl_asset_checklist', $where)->result();
+		$params['type'] = 'gatepass';
 		if ($params['dataChkList']) {
 			$this->createPdfWOHeadFoot('admin/crud/print-gatepass-slip', $params);	
 		} else {

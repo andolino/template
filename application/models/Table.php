@@ -92,6 +92,10 @@ class Table extends CI_Model {
 			$this->db->where("date_posted between '$sd' AND '$ed'");
 		}
 
+		//print logs
+		if ($this->input->post('print_logs_tbl')) {
+			$this->db->where('report_type', $this->input->post('print_logs_tbl'));
+		}
 	} 
 
 	private function _que_tbl(){

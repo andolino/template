@@ -47,6 +47,23 @@
 				</ul>
       </li>
       <li class="">
+				<a href="#printDocxSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-print"></i> PRINT LOGS</a>
+				<ul class="collapse list-unstyled" id="printDocxSubMenu">
+          <li>
+            <a href="<?php echo base_url(); ?>print-logs-gatepass">GATE PASS</a>
+          </li>
+          <li>
+            <a href="<?php echo base_url(); ?>print-logs-transmittal">TRANSMITTAL</a>
+          </li>
+          <li>
+            <a href="<?php echo base_url(); ?>print-logs-checklist">CHECKLIST</a>
+          </li>
+          <li>
+            <a href="<?php echo base_url(); ?>print-logs-qrcodes">QR CODE</a>
+          </li>
+				</ul>
+      </li>
+      <li class="">
 				<a href="#reqSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-tasks"></i> REQUEST</a>
 				<ul class="collapse list-unstyled" id="reqSubMenu">
           <li>
