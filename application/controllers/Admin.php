@@ -455,6 +455,19 @@ class Admin extends MY_Controller {
 		}
 		$this->customContainer('admin/crud/view-repair-asset-request', $params);
 	}
+	
+	public function viewDispatchRequestPending(){
+		$id = $this->input->get('id');
+		$params['dataRequest'] = $this->db->get_where('v_portal_request', array('tbl_asset_request_id' => $id, 'is_deleted' => 0 ))->row();
+		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
+		if ($params['dataRequest']) {
+			// $dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
+			// $params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
+			// 																				LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
+			// 																				WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
+		}
+		$this->customContainer('admin/crud/view-dispatch-asset-request', $params);
+	}
 
 	public function submitApprovalRepairRequest(){
 		if ($this->input->post('is_approved') == 'ap') {
@@ -907,6 +920,7 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = $row->disapproved_by;
 				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = '';
 				$data[] = '';
 			} elseif($row->status==3) {
 				$data[] = $row->id;

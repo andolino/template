@@ -432,13 +432,15 @@ class MY_Controller extends CI_Controller{
 			$mpdf->AddPage('L','','1','i','on');
 			$mpdf->WriteHTML($ht2);
 			$mpdf->SetFooter();	
+			$last_insert_id = strtotime(date('Y-m-d h:i:s'));
 			$this->db->insert('tbl_print_logs', array(
 				'users_id' => $this->session->users_id,
 				'location_id' => $location_id,
 				'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_transmital.pdf',
 				'report_type' => 'transmittal',
 				'entry_date' => date('Y-m-d h:i:s'),
-				'tbl_qrcodes_checklist_id' => $last_insert_id
+				'tbl_qrcodes_checklist_id' => $last_insert_id,
+				'qty' => count($param['dataChkList'])
 			));
 			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_transmital.pdf','F');
 			$mpdf->Output();

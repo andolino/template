@@ -96,6 +96,20 @@ class Table extends CI_Model {
 		if ($this->input->post('print_logs_tbl')) {
 			$this->db->where('report_type', $this->input->post('print_logs_tbl'));
 		}
+		
+		//request status dispatch
+		if ($this->input->post('request_status')!='') {
+			$this->db->where('status', $this->input->post('request_status'));
+		}
+		
+		if ($this->input->post('tbl_asset_id_dispatch')!='') {
+			$this->db->where('asset_category_id', $this->input->post('data_asset_category_id'));
+			$this->db->where('office_management_id', $this->input->post('data_office_management_id'));
+		}
+		
+		if ($this->input->post('sibling_asset_listdown')!='') {
+			$this->db->where('sibling', $this->input->post('sibling_asset_listdown'));
+		}
 	} 
 
 	private function _que_tbl(){
@@ -135,7 +149,12 @@ class Table extends CI_Model {
 		$this->_que_tbl();
 		if (!empty($_POST['length']))
 			if ($_POST['length'] < 0) {} else {
-				$this->db->limit($_POST['length'], $_POST['start']);
+				if ($this->input->post('data_qty') && $this->input->post('data_qty')!='') {
+					$this->db->limit($this->input->post('data_qty'));
+				} else {
+					$this->db->limit($_POST['length'], $_POST['start']);
+				}
+				
 			}
 		$query = $this->db->get();
 		return $query->result();

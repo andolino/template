@@ -30,7 +30,6 @@
 $loc = array();
 $pso = array();
 
-
 ?>
 
       <?php foreach($dataChkList as $row): ?>

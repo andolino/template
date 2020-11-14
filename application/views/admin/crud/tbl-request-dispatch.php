@@ -14,6 +14,9 @@
     <a class="nav-link active font-12" id="nav-home-tab" data-toggle="tab" href="#disp-pending" role="tab" aria-controls="disp-pending" aria-selected="true">Pending</a>
     <a class="nav-link font-12" id="nav-profile-tab" data-toggle="tab" href="#disp-approved" role="tab" aria-controls="disp-approved" aria-selected="false">Approved</a>
     <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#disp-disapproved" role="tab" aria-controls="disp-disapproved" aria-selected="false">Disapproved</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#disp-disapproved" role="tab" aria-controls="disp-disapproved" aria-selected="false">Incident Request</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#disp-disapproved" role="tab" aria-controls="disp-disapproved" aria-selected="false">Cancelled Request</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#disp-disapproved" role="tab" aria-controls="disp-disapproved" aria-selected="false">Closed</a>
   </div>
 </nav>
 
@@ -21,14 +24,17 @@
   <div class="tab-pane fade show active" id="disp-pending" role="tabpanel" aria-labelledby="disp-pending-tab">
     <div class="row">
       <div class="col-sm-12">
-        <table class="table font-12 w-100" id="tbl-request-dispatch-pending" data-status="<?php //echo $status ?>">
+        <table class="table font-12 w-100 nowrap condensed" id="tbl-request-dispatch-pending" data-status="0">
           <thead>
             <tr>
-              <th scope="col">REQUEST #</th>
-              <th scope="col">ASSET CATEGORY </th>
+              <th scope="col">TICKET</th>
+              <th scope="col">REQUESTEE</th>
+              <th scope="col">OFFICE</th>
+              <th scope="col">ASSET CATEGORY</th>
               <th scope="col">QTY</th>
-              <th scope="col">STATUS</th>
-              <th scope="col">REQUEST DATE</th>
+              <th scope="col">PURPOSE</th>
+              <th scope="col">LOCATION</th>
+              <th scope="col">REQ DATE TIME</th>
               <th scope="col">ACTION</th>
             </tr>
           </thead>

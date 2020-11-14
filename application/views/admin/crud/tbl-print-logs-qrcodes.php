@@ -18,8 +18,8 @@
         <th scope="col">ASSET</th>
         <th scope="col">QTY</th>
         <th scope="col">FILE</th>
-        <th scope="col">RECEIVED BY</th>
-        <th scope="col">DATE RECEIVED</th>
+        <th scope="col">SANNED BY</th>
+        <th scope="col">SANNED LOCATION</th>
         <th scope="col">ACTION</th>
       </tr>
     </thead>

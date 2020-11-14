@@ -34,6 +34,12 @@ var tbl_repair_asset_disapproved = [];
 var tbl_repair_asset_cancelled = [];
 var tbl_repair_asset_closed = [];
 var tbl_print_logs_transmittal = [];
+var tbl_print_logs_gatepass = [];
+var tbl_print_logs_checklist = [];
+var tbl_print_logs_qrcodes = [];
+var tbl_dispatch_request = [];
+var tbl_asset_dtables = [];
+var tbl_asset_siblings_dtables = [];
 
 $(document).ready(function() {
   //init plugin
@@ -120,6 +126,8 @@ $(document).ready(function() {
       initRepairRequestDataTables();
       initAdminRepairRequestDataTables();
       initPrintLogsDataTables();
+      initDispatchRequestDataTables();
+      initTblAssetDataTables();
 
     });    
   });
@@ -138,6 +146,8 @@ $(document).ready(function() {
   initRepairRequestDataTables();
   initAdminRepairRequestDataTables();
   initPrintLogsDataTables();
+  initDispatchRequestDataTables();
+  initTblAssetDataTables();
 
   //============================> BEGIN
   $(document).on('submit', '#frm-create-asset', function(e) {
@@ -931,6 +941,12 @@ $(document).ready(function() {
         window.open('print-summary-dispatch/'+res.data);
       }
     });
+  });
+
+  $(document).on('click', '#viewSib', function () {
+    var id = $(this).attr('data-id');
+    initTblAssetSiblingsDataTables(id);
+    animateSingleIn('#sibling-cont-table', 'fadeIn');
   });
 
   
@@ -1729,7 +1745,7 @@ function initPrintLogsDataTables(){
 
   //gatepass
   $('#tbl-print-logs-gatepass').DataTable().clear().destroy();
-  tbl_print_logs_transmittal  = $("#tbl-print-logs-gatepass").DataTable({
+  tbl_print_logs_gatepass  = $("#tbl-print-logs-gatepass").DataTable({
     searchHighlight : true,
     lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
     language: {
@@ -1764,7 +1780,7 @@ function initPrintLogsDataTables(){
 
   //checklist
   $('#tbl-print-logs-checklist').DataTable().clear().destroy();
-  tbl_print_logs_transmittal  = $("#tbl-print-logs-checklist").DataTable({
+  tbl_print_logs_checklist  = $("#tbl-print-logs-checklist").DataTable({
     searchHighlight : true,
     lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
     language: {
@@ -1775,7 +1791,7 @@ function initPrintLogsDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4,5,6,7,8,9] 
+        targets              : [0,1,2,3,4,5,6,7] 
       }
     ],
     "serverSide"               : true,
@@ -1800,7 +1816,7 @@ function initPrintLogsDataTables(){
 
   //qrcodes
   $('#tbl-print-logs-qrcodes').DataTable().clear().destroy();
-  tbl_print_logs_transmittal  = $("#tbl-print-logs-qrcodes").DataTable({
+  tbl_print_logs_qrcodes  = $("#tbl-print-logs-qrcodes").DataTable({
     searchHighlight : true,
     lengthMenu      : [[30, 50, -1], [30, 50, 'All']],
     language: {

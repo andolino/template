@@ -166,10 +166,13 @@ class Settings extends MY_Controller {
    		$data[] = $row->location_name;	
 			$data[] = $row->asset;	
 			$data[] = $row->qty;	
-			$data[] = $row->file_dir;	
+			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
 			$data[] = $row->received_by;	
 			$data[] = $row->date_received;	
-			$data[] = '';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																		data-id="'.$row->id.'"
+																																																		data-tbl="tbl_print_logs"
+																																																		data-field="id"><i class="fas fa-trash"></i></a>';	
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -195,9 +198,12 @@ class Settings extends MY_Controller {
    		$data[] = date('Y-m-d', strtotime($row->entry_date));
    		$data[] = $row->name_of_personnel;
 			$data[] = $row->plate_no;	
-			$data[] = $row->file_dir;	
+			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
 			$data[] = $row->date_received;	
-			$data[] = '';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																		data-id="'.$row->id.'"
+																																																		data-tbl="tbl_print_logs"
+																																																		data-field="id"><i class="fas fa-trash"></i></a>';	
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -224,10 +230,11 @@ class Settings extends MY_Controller {
    		$data[] = $row->location_name;	
 			$data[] = $row->asset;	
 			$data[] = $row->qty;	
-			$data[] = $row->file_dir;	
-			$data[] = $row->received_by;	
-			$data[] = $row->date_received;	
-			$data[] = '';	
+			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																		data-id="'.$row->id.'"
+																																																		data-tbl="tbl_print_logs"
+																																																		data-field="id"><i class="fas fa-trash"></i></a>';		
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -248,16 +255,19 @@ class Settings extends MY_Controller {
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->id;
-   		$data[] = $row->name_of_personnel;
-   		$data[] = date('Y-m-d', strtotime($row->entry_date));
-   		$data[] = $row->location_name;	
-			$data[] = $row->asset;	
+			$data[] = $row->id;
+			$data[] = $row->print_by;	
+			$data[] = date('Y-m-d', strtotime($row->entry_date));
+			$data[] = $row->location_name;	
+   		$data[] = $row->asset;
 			$data[] = $row->qty;	
-			$data[] = $row->file_dir;	
-			$data[] = $row->received_by;	
-			$data[] = $row->date_received;	
+			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
+			$data[] = $row->asset;	
 			$data[] = '';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																		data-id="'.$row->id.'"
+																																																		data-tbl="tbl_print_logs"
+																																																		data-field="id"><i class="fas fa-trash"></i></a>';		
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -428,6 +438,106 @@ class Settings extends MY_Controller {
    		$data[] = $row->office_code;
    		$data[] = $row->office_name;
  			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-office-frm" data-id="'.$row->office_management_id.'" data-title="EDIT - '.strtoupper($row->office_code).'"><i class="fas fa-edit"></i></a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="office_management" data-field="office_management_id" data-id="'.$row->office_management_id.'"><i class="fas fa-trash"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
+	public function server_dispatch_request(){
+		$result 	= $this->Table->getOutput('v_portal_request', ['tbl_asset_request_id', 'office_management_id', 'asset_category_id', 'qty', 'location_id', 
+																															'other_location', 'users_id', 'purpose', 'remarks', 'is_deleted', 'entry_date', 'date_need', 
+																															'date_return', 'status', 'office_name', 'category_name', 'location_name', 'screen_name', 
+																															'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date'], ['tbl_asset_request_id' => 'desc']);
+
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->tbl_asset_request_id;
+   		$data[] = $row->screen_name;
+   		$data[] = $row->office_name;
+   		$data[] = $row->category_name;
+   		$data[] = $row->qty;
+   		$data[] = $row->purpose;
+   		$data[] = $row->location_name;
+   		$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+			 $data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$row->tbl_asset_request_id).'" target="_blank"><i class="fas fa-search"></i></a> | 
+			 						<a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+									<a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
+	public function server_tbl_asset_listdown(){
+		$result 	= $this->Table->getOutput('v_asset_parent_sibling_child', ['id', 'parent', 'name', 'serial', 'asset_tag', 
+																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
+																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
+																															'sibling_count', 'property_tag', 'asset_category_name', 'status_id'], ['id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->name;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->property_tag;
+			$data[] = $row->serial;
+			 
+   		$data[] = '<strong>' . $row->end_user . '</strong>';
+			
+			 $data[] = ($row->child_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewChild" data-type="childs">childs('.$row->child_count.')</a>':'') . 
+								($row->sibling_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewSib" data-type="siblings">siblings('.$row->sibling_count.')</a>':'') . 
+								'"<input class="float-right" name="chk-asset-listdown" type="checkbox" value="'.$row->id.'">';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
+	public function server_tbl_asset_siblings_listdown(){
+		$result 	= $this->Table->getOutput('v_asset_report', ['id', 'parent', 'name', 'serial', 'asset_tag', 
+																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
+																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
+																															'sibling_count', 'property_tag', 'asset_category_name', 'status_id'], ['id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->name;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->property_tag;
+			$data[] = $row->serial;
+   		$data[] = '<strong>' . $row->end_user . '</strong>';
+			$data[] = '';
 			$res[] = $data;
 		}
 

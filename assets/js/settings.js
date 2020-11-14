@@ -781,6 +781,145 @@ function initHistoryLogsDataTables(){
   });
 }
 
+function initDispatchRequestDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_dispatch_request  = $("#tbl-request-dispatch-pending").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    order: [[ 0, "desc" ]],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [2] 
+      // }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-dispatch-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "request_status" : $("#tbl-request-dispatch-pending").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initTblAssetDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_asset_dtables  = $("#tbl-asset-listdown").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    order: [[ 0, "desc" ]],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [2] 
+      // }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-asset-listdown',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "tbl_asset_id_dispatch" : $("#tbl-asset-listdown").attr('data-id'),
+                                "data_asset_category_id" : $("#tbl-asset-listdown").attr('data-cat'),
+                                "data_office_management_id" : $("#tbl-asset-listdown").attr('data-man'),
+                                "data_qty" : $("#tbl-asset-listdown").attr('data-qty')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initTblAssetSiblingsDataTables(id){
+  var myObjKeyLguConst = {};
+  $('#tbl_sibling_listdown').DataTable().clear().destroy();
+  tbl_asset_siblings_dtables  = $("#tbl_sibling_listdown").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    order: [[ 0, "desc" ]],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [2] 
+      // }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-asset-siblings-listdown',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                  'sibling_asset_listdown': id               
+        }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
 function removeData(d){
   var id  = d.getAttribute('data-id');
   var tbl = d.getAttribute('data-tbl');
@@ -801,6 +940,29 @@ function removeData(d){
           tbl_departments.ajax.reload();
           tbl_asset_category.ajax.reload();
           tbl_office.ajax.reload();
+          tbl_print_logs_transmittal.ajax.reload();
+        });
+      }, function(){
+        console.log('Fail');
+  });
+}
+
+function removeDataInd(d){
+  var id  = d.getAttribute('data-id');
+  var tbl = d.getAttribute('data-tbl');
+  var fld = d.getAttribute('data-field');
+  customSwal(
+    'btn btn-success', 
+    'btn btn-danger mr-2', 
+    'Yes', 
+    'Wait',   
+    ['', 'Are you sure you want to delete ?', 'question'], 
+    function(){
+        $.post('delete-data', {'tbl' : tbl, 'w': fld, 'v': id}, function(data, textStatus, xhr) {
+          tbl_print_logs_transmittal.ajax.reload();
+          tbl_print_logs_gatepass.ajax.reload();
+          tbl_print_logs_checklist.ajax.reload();
+          tbl_print_logs_qrcodes.ajax.reload();
         });
       }, function(){
         console.log('Fail');
