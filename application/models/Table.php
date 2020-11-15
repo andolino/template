@@ -107,8 +107,13 @@ class Table extends CI_Model {
 			$this->db->where('office_management_id', $this->input->post('data_office_management_id'));
 		}
 		
-		if ($this->input->post('sibling_asset_listdown')!='') {
-			$this->db->where('sibling', $this->input->post('sibling_asset_listdown'));
+		if ($this->input->post('siblings_asset_listdown')!='') {
+			$this->db->where('sibling', $this->input->post('siblings_asset_listdown'));
+		}
+		
+		if ($this->input->post('childs_asset_listdown')!='') {
+			$this->db->where('id', $this->input->post('childs_asset_listdown'));
+			$this->db->where('parent is null');
 		}
 	} 
 

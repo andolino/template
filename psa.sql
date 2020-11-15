@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2020 at 02:32 PM
+-- Generation Time: Nov 15, 2020 at 01:55 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.3.23
 
@@ -1320,12 +1320,12 @@ CREATE TABLE `tbl_asset` (
 --
 
 INSERT INTO `tbl_asset` (`id`, `name`, `asset_tag`, `model_id`, `serial`, `purchase_date`, `purchase_cost`, `order_number`, `assigned_to`, `notes`, `image`, `user_id`, `created_at`, `updated_at`, `physical`, `deleted_at`, `status_id`, `archived`, `warranty_months`, `depreciate`, `supplier_id`, `requestable`, `rtd_location_id`, `_snipeit_mac_address_1`, `accepted`, `last_checkout`, `expected_checkin`, `company_id`, `assigned_type`, `last_audit_date`, `next_audit_date`, `location_id`, `checkin_counter`, `checkout_counter`, `requests_counter`, `is_deleted`, `checkout_user_id`, `office_management_id`, `departments_id`, `sibling`, `asset_category_id`, `property_tag`) VALUES
-(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL, NULL, NULL),
-(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-10-21 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 34, 1, NULL),
-(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL, NULL, NULL),
-(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL, NULL, NULL),
-(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', '2020-10-24 16:00:00', 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL, 1, '0022093'),
-(34, 'MSI Tomahawk Max B450 ATX', '0066687', NULL, '515124124', '2020-11-06', '24000.00', '0056897', NULL, 'TEST', NULL, 1, '2020-10-21 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 2, 30, 1, NULL);
+(29, 'AORUS RTX Geforce 2080 Super Gaming', 'RTX 2080', 8, '5256124', '2020-09-24', '24500.00', '26124124', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 2, 0, 24, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 4, 0, 0, 0, 1, 8, 5, 1, NULL, NULL, NULL),
+(30, 'MSI Tomahawk Max B450 ATX', 'Motherboard', 5, '562WTWT', '2020-09-09', '24500.00', '0125646874', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', '2020-10-21 16:00:00', 1, NULL, 2, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, 34, 1, NULL),
+(31, 'AORUS RTX Geforce 2080 Super Gaming', 'MOBO 2080', NULL, '6125125', '2020-09-11', '25000.00', '516124124', NULL, 'test', NULL, 1, '2020-09-29 16:00:00', NULL, 1, NULL, 2, 0, 48, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 23, NULL, NULL, NULL, 0, 0, 0, 0, 1, 6, 1, 1, NULL, NULL, NULL),
+(32, 'CORSAIR RAM 3200', 'Corsair RAM 16GB', NULL, '5611WTWY', '2020-10-21', '25000.00', '26124124', NULL, 'TEST', NULL, 1, '2020-10-02 16:00:00', NULL, 1, NULL, 2, 0, 25, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 2, NULL, NULL, NULL),
+(33, 'AORUS RTX Geforce 2080 Super Gaming', 'GPU 100', NULL, '116121251', '2020-07-22', '24500.00', '005925924', NULL, 'TEST', NULL, 1, '2020-10-20 16:00:00', '2020-10-24 16:00:00', 1, NULL, 2, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, 2, 0, 0, 0, 0, 1, 1, 1, NULL, 1, '0022093'),
+(34, 'MSI Tomahawk Max B450 ATX', '0066687', NULL, '515124124', '2020-11-06', '24000.00', '0056897', NULL, 'TEST', NULL, 1, '2020-10-21 16:00:00', NULL, 1, NULL, 2, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 2, 30, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1510,17 +1510,18 @@ CREATE TABLE `tbl_asset_request` (
   `approved_by` int(11) DEFAULT NULL,
   `approved_date` datetime DEFAULT NULL,
   `disapproved_by` int(11) DEFAULT NULL,
-  `disapproved_date` datetime DEFAULT NULL
+  `disapproved_date` datetime DEFAULT NULL,
+  `asset_request_ids` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset_request`
 --
 
-INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`) VALUES
-(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL),
-(12, 5, 1, 2, 4, '', 9, 'TEST1', 'TEST2', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 0, NULL, NULL, NULL, NULL),
-(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`) VALUES
+(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL),
+(12, 5, 1, 2, 4, '', 9, 'TEST1', 'TEST2', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 0, NULL, NULL, NULL, NULL, NULL),
+(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1585,7 +1586,8 @@ INSERT INTO `tbl_child_asset` (`id`, `tbl_asset_id`, `name`, `asset_tag`, `model
 (10, 29, 'NVIDIA GEFORCE RTX 2060', 'RTX 2060', 8, '51612125', '2020-09-17', '25000.00', '612512154', NULL, 'TEST', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 48, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, NULL, 0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL),
 (11, 30, 'AORUS RTX Geforce 2080 Super Gaming', 'Motherboard b550', 6, '6125125', '2020-09-04', '15000.00', '6212415', NULL, '', NULL, 1, '2020-09-27 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 4, NULL, NULL),
 (12, 30, 'TEST', 'TEST1', 5, 'TEST', '2020-10-08', '2500.00', '5121245152', NULL, 'TEST', NULL, 1, '2020-10-04 16:00:00', NULL, 1, NULL, 1, 0, 24, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, 21, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 5, 2, NULL, NULL),
-(13, 32, 'AORUS RTX Geforce 2080 Super Gaming', '5125124', 6, '124154', '2020-10-29', '15155.00', '525124', NULL, 'TEST', NULL, 1, '2020-10-29 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 3, 1, '141245');
+(13, 32, 'AORUS RTX Geforce 2080 Super Gaming', '5125124', 6, '124154', '2020-10-29', '15155.00', '525124', NULL, 'TEST', NULL, 1, '2020-10-29 16:00:00', NULL, 1, NULL, 1, 0, 25, NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 8, 1, 3, 1, '141245'),
+(14, 34, 'CDI Core Clock', '001293958', 6, '512512', '2020-11-17', '24000.00', '01646879', NULL, 'TEST', NULL, 1, '2020-11-14 16:00:00', NULL, 1, NULL, 2, 0, 48000, NULL, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 0, 0, 0, 0, 6, 1, 4, 1, 'QWERTYYU');
 
 -- --------------------------------------------------------
 
@@ -1739,7 +1741,8 @@ INSERT INTO `tbl_history` (`id`, `asset_id`, `current_custodian_id`, `previous_c
 (44, 30, 8, 8, 2, 2, 'update', '2020-09-28 04:32:09', '2020-10-22 02:41:00', NULL, NULL, 0, 1, NULL),
 (45, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:15', NULL, NULL, 0, 1, NULL),
 (46, 33, 1, 1, 2, 2, 'update', '2020-10-20 22:22:58', '2020-10-25 12:06:48', NULL, NULL, 0, 1, NULL),
-(47, NULL, 8, NULL, 2, NULL, 'create', '2020-10-29 22:17:19', NULL, NULL, NULL, 0, 1, 32);
+(47, NULL, 8, NULL, 2, NULL, 'create', '2020-10-29 22:17:19', NULL, NULL, NULL, 0, 1, 32),
+(48, NULL, 6, NULL, 2, NULL, 'create', '2020-11-14 21:41:26', NULL, NULL, NULL, 0, 1, 34);
 
 -- --------------------------------------------------------
 
@@ -1799,6 +1802,45 @@ INSERT INTO `tbl_models` (`id`, `name`, `created_at`, `updated_at`, `is_deleted`
 (6, 'AORUS B450 ELITE', NULL, NULL, 0),
 (7, 'MORTAR MAX B450', NULL, NULL, 0),
 (8, 'GEFORCE RTX', NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_print_logs`
+--
+
+CREATE TABLE `tbl_print_logs` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name_of_personnel` varchar(250) DEFAULT NULL,
+  `plate_no` varchar(250) DEFAULT NULL,
+  `users_id` int(11) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `file_dir` text DEFAULT NULL,
+  `report_type` text DEFAULT NULL,
+  `entry_date` datetime DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `qty` int(11) DEFAULT NULL,
+  `asset` text DEFAULT NULL,
+  `tbl_qrcodes_checklist_id` int(11) DEFAULT NULL,
+  `scanned_by` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_print_logs`
+--
+
+INSERT INTO `tbl_print_logs` (`id`, `name_of_personnel`, `plate_no`, `users_id`, `location_id`, `file_dir`, `report_type`, `entry_date`, `is_deleted`, `qty`, `asset`, `tbl_qrcodes_checklist_id`, `scanned_by`) VALUES
+(1, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_transmital.pdf', 'transmittal', '2020-11-11 04:32:17', 1, NULL, NULL, NULL, NULL),
+(2, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:29:57', 0, NULL, NULL, NULL, NULL),
+(3, 'test 1', 'test 2', 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:31:42', 0, NULL, NULL, NULL, NULL),
+(4, 'TEST1', 'TEST2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-11 05:56:00', 0, NULL, NULL, NULL, NULL),
+(5, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073450_qrcodes.pdf', 'qrcodes', '2020-11-11 06:44:10', 0, 3, NULL, NULL, NULL),
+(6, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073582_qrcodes.pdf', 'qrcodes', '2020-11-11 06:46:22', 0, 3, NULL, NULL, NULL),
+(7, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073660_qrcodes.pdf', 'qrcodes', '2020-11-11 06:47:40', 0, 3, NULL, NULL, NULL),
+(8, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073695_qrcodes.pdf', 'qrcodes', '2020-11-11 06:48:15', 0, 3, NULL, NULL, NULL),
+(9, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073770_qrcodes.pdf', 'qrcodes', '2020-11-11 06:49:30', 0, 3, NULL, NULL, 'Admins'),
+(10, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:08:19', 0, NULL, NULL, NULL, NULL),
+(11, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:14:04', 0, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2143,6 +2185,37 @@ CREATE TABLE `v_asset_child` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_asset_parent_sibling_child`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_asset_parent_sibling_child` (
+`id` int(10) unsigned
+,`parent` varchar(191)
+,`name` varchar(191)
+,`serial` varchar(191)
+,`asset_tag` varchar(191)
+,`office_name` mediumtext
+,`end_user` mediumtext
+,`location_id` int(11)
+,`users_id` int(11)
+,`is_deleted` tinyint(4)
+,`counter` varchar(191)
+,`last_name` mediumtext
+,`first_name` mediumtext
+,`middle_name` mediumtext
+,`designation` varchar(255)
+,`short` varchar(50)
+,`sibling` int(11)
+,`property_tag` varchar(191)
+,`child_count` bigint(21)
+,`sibling_count` bigint(21)
+,`office_management_id` int(11)
+,`asset_category_id` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_asset_report`
 -- (See below for the actual view)
 --
@@ -2157,13 +2230,18 @@ CREATE TABLE `v_asset_report` (
 ,`location_id` int(11)
 ,`users_id` int(11)
 ,`is_deleted` tinyint(4)
-,`counter` bigint(21)
+,`counter` varchar(191)
 ,`last_name` mediumtext
 ,`first_name` mediumtext
 ,`middle_name` mediumtext
 ,`designation` varchar(255)
 ,`short` varchar(50)
 ,`sibling` int(11)
+,`property_tag` varchar(191)
+,`asset_category_name` varchar(50)
+,`status_id` int(11)
+,`office_management_id` int(11)
+,`asset_category_id` int(11)
 );
 
 -- --------------------------------------------------------
@@ -2707,6 +2785,30 @@ CREATE TABLE `v_portal_request` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_print_logs`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_print_logs` (
+`id` int(10) unsigned
+,`name_of_personnel` varchar(250)
+,`plate_no` varchar(250)
+,`users_id` int(11)
+,`location_id` int(11)
+,`file_dir` text
+,`report_type` text
+,`entry_date` datetime
+,`is_deleted` tinyint(1)
+,`qty` int(11)
+,`asset` text
+,`print_by` text
+,`location_name` varchar(191)
+,`received_by` int(11)
+,`date_received` datetime
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_regkit_count`
 -- (See below for the actual view)
 --
@@ -2839,11 +2941,20 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `v_asset_parent_sibling_child`
+--
+DROP TABLE IF EXISTS `v_asset_parent_sibling_child`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset_parent_sibling_child`  AS  select `v`.`id` AS `id`,`v`.`parent` AS `parent`,`v`.`name` AS `name`,`v`.`serial` AS `serial`,`v`.`asset_tag` AS `asset_tag`,`v`.`office_name` AS `office_name`,`v`.`end_user` AS `end_user`,`v`.`location_id` AS `location_id`,`v`.`users_id` AS `users_id`,`v`.`is_deleted` AS `is_deleted`,`v`.`counter` AS `counter`,`v`.`last_name` AS `last_name`,`v`.`first_name` AS `first_name`,`v`.`middle_name` AS `middle_name`,`v`.`designation` AS `designation`,`v`.`short` AS `short`,`v`.`sibling` AS `sibling`,`v`.`property_tag` AS `property_tag`,(select count(0) AS `child` from `v_asset_report` `i` where `i`.`parent` is null and `i`.`id` = `v`.`id`) AS `child_count`,(select count(0) AS `sibling` from `v_asset_report` `i2` where `i2`.`sibling` = `v`.`id`) AS `sibling_count`,`v`.`office_management_id` AS `office_management_id`,`v`.`asset_category_id` AS `asset_category_id` from `v_asset_report` `v` where `v`.`parent` is not null and `v`.`status_id` = 2 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `v_asset_report`
 --
 DROP TABLE IF EXISTS `v_asset_report`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset_report`  AS  select `ta`.`id` AS `id`,`ta`.`asset_tag` AS `parent`,`ta`.`name` AS `name`,`ta`.`serial` AS `serial`,`ta`.`asset_tag` AS `asset_tag`,`om`.`office_name` AS `office_name`,`u1`.`screen_name` AS `end_user`,`ta`.`location_id` AS `location_id`,`u1`.`users_id` AS `users_id`,`ta`.`is_deleted` AS `is_deleted`,NULL AS `counter`,`u1`.`last_name` AS `last_name`,`u1`.`first_name` AS `first_name`,`u1`.`middle_name` AS `middle_name`,`u1`.`designation` AS `designation`,`d2`.`short` AS `short`,`ta`.`sibling` AS `sibling` from (((`tbl_asset` `ta` left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d2` on(`d2`.`departments_id` = `om`.`departments_id`)) left join `users` `u1` on(`u1`.`users_id` = `ta`.`checkout_user_id`)) where `ta`.`is_deleted` = 0 union select `tca`.`tbl_asset_id` AS `id`,NULL AS `parent`,`tca`.`name` AS `name`,`tca`.`serial` AS `serial`,`tca`.`asset_tag` AS `asset_tag`,`om`.`office_name` AS `office_name`,`u2`.`screen_name` AS `end_user`,`tca`.`location_id` AS `location_id`,`u2`.`users_id` AS `users_id`,`tca`.`is_deleted` AS `is_deleted`,count(case when `tca`.`is_deleted` = 0 then `tca`.`name` else 0 end) AS `counter`,`u2`.`last_name` AS `last_name`,`u2`.`first_name` AS `first_name`,`u2`.`middle_name` AS `middle_name`,`u2`.`designation` AS `designation`,`d3`.`short` AS `short`,NULL AS `sibling` from (((`tbl_child_asset` `tca` left join `office_management` `om` on(`om`.`office_management_id` = `tca`.`office_management_id`)) left join `departments` `d3` on(`d3`.`departments_id` = `om`.`departments_id`)) left join `users` `u2` on(`u2`.`users_id` = `tca`.`checkout_user_id`)) where `tca`.`is_deleted` = 0 group by `tca`.`id` order by 1 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset_report`  AS  select `ta`.`id` AS `id`,`ta`.`asset_tag` AS `parent`,`ta`.`name` AS `name`,`ta`.`serial` AS `serial`,`ta`.`asset_tag` AS `asset_tag`,`om`.`office_name` AS `office_name`,`u1`.`screen_name` AS `end_user`,`ta`.`location_id` AS `location_id`,`u1`.`users_id` AS `users_id`,`ta`.`is_deleted` AS `is_deleted`,NULL AS `counter`,`u1`.`last_name` AS `last_name`,`u1`.`first_name` AS `first_name`,`u1`.`middle_name` AS `middle_name`,`u1`.`designation` AS `designation`,`d2`.`short` AS `short`,`ta`.`sibling` AS `sibling`,`ta`.`property_tag` AS `property_tag`,`acy`.`name` AS `asset_category_name`,`ta`.`status_id` AS `status_id`,`ta`.`office_management_id` AS `office_management_id`,`acy`.`asset_category_id` AS `asset_category_id` from ((((`tbl_asset` `ta` left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d2` on(`d2`.`departments_id` = `om`.`departments_id`)) left join `users` `u1` on(`u1`.`users_id` = `ta`.`checkout_user_id`)) left join `asset_category` `acy` on(`acy`.`asset_category_id` = `ta`.`asset_category_id`)) where `ta`.`is_deleted` = 0 union select `tca`.`tbl_asset_id` AS `id`,NULL AS `parent`,`tca`.`name` AS `name`,`tca`.`serial` AS `serial`,`tca`.`asset_tag` AS `asset_tag`,`om`.`office_name` AS `office_name`,`u2`.`screen_name` AS `end_user`,`tca`.`location_id` AS `location_id`,`u2`.`users_id` AS `users_id`,`tca`.`is_deleted` AS `is_deleted`,case when `tca`.`is_deleted` = 0 then `tca`.`name` else 0 end AS `counter`,`u2`.`last_name` AS `last_name`,`u2`.`first_name` AS `first_name`,`u2`.`middle_name` AS `middle_name`,`u2`.`designation` AS `designation`,`d3`.`short` AS `short`,NULL AS `sibling`,`tca`.`property_tag` AS `property_tag`,`acy`.`name` AS `asset_category_name`,NULL AS `status_id`,`tca`.`office_management_id` AS `office_management_id`,`acy`.`asset_category_id` AS `asset_category_id` from ((((`tbl_child_asset` `tca` left join `office_management` `om` on(`om`.`office_management_id` = `tca`.`office_management_id`)) left join `departments` `d3` on(`d3`.`departments_id` = `om`.`departments_id`)) left join `users` `u2` on(`u2`.`users_id` = `tca`.`checkout_user_id`)) left join `asset_category` `acy` on(`acy`.`asset_category_id` = `tca`.`asset_category_id`)) where `tca`.`is_deleted` = 0 group by `tca`.`id` order by 1 ;
 
 -- --------------------------------------------------------
 
@@ -3033,6 +3144,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `v_portal_request`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name` from ((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_print_logs`
+--
+DROP TABLE IF EXISTS `v_print_logs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_print_logs`  AS  select `tpl`.`id` AS `id`,`tpl`.`name_of_personnel` AS `name_of_personnel`,`tpl`.`plate_no` AS `plate_no`,`tpl`.`users_id` AS `users_id`,`tpl`.`location_id` AS `location_id`,`tpl`.`file_dir` AS `file_dir`,`tpl`.`report_type` AS `report_type`,`tpl`.`entry_date` AS `entry_date`,`tpl`.`is_deleted` AS `is_deleted`,`tpl`.`qty` AS `qty`,`tpl`.`asset` AS `asset`,`u`.`screen_name` AS `print_by`,`tl`.`name` AS `location_name`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received` from (((`tbl_print_logs` `tpl` left join `users` `u` on(`tpl`.`users_id` = `u`.`users_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tpl`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`id` = `tpl`.`tbl_qrcodes_checklist_id`)) where `tpl`.`is_deleted` = 0 ;
 
 -- --------------------------------------------------------
 
@@ -3407,6 +3527,12 @@ ALTER TABLE `tbl_models`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbl_print_logs`
+--
+ALTER TABLE `tbl_print_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_qrcodes`
 --
 ALTER TABLE `tbl_qrcodes`
@@ -3667,7 +3793,7 @@ ALTER TABLE `tbl_asset_request`
 -- AUTO_INCREMENT for table `tbl_child_asset`
 --
 ALTER TABLE `tbl_child_asset`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `tbl_companies`
@@ -3697,7 +3823,7 @@ ALTER TABLE `tbl_gps_checklist`
 -- AUTO_INCREMENT for table `tbl_history`
 --
 ALTER TABLE `tbl_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `tbl_locations`
@@ -3710,6 +3836,12 @@ ALTER TABLE `tbl_locations`
 --
 ALTER TABLE `tbl_models`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `tbl_print_logs`
+--
+ALTER TABLE `tbl_print_logs`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tbl_qrcodes`

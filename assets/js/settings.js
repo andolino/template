@@ -906,7 +906,53 @@ function initTblAssetSiblingsDataTables(id){
         "url"                  : 'server-tbl-asset-siblings-listdown',
         "type"                 : 'POST',
         "data"                 : { 
-                                  'sibling_asset_listdown': id               
+                                  'siblings_asset_listdown': id               
+        }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initTblAssetChildsDataTables(id){
+  var myObjKeyLguConst = {};
+  $('#tbl_child_listdown').DataTable().clear().destroy();
+  tbl_asset_siblings_dtables  = $("#tbl_child_listdown").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    order: [[ 0, "desc" ]],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [2] 
+      // }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-asset-siblings-listdown',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                  'childs_asset_listdown': id               
         }
     },
     'createdRow'            : function(row, data, dataIndex) {

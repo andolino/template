@@ -391,8 +391,10 @@ class Admin extends MY_Controller {
 		$params['data'] 	 	= $this->AdminMod->getAssetRecord($asset_id); 
 		$params['uploads'] 	= $this->db->get_where('tbl_uploads', array('asset_id' => $asset_id))->row();
 		$url 							 	= $this->db->get_where('tbl_qrcodes', array('asset_id' => $asset_id))->row();
-		$jsonQrData 			 	= json_decode($url->qr_code);
-		$params['qrcode']  	= $jsonQrData->result->qr;
+		if ($url) {
+			$jsonQrData 			 	= json_decode($url->qr_code);
+			$params['qrcode']  	= $jsonQrData->result->qr;
+		}
 		$params['asset_id'] = $asset_id;
 		$this->load->view('admin/crud/view-child-asset', $params);
 	}
@@ -473,26 +475,26 @@ class Admin extends MY_Controller {
 		if ($this->input->post('is_approved') == 'ap') {
 			$data = array(
 				'status' => 1, 
-				'tech_support_id' => $this->input->post('tech_support_id'),
+				// 'tech_support_id' => $this->input->post('tech_support_id'),
 				'approved_by' => $this->session->users_id,
 				'approved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
 			}
-			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
 		} else {
 			$data = array(
 				'status' => 2, 
 				'remarks' => $this->input->post('remarks'), 
-				'tech_support_id' => $this->input->post('tech_support_id'),
+				// 'tech_support_id' => $this->input->post('tech_support_id'),
 				'disapproved_by' => $this->session->users_id,
 				'disapproved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
 			}
-			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
 		}
 		$res = array();
 		if ($q) {

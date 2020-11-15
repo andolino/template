@@ -478,6 +478,39 @@ $(document).ready(function() {
     });
   });
   
+  $(document).on('click', '#btnApproveDispatchRequest', function (e) {
+    e.preventDefault();
+    var frm = $('#frm-request-dispatch-approval').serializeArray();
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Approve Request?', 'question'], 
+      function(){
+        frm.push({name: 'is_approved', value: 'ap'});
+        $.ajax({
+          type: "POST",
+          url: "submit-approval-repair-request",
+          data: frm,
+          dataType: "json",
+          success: function (res) {
+            Swal.fire(
+              res.msg.param1,
+              res.msg.param2,
+              res.msg.param3
+            );
+            $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+              $('.cont-parent-child-repair').html(data);
+            });
+            // window.location.reload();
+          }
+        });
+      }, function(){
+        // console.log('Fail');
+    });
+  });
+  
   $(document).on('click', '#btnDisapproveRepairRequest', function (e) {
     e.preventDefault();
     var remarks = $('#remarks').val();
@@ -947,6 +980,12 @@ $(document).ready(function() {
     var id = $(this).attr('data-id');
     initTblAssetSiblingsDataTables(id);
     animateSingleIn('#sibling-cont-table', 'fadeIn');
+  });
+
+  $(document).on('click', '#viewChild', function () {
+    var id = $(this).attr('data-id');
+    initTblAssetChildsDataTables(id);
+    animateSingleIn('#child-cont-table', 'fadeIn');
   });
 
   

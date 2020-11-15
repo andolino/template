@@ -11,7 +11,7 @@
             <?php if(!empty($dataRequest)): ?>
             <div class="card">
 							<div class="card-body">
-								<form id="frm-request-repair-approval">
+								<form id="frm-request-dispatch-approval">
                 <input type="hidden" name="id" value="<?php echo $dataRequest->tbl_asset_request_id; ?>">
                 <div class="row w-100">
                 <h6 class="mb-0 pl-3">REQUEST DETAILS</h6>
@@ -39,13 +39,13 @@
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="col-lg-6">
-                    <select class="custom-select form-control-sm font-12" name="tech_support_id" id="" required>
+                    <!-- <select class="custom-select form-control-sm font-12" name="tech_support_id" id="" required>
                       <option selected value="" hidden>Select Technician / Tech support</option>
                       <option value="" disabled></option>
-                      <?php foreach($techSup as $row): ?>
-                      <option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
-                      <?php endforeach; ?>
-                    </select>
+                      <?php //foreach($techSup as $row): ?>
+                      <option value="<?php //echo $row->users_id; ?>"><?php //echo $row->screen_name; ?></option>
+                      <?php //endforeach; ?>
+                    </select> -->
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="warranty_cont none">
@@ -62,17 +62,17 @@
                         <input type="date" name="repair_date" id="repair_date" placeholder="Select Repair Date" class="form-control form-control-sm font-12" required>
                       </div>
                     <?php endif; ?>
-                    <div class="col-lg-12">
-                      <textarea name="remarks" id="remarks" cols="30" rows="10" class="form-control form-control-sm font-12" placeholder="Remarks "></textarea>
-                    </div>
+                  </div>
+                  <div class="col-lg-5">
+                    <textarea name="remarks" id="remarks" cols="30" rows="5" class="form-control form-control-sm font-12" placeholder="Remarks "></textarea>
                   </div>
                   <div class="col-lg-4 offset-lg-8">
                     <?php if($this->session->level == 2): ?>
                       <button type="button" id="btnCloseRepairRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Close This Request</button>
                       <?php else: ?>
                       <?php if($dataRequest->status == 0): ?>
-                        <button type="button" id="btnDisapproveRepairRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
-                        <button type="button" id="btnApproveRepairRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
+                        <button type="button" id="btnDisapproveDispatchRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
+                        <button type="button" id="btnApproveDispatchRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
                       <?php elseif($dataRequest->status == 1): ?>
                         <div class="alert alert-success font-12 text-center">Approved For Repair</div>
                       <?php elseif($dataRequest->status == 2): ?>
@@ -96,10 +96,10 @@
                 ?>
                 <h6>ASSET</h6>
                 <table class="table font-12 w-100" id="tbl-asset-listdown" 
-                  data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
-                  data-man="<?php echo $dataRequest->office_management_id; ?>" 
-                  data-id="<?php echo $this->input->get('id'); ?>"
-                  data-qty="<?php echo $dataRequest->qty; ?>">
+                        data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
+                        data-man="<?php echo $dataRequest->office_management_id; ?>" 
+                        data-id="<?php echo $this->input->get('id'); ?>"
+                        data-qty="<?php echo $dataRequest->qty; ?>">
                   <thead>
                     <tr>
                       <th scope="col">ASSET NAME</th>
@@ -120,6 +120,24 @@
                 <div id="sibling-cont-table" class="none">
                   <h6>SIBLING ASSET</h6>
                   <table class="table font-12 w-100"  id="tbl_sibling_listdown" data-type="siblings">
+                    <thead>
+                      <tr>
+                        <th scope="col">ASSET NAME</th>
+                        <th scope="col">ASSET TAG </th>
+                        <th scope="col">PROPERTY TAG</th>
+                        <th scope="col">SERIAL NO</th>
+                        <th scope="col">CUSTODIAN</th>
+                        <th class="text-left" scope="col">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                  </table>
+                </div>
+                <div id="child-cont-table" class="none">
+                  <h6>CHILD ASSET</h6>
+                  <table class="table font-12 w-100"  id="tbl_child_listdown" data-type="childs">
                     <thead>
                       <tr>
                         <th scope="col">ASSET NAME</th>

@@ -198,7 +198,7 @@
 								<label for="upload-file-dp" class="custom-file-upload">Upload image</label>
 						</div>
 						<div class="col-md-9 col-md-offset-3">
-								<input type="file" class="" id="upload-file-dp" name="upload-file-dp" aria-describedby="fileHelp" required>
+								<input type="file" class="" id="upload-file-dp" name="upload-file-dp" aria-describedby="fileHelp">
 						</div>
 				</div>
 				<!-- <div class="col-5 mt-4 pl-2 pt-2">

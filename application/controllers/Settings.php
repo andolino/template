@@ -505,7 +505,7 @@ class Settings extends MY_Controller {
 			 
    		$data[] = '<strong>' . $row->end_user . '</strong>';
 			
-			 $data[] = ($row->child_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewChild" data-type="childs">childs('.$row->child_count.')</a>':'') . 
+			 $data[] = ($row->child_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewChild" data-type="childs">childs('.$row->child_count.')</a> ':'') . 
 								($row->sibling_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewSib" data-type="siblings">siblings('.$row->sibling_count.')</a>':'') . 
 								'"<input class="float-right" name="chk-asset-listdown" type="checkbox" value="'.$row->id.'">';
 			$res[] = $data;
@@ -522,6 +522,36 @@ class Settings extends MY_Controller {
 	}
 	
 	public function server_tbl_asset_siblings_listdown(){
+		$result 	= $this->Table->getOutput('v_asset_report', ['id', 'parent', 'name', 'serial', 'asset_tag', 
+																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
+																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
+																															'sibling_count', 'property_tag', 'asset_category_name', 'status_id'], ['id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->name;
+   		$data[] = $row->asset_tag;
+   		$data[] = $row->property_tag;
+			$data[] = $row->serial;
+   		$data[] = '<strong>' . $row->end_user . '</strong>';
+			$data[] = '';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
+	public function server_tbl_asset_childs_listdown(){
 		$result 	= $this->Table->getOutput('v_asset_report', ['id', 'parent', 'name', 'serial', 'asset_tag', 
 																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
 																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
