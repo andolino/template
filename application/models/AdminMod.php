@@ -85,7 +85,7 @@ class AdminMod extends CI_Model {
 
 	public function __construct(){
 		parent::__construct();
-		$this->userType = [0 => 'Administrator', 1 => 'User - Loans', 2 => 'User - Collections', 3 => 'User - Benefits', 4 => 'Guest'];
+		$this->userType = [0 => 'Administrator', 1 => 'Manager', 2 => 'Tech Support', 3 => 'User - Requestor', 4 => 'Guest'];
 	}
 
 	public function getUserType($id){

@@ -91,7 +91,9 @@ class Settings extends MY_Controller {
 	}
 
 	public function server_users(){
-		$result 	= $this->Table->getOutput('users', ['users_id', 'screen_name', 'username', 'password', 'txt_password', 'trans_date', 'trans_desc', 'is_deleted', 'last_name', 'first_name', 'middle_name', 'level'], ['users_id' => 'desc']);
+		$result 	= $this->Table->getOutput('users', ['users_id', 'screen_name', 'username', 'password', 'txt_password', 
+																									'trans_date', 'trans_desc', 'is_deleted', 'last_name', 'first_name', 
+																									'middle_name', 'level'], ['users_id' => 'desc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
@@ -161,18 +163,18 @@ class Settings extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = $row->id;
-   		$data[] = $row->name_of_personnel;
+   		$data[] = $row->print_by;
    		$data[] = date('Y-m-d', strtotime($row->entry_date));
    		$data[] = $row->location_name;	
 			$data[] = $row->asset;	
 			$data[] = $row->qty;	
 			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
-			$data[] = $row->received_by;	
-			$data[] = $row->date_received;	
-			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
-																																																		data-id="'.$row->id.'"
-																																																		data-tbl="tbl_print_logs"
-																																																		data-field="id"><i class="fas fa-trash"></i></a>';	
+			$data[] = $row->contact_person;	
+			$data[] = $row->date_received == '' ? '' : date('Y-m-d h:i:s A', strtotime($row->date_received));	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																																								data-id="'.$row->id.'"
+																																																																								data-tbl="tbl_print_logs"
+																																																																								data-field="id"><i class="fas fa-trash"></i></a>');	
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -200,10 +202,14 @@ class Settings extends MY_Controller {
 			$data[] = $row->plate_no;	
 			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
 			$data[] = $row->date_received;	
-			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
-																																																		data-id="'.$row->id.'"
-																																																		data-tbl="tbl_print_logs"
-																																																		data-field="id"><i class="fas fa-trash"></i></a>';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																																							data-id="'.$row->id.'"
+																																																																							data-tbl="tbl_print_logs"
+																																																																							data-field="id"><i class="fas fa-trash"></i></a>');	
+			// <a href="javascript:void(0);" onclick="removeDataInd(this)" 
+			// 																																															data-id="'.$row->id.'"
+			// 																																															data-tbl="tbl_print_logs"
+			// 																																															data-field="id"><i class="fas fa-trash"></i></a>
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -225,16 +231,16 @@ class Settings extends MY_Controller {
 			$data = array();
 			$no++;
    		$data[] = $row->id;
-   		$data[] = $row->name_of_personnel;
+   		$data[] = $row->print_by;
    		$data[] = date('Y-m-d', strtotime($row->entry_date));
    		$data[] = $row->location_name;	
 			$data[] = $row->asset;	
 			$data[] = $row->qty;	
 			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
-			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
-																																																		data-id="'.$row->id.'"
-																																																		data-tbl="tbl_print_logs"
-																																																		data-field="id"><i class="fas fa-trash"></i></a>';		
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																																						data-id="'.$row->id.'"
+																																																																						data-tbl="tbl_print_logs"
+																																																																						data-field="id"><i class="fas fa-trash"></i></a>');		
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -262,12 +268,12 @@ class Settings extends MY_Controller {
    		$data[] = $row->asset;
 			$data[] = $row->qty;	
 			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
-			$data[] = $row->asset;	
-			$data[] = '';	
-			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | <a href="javascript:void(0);" onclick="removeDataInd(this)" 
-																																																		data-id="'.$row->id.'"
-																																																		data-tbl="tbl_print_logs"
-																																																		data-field="id"><i class="fas fa-trash"></i></a>';		
+			// $data[] = $row->asset;	
+			// $data[] = '';	
+			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" onclick="removeDataInd(this)" 
+																																																																						data-id="'.$row->id.'"
+																																																																						data-tbl="tbl_print_logs"
+																																																																						data-field="id"><i class="fas fa-trash"></i></a>');		
 			// $data[] = '<a href="javascript:void(0);" class="text-success font-weight-bold" id="showMapGeo" data-lat="'.$row->scanned_lat.'" data-long="'.$row->scanned_lng.'" >'.$row->address.'</a>';	;	
 			$res[] = $data;
 		}
@@ -838,6 +844,17 @@ class Settings extends MY_Controller {
 		$params['settOffcMngmnt'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
 		$this->load->view('admin/settings/view-office', $params);
 	}
+
+	// public function getJson(){
+	// 	header("Access-Control-Allow-Origin: *");
+	// 	header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+	// 	header("Content-type: application/json charset=UTF-8");
+
+	// 	$request_body = file_get_contents('php://input');
+	// 	$requestData 	= json_decode($request_body);
+
+
+	// }
 
 
 }

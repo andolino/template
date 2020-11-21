@@ -27,6 +27,13 @@
           <label for="" class="font-12">Plate No.</label>
            <input type="text" name="plate_no" class="form-control form-control-sm font-12" id="plate_no">
         </div>
+        <div class="col-6 mt-4">
+          
+          <label for="" class="font-12">Gatepass Date:</label>
+          <input type="date" class="form-control form-control-sm font-12" id="gatepass_date" required>
+          <label for="" class="font-12 mt-2">QTY (To Dispatch).</label>
+           <input type="text" class="form-control form-control-sm font-12" id="qty_dispatch" required>
+        </div>
         
       </div>
       <div class="line mt-3 mb-3 pt-0 pb-0"></div>

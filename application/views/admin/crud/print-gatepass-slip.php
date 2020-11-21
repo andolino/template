@@ -59,7 +59,7 @@ $pso = array();
 <div style="font-size: 14px;" align="center"><strong>GATE PASS</strong></div>
 <br>
 <br>
-<div style="font-size: 12px;" align="right"><strong><?php echo date("d F Y"); ?></strong></div>
+<div style="font-size: 12px;" align="right"><strong><?php echo date("d F Y", strtotime($data_procces[3] ? $data_procces[3] : '')); ?></strong></div>
     <table>
     <tr>
       <td style="font-size: 12px;">TO THE GUARD:</td>
@@ -83,8 +83,8 @@ $pso = array();
     <tr style="line-height: 50px;">
 
 
-      <td width="60%" style="line-height: 40px;">&nbsp;<?php echo count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
-      &nbsp;<?php echo count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
+      <td width="60%" style="line-height: 40px;">&nbsp;<?php echo $data_procces[2] ? $data_procces[2] : '';//count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
+      &nbsp;<?php echo $data_procces[2] ? $data_procces[2] : '';//count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
       <td align="center" width="20%"><?php echo "<strong>".$pso[0] . "</strong><br>".  $loc[0]; ?></td>
       <td width="15%">&nbsp;</td>
 
@@ -123,7 +123,7 @@ $pso = array();
 <div style="font-size: 14px;" align="center"><strong>GATE PASS</strong></div>
 <br>
 
-<div style="font-size: 12px;" align="right"><strong><?php echo date("d F Y"); ?></strong></div>
+<div style="font-size: 12px;" align="right"><strong><?php echo date("d F Y", strtotime($data_procces[3] ? $data_procces[3] : '')); ?></strong></div>
     <table>
     <tr>
       <td style="font-size: 12px;">TO THE GUARD:</td>
@@ -134,29 +134,22 @@ $pso = array();
       <td style="line-height: 25px; font-size: 12px;">Please allow <strong><?php echo $data_procces[0]; ?></strong>,with vehicle plate No. <strong><?php echo $data_procces[1]; ?></strong> to take out the property listed below from the PRO Warehouse, 901 Great East Industrial Corporation, EDSA</td>
     
     </tr>
-
     </table>
-
     <br>
     <table border=1 width="100%" style="font-size: 12px;">
       <tr>
        <th align="center">DESCRIPTION</th>
        <th align="center">DESTINATION</th>
        <th align="center">Signature of the Recipient</th>
-
       </tr>
-
-    <tr style="line-height: 50px;">
-
- <td width="60%" style="line-height: 40px;">&nbsp;<?php echo count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
-      &nbsp;<?php echo count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
-     <td align="center" width="20%"><?php echo "<strong>".$pso[0] . "</strong><br>".  $loc[0]; ?></td>
-      <td width="15%">&nbsp;</td>
-
-
+      <tr style="line-height: 50px;">
+        <td width="60%" style="line-height: 40px;">&nbsp;<?php echo $data_procces[2] ? $data_procces[2] : '';//count($dataChkList); ?> SET OF LUGGAGE KIT (120 x 80 x 150 cm;26 kg)<br>
+        &nbsp;<?php echo $data_procces[2] ? $data_procces[2] : '';//count($dataChkList); ?> SET OF PHOTO BOOTH (38x21x30cm;6.9 kg)</td>
+        <td align="center" width="20%"><?php echo "<strong>".$pso[0] . "</strong><br>".  $loc[0]; ?></td>
+        <td width="15%">&nbsp;</td>
      </tr>
     </table>
-<br>
+    <br>
       <table>
       <tr>
         <td style="padding:0px;width:14%;font-size: 10px !important;font-family: 'Arial';line-height:1.9; font-size: 12px;">Approved: </td>

@@ -994,12 +994,21 @@ $(document).ready(function() {
     var locationId = $('#location_id').val();
     var personnel_id = $('#person_id').val();
     var plate_no     = $('#plate_no').val();
+    var gatepass_date     = $('#gatepass_date').val();
+    var qty_dispatch     = $('#qty_dispatch').val();
     var status = ($('#ready-to-deploy').is(':checked') ? 1 : 0);
 
     $.ajax({
       type: "POST",
       url: "get-print-gatepass-report",
-      data: { 'location_id' : locationId, 'personnel_id' : personnel_id, 'plate_no' : plate_no, 'status' : status },
+      data: { 
+          'location_id' : locationId, 
+          'personnel_id' : personnel_id, 
+          'plate_no' : plate_no, 
+          'status' : status,
+          'qty_dispatch' : qty_dispatch,
+          'gatepass_date' : gatepass_date
+         },
       dataType: "JSON",
       success: function (res) {
         window.open('print-gatepass-slip/'+res.data+'/'+res.params);//+res.data+'/'+$('#date_generated').val());
@@ -1866,7 +1875,7 @@ function initPrintLogsDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [0,1,2,3,4,5,6,7,8,9] 
+        targets              : [0,1,2,3,4,5,6,7] 
       }
     ],
     "serverSide"               : true,

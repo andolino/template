@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2020 at 01:55 PM
+-- Generation Time: Nov 21, 2020 at 04:25 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.3.23
 
@@ -1840,7 +1840,18 @@ INSERT INTO `tbl_print_logs` (`id`, `name_of_personnel`, `plate_no`, `users_id`,
 (8, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073695_qrcodes.pdf', 'qrcodes', '2020-11-11 06:48:15', 0, 3, NULL, NULL, NULL),
 (9, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073770_qrcodes.pdf', 'qrcodes', '2020-11-11 06:49:30', 0, 3, NULL, NULL, 'Admins'),
 (10, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:08:19', 0, NULL, NULL, NULL, NULL),
-(11, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:14:04', 0, NULL, NULL, NULL, NULL);
+(11, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:14:04', 0, NULL, NULL, NULL, NULL),
+(12, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:17:21', 0, NULL, NULL, NULL, NULL),
+(13, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:00', 0, NULL, NULL, NULL, NULL),
+(14, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:26', 0, NULL, NULL, NULL, NULL),
+(15, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:28', 0, NULL, NULL, NULL, NULL),
+(16, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:44', 0, NULL, NULL, NULL, NULL),
+(17, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:32', 0, NULL, NULL, NULL, NULL),
+(18, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:36', 0, NULL, NULL, NULL, NULL),
+(19, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:58', 0, NULL, NULL, NULL, NULL),
+(20, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:28', 0, NULL, NULL, NULL, NULL),
+(21, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:47', 0, NULL, NULL, NULL, NULL),
+(22, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:56', 0, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2804,6 +2815,7 @@ CREATE TABLE `v_print_logs` (
 ,`location_name` varchar(191)
 ,`received_by` int(11)
 ,`date_received` datetime
+,`contact_person` text
 );
 
 -- --------------------------------------------------------
@@ -3152,7 +3164,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_print_logs`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_print_logs`  AS  select `tpl`.`id` AS `id`,`tpl`.`name_of_personnel` AS `name_of_personnel`,`tpl`.`plate_no` AS `plate_no`,`tpl`.`users_id` AS `users_id`,`tpl`.`location_id` AS `location_id`,`tpl`.`file_dir` AS `file_dir`,`tpl`.`report_type` AS `report_type`,`tpl`.`entry_date` AS `entry_date`,`tpl`.`is_deleted` AS `is_deleted`,`tpl`.`qty` AS `qty`,`tpl`.`asset` AS `asset`,`u`.`screen_name` AS `print_by`,`tl`.`name` AS `location_name`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received` from (((`tbl_print_logs` `tpl` left join `users` `u` on(`tpl`.`users_id` = `u`.`users_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tpl`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`id` = `tpl`.`tbl_qrcodes_checklist_id`)) where `tpl`.`is_deleted` = 0 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_print_logs`  AS  select `tpl`.`id` AS `id`,`tpl`.`name_of_personnel` AS `name_of_personnel`,`tpl`.`plate_no` AS `plate_no`,`tpl`.`users_id` AS `users_id`,`tpl`.`location_id` AS `location_id`,`tpl`.`file_dir` AS `file_dir`,`tpl`.`report_type` AS `report_type`,`tpl`.`entry_date` AS `entry_date`,`tpl`.`is_deleted` AS `is_deleted`,`tpl`.`qty` AS `qty`,`tpl`.`asset` AS `asset`,`u`.`screen_name` AS `print_by`,`tl`.`name` AS `location_name`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received`,`tl2`.`contact_person` AS `contact_person` from ((((`tbl_print_logs` `tpl` left join `users` `u` on(`tpl`.`users_id` = `u`.`users_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tpl`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`id` = `tpl`.`tbl_qrcodes_checklist_id`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tqc`.`received_by`)) where `tpl`.`is_deleted` = 0 ;
 
 -- --------------------------------------------------------
 
@@ -3841,7 +3853,7 @@ ALTER TABLE `tbl_models`
 -- AUTO_INCREMENT for table `tbl_print_logs`
 --
 ALTER TABLE `tbl_print_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `tbl_qrcodes`

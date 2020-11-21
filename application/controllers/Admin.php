@@ -590,12 +590,12 @@ class Admin extends MY_Controller {
 										data-ind="'.$row->id.'" 
 										data-cls="cont-edit-member" 
 										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
-								<a href="javascript:void(0);" 
-										id="remove-lgu-const-list" 
-										data-placement="top" 
-										data-toggle="tooltip" 
-										title="Remove" 
-										data-id="'.$row->id.'"><i class="fas fa-trash"></i></a> | 
+							'.($this->session->level == 1 ? '' : '<a href="javascript:void(0);" 
+									id="remove-lgu-const-list" 
+									data-placement="top" 
+									data-toggle="tooltip" 
+									title="Remove" 
+									data-id="'.$row->id.'"><i class="fas fa-trash"></i></a> | ').'
 								<a href="javascript:void(0);" 
 										id="loadPage" 
 										data-link="view-child-asset" 
@@ -661,13 +661,12 @@ class Admin extends MY_Controller {
 										data-link="edit-child-asset" 
 										data-ind="'.$row->id.'" 
 										data-cls="cont-edit-member" 
-										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | 
-								<a href="javascript:void(0);" 
-										id="remove-child-asset" 
-										data-placement="top" 
-										data-toggle="tooltip" 
-										title="Remove" 
-										data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
+										data-badge-head="EDIT '.strtoupper($row->asset_name).'"><i class="fas fa-edit"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" 
+																																																																													id="remove-child-asset" 
+																																																																													data-placement="top" 
+																																																																													data-toggle="tooltip" 
+																																																																													title="Remove" 
+																																																																													data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>');
 			$res[] = $data;
 		}
 
@@ -1379,7 +1378,7 @@ class Admin extends MY_Controller {
 		$url 							 				= $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $location_id ORDER BY id desc LIMIT 1")->row();
 		$jsonQrData 			 				= json_decode($url->qr_code);
 		$params['qrcode']  				= $jsonQrData->result->qr;
-		$params['last_insert_id'] = $this->db->insert_id();
+		$params['last_insert_id'] = $url->id;
 		$this->createPdfTransmitalSummary('admin/crud/print-transmital-summary', $params);
 	}
 
@@ -1539,11 +1538,11 @@ class Admin extends MY_Controller {
 		$dec_un = $this->encdec($d, 'd');
 		$res = $this->db->get_where('tbl_locations', array('id' => $dec_un))->row();
 		$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $dec_un ORDER BY id DESC LIMIT 1")->row();
-		if ($existingQr->received_by == '' || $existingQr->date_received == '') {
-			redirect(base_url() . 'mobile-view-checklist-catch?data=' . $dec_un);
-		} else {
+		// if ($existingQr->received_by == '' || $existingQr->date_received == '') {
+		// 	redirect(base_url() . 'mobile-view-checklist-catch?data=' . $dec_un);
+		// } else {
 			redirect(base_url() . 'mobile-view-checklist?data=' . $dec_un);
-		}
+		// }
 		
 	}
 	
@@ -1581,10 +1580,11 @@ class Admin extends MY_Controller {
 		$enc_ai = $this->encdec($arr_asset_id, 'd');
 		$data = json_decode($enc_ai);
 		$data = implode(',',$data);
-		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag, ta.location_id, u.screen_name
+		$params['data'] = $this->db->query("SELECT tq.*, ta.asset_tag, ta.location_id, u.screen_name, ac.name as asset_category_name
 																				FROM tbl_qrcodes tq 
 																				left join tbl_asset ta on ta.id = tq.asset_id 
 																				left join users u on u.users_id = ta.user_id
+																				left join asset_category ac on ac.asset_category_id = ta.asset_category_id
 																				WHERE ta.id in (".$data.") AND ta.is_deleted = 0")->result();
 		$params['check_url'] = function($url){ return $this->check_url($url); };
 		// $html = $this->load->view('admin/crud/print-asset-qr', $params, TRUE);
@@ -1703,7 +1703,7 @@ class Admin extends MY_Controller {
 		// if ($distance_diff['meters'] <= 250) {	
 			$location_id = $this->db->get_where('tbl_locations', array('id' => $qrData->location_id))->row();
 			$this->db->update('tbl_qrcodes_checklist', array(
-					'date_received' => date('Y-m-d H:i:s', strtotime($this->input->post('timestamp'))),
+					'date_received' => date('Y-m-d H:i:s'),
 					'received_by' => $location_id->id
 				), array('code' => $this->input->post('code')));
 			// $this->save_action_logs(array(
@@ -1766,25 +1766,26 @@ class Admin extends MY_Controller {
 	
 	
 	
-		public function getPrintGatePassReport(){
+	public function getPrintGatePassReport(){
+			$where = 'is_deleted = 0';
+			$person_id = $this->input->post('personnel_id');
+			$plate_no  = $this->input->post('plate_no');
+			$status  = $this->input->post('status');
+			$qty_dispatch  = $this->input->post('qty_dispatch');
+			$gatepass_date  = date('m/d/Y', strtotime($this->input->post('gatepass_date')));
 
-				$where = 'is_deleted = 0';
-				$person_id = $this->input->post('personnel_id');
-				$plate_no  = $this->input->post('plate_no');
-				$status  = $this->input->post('status');
-
-		if($this->input->post('location_id') != ''){
-			$where .= ' AND location_id = ' . $this->input->post('location_id');
-		}
-		if ($this->input->post('status') == 1) {
-			$where .= ' AND status = 1';
-		} else {
-			$where .= ' AND status = 0';
-		}
-		echo json_encode(array(
-				'data'      => $this->encdec($where, 'e'),
-				'params' => $this->encdec($person_id . '-' . $plate_no, 'e')
-		));
+			if($this->input->post('location_id') != ''){
+				$where .= ' AND location_id = ' . $this->input->post('location_id');
+			}
+			if ($this->input->post('status') == 1) {
+				$where .= ' AND status = 1';
+			} else {
+				$where .= ' AND status = 0';
+			}
+			echo json_encode(array(
+					'data'      => $this->encdec($where, 'e'),
+					'params' => $this->encdec($person_id . '-' . $plate_no . '-' . $qty_dispatch . '-' . $gatepass_date, 'e')
+			));
 	}
 
 

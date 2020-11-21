@@ -384,6 +384,7 @@ $route['get-print-gatepass-report'] = 'Admin/getPrintGatePassReport';
 $route['print-gatepass-slip'] 	                = 'Admin/printGatePass';
 $route['print-gatepass-slip/(:any)'] 	        = 'Admin/printGatePass';
 $route['print-gatepass-slip/(:any)/(:any)'] 	= 'Admin/printGatePass';
+$route['get-jzon'] 	= 'Settings/getJson';
 
 
 $route['404_override'] 					= '';

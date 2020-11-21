@@ -379,7 +379,8 @@ class MY_Controller extends CI_Controller{
 				'report_type' => 'qrcodes',
 				'qty' => count($param['data']),
 				'entry_date' => date('Y-m-d h:i:s'),
-				'scanned_by' => $param['data'][0]->screen_name
+				'scanned_by' => $param['data'][0]->screen_name,
+				'asset' => $param['data'][0]->asset_category_name
 			));
 			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_qrcodes.pdf','F');
 			$mpdf->Output();
@@ -435,11 +436,11 @@ class MY_Controller extends CI_Controller{
 			$last_insert_id = strtotime(date('Y-m-d h:i:s'));
 			$this->db->insert('tbl_print_logs', array(
 				'users_id' => $this->session->users_id,
-				'location_id' => $location_id,
+				'location_id' => $param['tbl_locations']->id,
 				'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_transmital.pdf',
 				'report_type' => 'transmittal',
 				'entry_date' => date('Y-m-d h:i:s'),
-				'tbl_qrcodes_checklist_id' => $last_insert_id,
+				'tbl_qrcodes_checklist_id' => $param['last_insert_id'],
 				'qty' => count($param['dataChkList'])
 			));
 			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_transmital.pdf','F');
@@ -490,7 +491,7 @@ class MY_Controller extends CI_Controller{
 			$mpdf->WriteHTML($ht);
 			//for gatepass
 			if ($param['type']=='gatepass') {
-				$last_insert_id = $param['dataChkList'][0]->deviceid;
+				$last_insert_id = strtotime(date('Y-m-d h:i:s'));//$param['dataChkList'][0]->deviceid;
 				$this->db->insert('tbl_print_logs', array(
 					'users_id' => $this->session->users_id,
 					'entry_date' => date('Y-m-d h:i:s'),
@@ -501,13 +502,14 @@ class MY_Controller extends CI_Controller{
 				));
 				$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_gatepass.pdf','F');
 			} else {
-				$last_insert_id = $param['dataChkList'][0]->deviceid;
+				$last_insert_id = strtotime(date('Y-m-d h:i:s'));//$param['dataChkList'][0]->deviceid;
 				$this->db->insert('tbl_print_logs', array(
 					'users_id' => $this->session->users_id,
 					'entry_date' => date('Y-m-d h:i:s'),
 					'location_id' => $param['dataChkList'][0]->location_id,
 					// 'name_of_personnel' => $param['data_procces'][0],
 					// 'plate_no' => $param['data_procces'][1],
+					'qty' => count($param['dataChkList']),
 					'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_checklist.pdf',
 					'report_type' => 'checklist'
 				));
