@@ -8,6 +8,7 @@
 </div>
 <div class="row w-100">
 <div class="col-sm-12">
+<button type="button" class="btn btn-c-success mb-3 btn-md rounded-0 font-12" onclick="window.open('<?php echo base_url('print-transmittal-summary-report'); ?>')"><i class="fas fa-print"></i> Transmittal Slip Summary</button>
   <table class="table font-12 w-100 nowrap condensed" id="tbl-print-logs-transmittal" data-tbl="transmittal">
     <thead>
       <tr>

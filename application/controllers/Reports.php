@@ -63,4 +63,9 @@ class Reports extends MY_Controller {
 		$this->AdminMod->pdf($html, 'Official Receipt', false, 'LEGAL', false, false, false, 'OFFICIAL RECEIPT', '');
 	}
 
+	public function printTransmittalSummaryReport(){
+		$params['dataTransmittal'] = $this->db->get('v_transmittal_summary')->result();
+		$this->createPdfAlone('admin/crud/print-summary-slip-list', $params);
+	}
+
 }

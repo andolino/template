@@ -372,6 +372,7 @@ $route['print-official-receipt/(:any)'] = 'Reports/printOR';
 $route['print-pacs-report/(:any)/(:any)'] = 'Reports/pacsSummaryReport';
 $route['print-cdj-report/(:any)/(:any)'] = 'Reports/cdjSummaryReport';
 $route['print-gj-report/(:any)/(:any)'] = 'Reports/gjSummaryReport';
+$route['print-transmittal-summary-report'] = 'Reports/printTransmittalSummaryReport';
 $route['get-chkd-summary-dispatch']     = 'Admin/getChkSummaryDispatch';
 $route['print-summary-dispatch/(:any)']  = 'Admin/printSummaryDispatch';
 

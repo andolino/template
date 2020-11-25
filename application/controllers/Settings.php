@@ -189,7 +189,7 @@ class Settings extends MY_Controller {
 
 	public function server_tbl_print_logs_gatepass(){
 		$result 	= $this->Table->getOutput('v_print_logs', ['id', 'name_of_personnel', 'plate_no', 'print_by', 
-																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by'], ['id' => 'asc']);
+																														'location_name', 'is_deleted', 'entry_date', 'qty', 'asset', 'file_dir', 'received_by', 'gatepass_date'], ['id' => 'asc']);
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 		foreach ($result as $row) {
@@ -200,8 +200,9 @@ class Settings extends MY_Controller {
    		$data[] = date('Y-m-d', strtotime($row->entry_date));
    		$data[] = $row->name_of_personnel;
 			$data[] = $row->plate_no;	
+			$data[] = $row->location_name;	
 			$data[] = '<a href="'.$row->file_dir.'" class="text-primary" download >'.explode('/', $row->file_dir)[INDEX_PRINT_LOGS].'</a>';	
-			$data[] = $row->date_received;	
+			$data[] = $row->gatepass_date == '' ? '' : date('Y-m-d', strtotime($row->gatepass_date));
 			$data[] = '<a href="'.$row->file_dir.'" target="_blank" ><i class="fas fa-search"></i></a> | ' . ($this->session->level == 1 ? '' : '<a href="javascript:void(0);" onclick="removeDataInd(this)" 
 																																																																							data-id="'.$row->id.'"
 																																																																							data-tbl="tbl_print_logs"

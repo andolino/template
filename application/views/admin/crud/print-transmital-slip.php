@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-4" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>QR List</title>
+    <title>Transmittal Slip</title>
 </head>
 <body>
 

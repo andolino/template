@@ -3,10 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-4" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>QR List</title>
+    <title>Transmittal Slip</title>
 </head>
 <body>
-
 <?php ini_set("pcre.backtrack_limit", "5000000"); ?>
 <img style="margin-top: -25px;" src="<?php echo base_url('assets/image/misc/img-logo-header.png'); ?>">
 <br>
@@ -137,7 +136,7 @@
 <table style="font-size: 12px;">
 <tr>
   <td style="padding:0px;">Received by: </td>
-  <td style="padding:0px;border-bottom:0.2px solid #000;"> <?php //echo strtoupper($tbl_locations->contact_person); ?></td>
+  <td style="padding:0px;border-bottom:0.2px solid #000;"> <?php echo !empty($received_by) ? $received_by : ''; ?></td>
 </tr>
 </table>
 <br>
@@ -152,7 +151,7 @@
   <td style="padding:0px;"><?php //echo ucfirst($data[0]->office_name); ?></td>
 </tr>
 <tr>
-  <td style="padding:0px;">Date Received : <?php //echo !empty($data_procces) ? date('d F Y', strtotime($data_procces)) : ''; ?></td>
+  <td style="padding:0px;">Date Received : <?php echo !empty($date_received) ? date('Y-m-d', $date_received) : '';//echo !empty($data_procces) ? date('d F Y', strtotime($data_procces)) : ''; ?></td>
 </tr>
 <tr>
   <td style="padding:0px;">

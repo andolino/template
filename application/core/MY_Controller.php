@@ -280,22 +280,25 @@ class MY_Controller extends CI_Controller{
 				$json         = file_get_contents($jsonurl, 0, null, null);
 				$json_output  = json_decode($json);
 				$json_encoded = json_encode($json_output);
-				$code         = explode('/', $json_output->result->qr);
+				// if (array_key_exists('qr', $json_output->result)) {
+					$code       = explode('/', $json_output->result->qr);
 
-				$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $id ORDER BY id DESC LIMIT 1")->row();
-				if ($existingQr->received_by == '' || $existingQr->date_received == '') {
-					return $this->db->update('tbl_qrcodes_checklist', array(
-																															'location_id' => $id,
-																															'qr_code'  		=> $json_encoded,
-																															'code'    	 	=> $code[4],
-																														), array('id' => $existingQr->id));
-				} else {
-					return $this->db->insert('tbl_qrcodes_checklist', array(
-																															'location_id' => $id,
-																															'qr_code'  		=> $json_encoded,
-																															'code'    	 	=> $code[4],
-																														));
-				}
+					$existingQr   = $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $id ORDER BY id DESC LIMIT 1")->row();
+					if ($existingQr->received_by == '' || $existingQr->date_received == '') {
+						return $this->db->update('tbl_qrcodes_checklist', array(
+																																'location_id' => $id,
+																																'qr_code'  		=> $json_encoded,
+																																'code'    	 	=> $code[4],
+																															), array('id' => $existingQr->id));
+					} else {
+						return $this->db->insert('tbl_qrcodes_checklist', array(
+																																'location_id' => $id,
+																																'qr_code'  		=> $json_encoded,
+																																'code'    	 	=> $code[4],
+																															));
+					}
+				// }
+
 		}
 
 		public function save_action_logs($data){
@@ -496,9 +499,11 @@ class MY_Controller extends CI_Controller{
 					'users_id' => $this->session->users_id,
 					'entry_date' => date('Y-m-d h:i:s'),
 					'name_of_personnel' => $param['data_procces'][0],
+					'location_id' => $param['dataChkList'][0]->location_id,
 					'plate_no' => $param['data_procces'][1],
 					'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_gatepass.pdf',
-					'report_type' => 'gatepass'
+					'report_type' => 'gatepass',
+					'gatepass_date' => date('Y-m-d H:i:s A', strtotime($param['data_procces'][3]))
 				));
 				$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_gatepass.pdf','F');
 			} else {
@@ -516,6 +521,53 @@ class MY_Controller extends CI_Controller{
 				$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_checklist.pdf','F');
 			}
 
+			$mpdf->Output();
+		}
+
+		public function createPdfAlone($data, $param = array()){
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];
+
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			$mpdf = new \Mpdf\Mpdf([
+								'fontDir' => array_merge($fontDirs, [
+									__DIR__ . '/fonts',
+							]),
+							'setAutoTopMargin' 		=> 'stretch', 
+							'setAutoBottomMargin' => 'stretch',
+							'fontdata' => $fontData + [
+								'quicksand' => [
+										'R' => 'Quicksand-Regular.ttf',
+										'I' => 'Quicksand-Bold.ttf'
+								],
+								'serif' => [
+									'R' => 'OpenSans-Regular.ttf',
+									'I' => 'OpenSans-Semibold.ttf'
+								],
+								'arial' => [
+									'R' => 'ArialCE.ttf',
+									'I' => 'ArialCEItalic.ttf'
+								]
+							],
+							'default_font' => 'arial',
+							'useSubstitutions' => true
+						]);
+			$mpdf->SetTitle('Checklist');
+			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
+			$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+			// $param['page_no'] = '{PAGENO} of {nbpg}';
+			// {nbpg} which prints the total number of pages considering page 
+			$param['logoFileName1'] = $logoFileName1;
+			$ht = $this->load->view($data, $param, TRUE);
+			// $header = $this->load->view('partials/checkListHeader', $param, TRUE);
+			$mpdf->defaultheaderline = 0;
+			// $mpdf->defaultfooterline = 0;
+			// $mpdf->SetHeader($header);
+			// $mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
+			$mpdf->WriteHTML($ht);
+			//for gatepass
+		
 			$mpdf->Output();
 		}
 

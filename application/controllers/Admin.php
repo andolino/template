@@ -1379,6 +1379,9 @@ class Admin extends MY_Controller {
 		$jsonQrData 			 				= json_decode($url->qr_code);
 		$params['qrcode']  				= $jsonQrData->result->qr;
 		$params['last_insert_id'] = $url->id;
+		$users = $this->db->get_where('users', array('users_id' => $url->received_by))->row();
+		$params['received_by'] 		= !empty($users) ? $users->screen_name : '';
+		$params['date_received'] = !empty($url) ? $url->date_received : '';
 		$this->createPdfTransmitalSummary('admin/crud/print-transmital-summary', $params);
 	}
 

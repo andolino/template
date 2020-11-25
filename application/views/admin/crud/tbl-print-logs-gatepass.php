@@ -16,6 +16,7 @@
         <th scope="col">PRINTED DATE</th>
         <th scope="col">NAME OF PERSONNEL</th>
         <th scope="col">PLATE NO.</th>
+        <th scope="col">LOCATION</th>
         <th scope="col">FILE</th>
         <th scope="col">DATE RELEASED</th>
         <th scope="col">ACTION</th>
