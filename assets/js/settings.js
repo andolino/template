@@ -343,6 +343,42 @@ $(document).ready(function() {
       });
   });
   
+  $(document).on('submit', '#frm-approver-settings', function(e) {
+    e.preventDefault();
+    var frm = $(this).serializeArray();
+    frm.push({name: 'tbl', value: 'tbl_approver'});
+    frm.push({name: 'pk_key', value: 'tbl_approver_id'});
+    frm.push({name: 'unique', value: 'location_id'});
+    customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Are you sure you want to save ?', 'question'], 
+        function(){
+          $.ajax({
+            url: 'add-data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: frm,
+            success: function(res){
+              if (res.param3 == 'success') {
+                tbl_approver.ajax.reload();
+              }
+              Swal.fire(
+                res.param1,
+                res.param2,
+                res.param3
+              );
+              animateSingleOut('.cont-card-add', 'fadeOutRight');
+            }
+          });
+          
+          }, function(){
+            console.log('Fail');
+      });
+  });
+  
   $(document).on('submit', '#frm-asset-category-settings', function(e) {
     e.preventDefault();
     var frm = $(this).serializeArray();
@@ -632,6 +668,50 @@ function initDepartmentsDataTables(){
     "processing"               : true,
     "ajax"                     : {
         "url"                  : 'server-departments',
+        "type"                 : 'POST',
+        // "data"                 : { 
+        //                         "id" : $("#tbl-loans-by-member").attr('data-id')
+        //                       }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      var dataRowAttrIndex = ['data-loan-settings'];
+      var dataRowAttrValue = [0];
+        for (var i = 0; i < dataRowAttrIndex.length; i++) {
+          myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+        }
+        $(row).attr(myObjKeyLguConst);
+    }
+  });
+}
+
+function initApproverDataTables(){
+  var myObjKeyLguConst = {};
+  tbl_approver  = $("#tbl-approver-settings").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [0,1,2,3,4] 
+      },
+      { 
+        className            : 'text-center', 
+        targets              : [2] 
+      }
+      // { 
+      //   className            : 'text-center', 
+      //   targets              : [6] 
+      // }
+    ],
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-approver',
         "type"                 : 'POST',
         // "data"                 : { 
         //                         "id" : $("#tbl-loans-by-member").attr('data-id')

@@ -15,6 +15,7 @@ var tbl_suppliers = [];
 var tbl_locations = [];
 var tbl_activity_logs = [];
 var tbl_departments = [];
+var tbl_approver = [];
 var tbl_asset_category = [];
 var tbl_office = [];
 var tbl_history_logs = [];
@@ -120,6 +121,7 @@ $(document).ready(function() {
       initSupplierDataTables();
       initLocationsDataTables();
       initDepartmentsDataTables();
+      initApproverDataTables();
       initAssetCategoryDataTables();
       initOfficeDataTables();
       initPortalRequestDataTables();
@@ -139,6 +141,7 @@ $(document).ready(function() {
   initAssetRequestDataTables();
   initActivityLogsDataTables();
   initDepartmentsDataTables();
+  initApproverDataTables();
   initAssetCategoryDataTables();
   initOfficeDataTables();
   initHistoryLogsDataTables();
@@ -893,6 +896,8 @@ $(document).ready(function() {
             tbl_repair_asset_cancelled.ajax.reload();
             tbl_repair_asset_closed.ajax.reload();
             $('#modal-portal-add-request').modal('hide');
+            // window.location.reload();
+            $('#frm-repair-request').trigger('reset');
           }
         });
       }, function(){

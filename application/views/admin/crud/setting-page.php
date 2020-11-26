@@ -41,6 +41,11 @@
 		</button>	
 	</div>
 	<div class="col-lg-3 col-md-4 col-sm-6 font-12 pr-0 pt-3 btn-panel-bar">
+		<button type="button" class="btn btn-md rounded-0 btn-default w-100" id="loadPage" data-badge-head="APPROVAL" data-link="view-approval" data-ind="" data-cls="cont-view-departments">
+			<i class="fas fa-user-friends font-25"></i>  APPROVAL 
+		</button>	
+	</div>
+	<div class="col-lg-3 col-md-4 col-sm-6 font-12 pr-0 pt-3 btn-panel-bar">
 		<button type="button" 
 						class="btn btn-md rounded-0 btn-default w-100" 
 						id="loadPage" 

@@ -410,6 +410,38 @@ class Settings extends MY_Controller {
 		echo json_encode($output);
 	}
 	
+	public function server_approver(){
+		$result 	= $this->Table->getOutput('v_approver', 
+																					['tbl_approver_id', 'location_id', 'first_approver', 'second_approver', 'f_approver_name', 's_approver_name', 'location_name', 'entry_date', 'is_deleted'], 
+																						['tbl_approver_id' => 'desc']);
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+   		$data[] = $row->tbl_approver_id;
+   		$data[] = $row->location_name;
+   		$data[] = $row->f_approver_name;
+   		$data[] = $row->s_approver_name;
+			$data[] = '<a href="javascript:void(0);" id="loadSidePage" data-link="get-approver-frm" data-id="'.$row->tbl_approver_id.'" data-title="EDIT - '.strtoupper($row->location_name).'">
+										 <i class="fas fa-edit"></i>
+									</a> | <a href="javascript:void(0);" onclick="removeData(this)" data-tbl="tbl_approver" data-field="tbl_approver_id" data-id="'.$row->tbl_approver_id.'">
+													<i class="fas fa-trash"></i>
+												</a>';
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->Table->countAllTbl(),
+			'recordsFiltered' => $this->Table->countFilterTbl(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+	
 	public function server_asset_category(){
 		$result 	= $this->Table->getOutput('asset_category', ['asset_category_id', 'code', 'name', 'entry_date', 'is_deleted'], ['asset_category_id' => 'desc']);
 		$res 			= array();
@@ -662,6 +694,14 @@ class Settings extends MY_Controller {
 		$this->load->view('admin/settings/forms/frm-departments', $params);
 	}
 	
+	public function getApproverFrm(){
+		$params['has_update'] = $this->input->post('id');
+		$params['data'] = $this->db->get_where('tbl_approver', array('is_deleted' => 0,'tbl_approver_id' => $this->input->post('id')))->row();
+		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['users'] = $this->db->query("SELECT * FROM users WHERE is_deleted = 0 AND (level = 0 OR level = 1)")->result();
+		$this->load->view('admin/settings/forms/frm-approver', $params);
+	}
+	
 	public function getAssetCategoryFrm(){
 		$params['has_update'] = $this->input->post('id');
 		$params['data'] = $this->db->get_where('asset_category', array('is_deleted' => 0,'asset_category_id' => $this->input->post('id')))->row();
@@ -834,6 +874,11 @@ class Settings extends MY_Controller {
 	public function view_departments(){
 		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
 		$this->load->view('admin/settings/view-departments', $params);
+	}
+	
+	public function view_approval(){
+		$params['settDepartments'] = $this->db->get_where('departments', array('is_deleted' => 0))->result();
+		$this->load->view('admin/settings/view-approval', $params);
 	}
 	
 	public function view_asset_category(){

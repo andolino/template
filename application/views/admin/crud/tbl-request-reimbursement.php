@@ -14,6 +14,7 @@
     <a class="nav-link active font-12" id="nav-home-tab" data-toggle="tab" href="#reimbursement-pending" role="tab" aria-controls="reimbursement-pending" aria-selected="true">Pending</a>
     <a class="nav-link font-12" id="nav-profile-tab" data-toggle="tab" href="#reimbursement-approved" role="tab" aria-controls="reimbursement-approved" aria-selected="false">Approved</a>
     <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#reimbursement-disapproved" role="tab" aria-controls="reimbursement-disapproved" aria-selected="false">Disapproved</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#reimbursement-disapproved" role="tab" aria-controls="reimbursement-disapproved" aria-selected="false">Cancelled</a>
   </div>
 </nav>
 

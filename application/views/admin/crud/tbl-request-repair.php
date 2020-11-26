@@ -14,6 +14,8 @@
     <a class="nav-link active font-12" id="nav-home-tab" data-toggle="tab" href="#repair-pending" role="tab" aria-controls="repair-pending" aria-selected="true">Pending</a>
     <a class="nav-link font-12" id="nav-profile-tab" data-toggle="tab" href="#repair-approved" role="tab" aria-controls="repair-approved" aria-selected="false">Approved</a>
     <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#repair-disapproved" role="tab" aria-controls="repair-disapproved" aria-selected="false">Disapproved</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#repair-disapproved" role="tab" aria-controls="repair-disapproved" aria-selected="false">Cancelled</a>
+    <a class="nav-link font-12" id="nav-contact-tab" data-toggle="tab" href="#repair-disapproved" role="tab" aria-controls="repair-disapproved" aria-selected="false">Closed</a>
   </div>
 </nav>
 

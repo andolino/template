@@ -1221,6 +1221,9 @@ class Admin extends MY_Controller {
 	
 
 	public function saveRepairRequest(){
+		// implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id')))
+		// var_dump(is_array($this->input->post('tbl_child_asset_id')));
+		// die();
 
 		$uploadedImage = $this->upload_image('image_upload');
 		$uploadedFile = $this->upload_file('file_upload');
@@ -1234,7 +1237,7 @@ class Admin extends MY_Controller {
 			'remarks'            => $this->input->post('remarks'),
 			'requestor' 				 => $this->input->post('requestor'), 
 			'serial' 						 => $this->input->post('serial'),
-			'tbl_child_asset_id' => implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
+			'tbl_child_asset_id' => is_array($this->input->post('tbl_child_asset_id')) ? implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))) : '', //implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
 			'entry_date'				 => date('Y-m-d H:i:s'),
 			'file_upload' 			 => $this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
 			'image_upload'			 => $this->input->post('image_upload') ? $uploadedImage['file_name'] : ''

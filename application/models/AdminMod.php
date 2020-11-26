@@ -300,6 +300,7 @@ class AdminMod extends CI_Model {
 		$status = $this->input->post('status');
 		$this->db->where('status', $status);
 		$this->db->where('is_deleted', '0');
+		$this->db->where('users_id', $this->session->users_id);
 		$i = 0;
 		foreach ($this->tblPortalRequestCollumn as $item) {
 			if (!empty($_POST['search']['value'])) {
@@ -307,10 +308,12 @@ class AdminMod extends CI_Model {
 					$this->db->where('is_deleted', '0');
 					$this->db->like($item, strtolower($_POST['search']['value']));
 					$this->db->where('status', $status);
+					$this->db->where('users_id', $this->session->users_id);
 				} else {
 					$this->db->where('is_deleted', '0');
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
 					$this->db->where('status', $status);
+					$this->db->where('users_id', $this->session->users_id);
 				}
 			}
 			$column[$i] = $item;
@@ -351,6 +354,7 @@ class AdminMod extends CI_Model {
 		$status = $this->input->post('status');
 		$this->db->where('status', $status);
 		$this->db->where('is_deleted', '0');
+		$this->db->where('requestor', $this->session->users_id);
 		if ($this->input->post('is_tech') == 'yes') {
 			$this->db->where('tech_support_id', $this->session->users_id);
 		}
@@ -361,10 +365,12 @@ class AdminMod extends CI_Model {
 					$this->db->where('is_deleted', '0');
 					$this->db->like($item, strtolower($_POST['search']['value']));
 					$this->db->where('status', $status);
+					$this->db->where('requestor', $this->session->users_id);
 				} else {
 					$this->db->where('is_deleted', '0');
 					$this->db->or_like($item, strtolower($_POST['search']['value']));
 					$this->db->where('status', $status);
+					$this->db->where('requestor', $this->session->users_id);
 				}
 				if ($this->input->post('is_tech') == 'yes') {
 					$this->db->where('tech_support_id', $this->session->users_id);
