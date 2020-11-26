@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2020 at 04:25 AM
+-- Generation Time: Nov 26, 2020 at 01:22 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.3.23
 
@@ -1267,6 +1267,28 @@ CREATE TABLE `tbl_action_logs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_approver`
+--
+
+CREATE TABLE `tbl_approver` (
+  `tbl_approver_id` int(11) NOT NULL,
+  `location_id` varchar(255) DEFAULT NULL,
+  `first_approver` varchar(50) DEFAULT NULL,
+  `second_approver` varchar(50) DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_approver`
+--
+
+INSERT INTO `tbl_approver` (`tbl_approver_id`, `location_id`, `first_approver`, `second_approver`, `is_deleted`, `entry_date`) VALUES
+(1, '3', '1', '8', 0, '2020-11-26');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_asset`
 --
 
@@ -1484,7 +1506,12 @@ CREATE TABLE `tbl_asset_repair_request` (
 
 INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`, `tech_support_id`, `repair_date`, `tech_notes`, `closed_by`, `closed_date`) VALUES
 (6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL),
-(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'MAY PROBLEMA DITO TAENA TANGA E', 0, '2020-10-31 20:01:41', 2, NULL, NULL, 1, '2020-11-04 01:45:40', 10, 10, NULL, NULL, NULL, NULL);
+(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'MAY PROBLEMA DITO TAENA TANGA E', 0, '2020-10-31 20:01:41', 2, NULL, NULL, 1, '2020-11-04 01:45:40', 10, 10, NULL, NULL, NULL, NULL),
+(8, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'TEST 1', '', '', 'TEST 2', 0, '2020-11-26 19:34:48', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
+(9, 1, '116121251', 'GPU 100', '0022093', NULL, NULL, NULL, '2020-11-24 00:00:00', 'TEST 1', '', '', 'TESt 2', 0, '2020-11-26 19:44:00', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
+(10, 1, '116121251', 'GPU 100', '0022093', '', NULL, NULL, '2020-11-24 00:00:00', 'test 1', '', '', 'test 2', 0, '2020-11-26 19:50:02', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
+(11, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'test1', '', '', 'test2', 0, '2020-11-26 19:51:03', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
+(12, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-28 00:00:00', 'test 11', '', '', 'test 22', 0, '2020-11-26 19:52:09', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1521,7 +1548,8 @@ CREATE TABLE `tbl_asset_request` (
 INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`) VALUES
 (11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL),
 (12, 5, 1, 2, 4, '', 9, 'TEST1', 'TEST2', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 0, NULL, NULL, NULL, NULL, NULL),
-(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL);
+(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL),
+(14, 1, 1, 2, 2, 'TEST', 9, 'TEST 1', 'TEST 2', 0, '2020-11-26 19:33:24', '2020-12-01 00:00:00', '2020-12-04 00:00:00', 0, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1822,36 +1850,57 @@ CREATE TABLE `tbl_print_logs` (
   `qty` int(11) DEFAULT NULL,
   `asset` text DEFAULT NULL,
   `tbl_qrcodes_checklist_id` int(11) DEFAULT NULL,
-  `scanned_by` text DEFAULT NULL
+  `scanned_by` text DEFAULT NULL,
+  `gatepass_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_print_logs`
 --
 
-INSERT INTO `tbl_print_logs` (`id`, `name_of_personnel`, `plate_no`, `users_id`, `location_id`, `file_dir`, `report_type`, `entry_date`, `is_deleted`, `qty`, `asset`, `tbl_qrcodes_checklist_id`, `scanned_by`) VALUES
-(1, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_transmital.pdf', 'transmittal', '2020-11-11 04:32:17', 1, NULL, NULL, NULL, NULL),
-(2, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:29:57', 0, NULL, NULL, NULL, NULL),
-(3, 'test 1', 'test 2', 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:31:42', 0, NULL, NULL, NULL, NULL),
-(4, 'TEST1', 'TEST2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-11 05:56:00', 0, NULL, NULL, NULL, NULL),
-(5, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073450_qrcodes.pdf', 'qrcodes', '2020-11-11 06:44:10', 0, 3, NULL, NULL, NULL),
-(6, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073582_qrcodes.pdf', 'qrcodes', '2020-11-11 06:46:22', 0, 3, NULL, NULL, NULL),
-(7, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073660_qrcodes.pdf', 'qrcodes', '2020-11-11 06:47:40', 0, 3, NULL, NULL, NULL),
-(8, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073695_qrcodes.pdf', 'qrcodes', '2020-11-11 06:48:15', 0, 3, NULL, NULL, NULL),
-(9, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073770_qrcodes.pdf', 'qrcodes', '2020-11-11 06:49:30', 0, 3, NULL, NULL, 'Admins'),
-(10, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:08:19', 0, NULL, NULL, NULL, NULL),
-(11, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:14:04', 0, NULL, NULL, NULL, NULL),
-(12, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:17:21', 0, NULL, NULL, NULL, NULL),
-(13, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:00', 0, NULL, NULL, NULL, NULL),
-(14, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:26', 0, NULL, NULL, NULL, NULL),
-(15, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:28', 0, NULL, NULL, NULL, NULL),
-(16, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:44', 0, NULL, NULL, NULL, NULL),
-(17, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:32', 0, NULL, NULL, NULL, NULL),
-(18, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:36', 0, NULL, NULL, NULL, NULL),
-(19, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:58', 0, NULL, NULL, NULL, NULL),
-(20, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:28', 0, NULL, NULL, NULL, NULL),
-(21, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:47', 0, NULL, NULL, NULL, NULL),
-(22, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:56', 0, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_print_logs` (`id`, `name_of_personnel`, `plate_no`, `users_id`, `location_id`, `file_dir`, `report_type`, `entry_date`, `is_deleted`, `qty`, `asset`, `tbl_qrcodes_checklist_id`, `scanned_by`, `gatepass_date`) VALUES
+(1, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_transmital.pdf', 'transmittal', '2020-11-11 04:32:17', 1, NULL, NULL, NULL, NULL, NULL),
+(2, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:29:57', 0, NULL, NULL, NULL, NULL, NULL),
+(3, 'test 1', 'test 2', 1, NULL, 'http://localhost/template/assets/image/uploads/_gatepass.pdf', 'gatepass', '2020-11-11 05:31:42', 0, NULL, NULL, NULL, NULL, NULL),
+(4, 'TEST1', 'TEST2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-11 05:56:00', 0, NULL, NULL, NULL, NULL, NULL),
+(5, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073450_qrcodes.pdf', 'qrcodes', '2020-11-11 06:44:10', 0, 3, NULL, NULL, NULL, NULL),
+(6, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073582_qrcodes.pdf', 'qrcodes', '2020-11-11 06:46:22', 0, 3, NULL, NULL, NULL, NULL),
+(7, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073660_qrcodes.pdf', 'qrcodes', '2020-11-11 06:47:40', 0, 3, NULL, NULL, NULL, NULL),
+(8, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073695_qrcodes.pdf', 'qrcodes', '2020-11-11 06:48:15', 0, 3, NULL, NULL, NULL, NULL),
+(9, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1605073770_qrcodes.pdf', 'qrcodes', '2020-11-11 06:49:30', 0, 3, NULL, NULL, 'Admins', NULL),
+(10, NULL, NULL, 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:08:19', 0, NULL, NULL, NULL, NULL, NULL),
+(11, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_checklist.pdf', 'checklist', '2020-11-11 07:14:04', 0, NULL, NULL, NULL, NULL, NULL),
+(12, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:17:21', 0, NULL, NULL, NULL, NULL, NULL),
+(13, 'TEST 1', 'TESt 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:00', 0, NULL, NULL, NULL, NULL, NULL),
+(14, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:33:26', 0, NULL, NULL, NULL, NULL, NULL),
+(15, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:28', 0, NULL, NULL, NULL, NULL, NULL),
+(16, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:34:44', 0, NULL, NULL, NULL, NULL, NULL),
+(17, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:32', 0, NULL, NULL, NULL, NULL, NULL),
+(18, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:36', 0, NULL, NULL, NULL, NULL, NULL),
+(19, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:35:58', 0, NULL, NULL, NULL, NULL, NULL),
+(20, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:28', 0, NULL, NULL, NULL, NULL, NULL),
+(21, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:47', 0, NULL, NULL, NULL, NULL, NULL),
+(22, 'TEST 1', 'TEST 2', 1, NULL, 'http://localhost/template/assets/image/uploads/4f7d1131f3f67b19_gatepass.pdf', 'gatepass', '2020-11-17 05:36:56', 0, NULL, NULL, NULL, NULL, NULL),
+(23, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606175886_transmital.pdf', 'transmittal', '2020-11-24 07:58:06', 0, 15, NULL, 1, NULL, NULL),
+(24, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606277020_transmital.pdf', 'transmittal', '2020-11-25 12:03:40', 0, 15, NULL, 1, NULL, NULL),
+(25, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606277725_transmital.pdf', 'transmittal', '2020-11-25 12:15:25', 0, 15, NULL, 1, NULL, NULL),
+(26, 'TEST 1', 'TEST 3', 1, NULL, 'http://localhost/template/assets/image/uploads/1606277855_gatepass.pdf', 'gatepass', '2020-11-25 12:17:35', 0, NULL, NULL, NULL, NULL, NULL),
+(27, 'TEST 1', 'TEST 3', 1, NULL, 'http://localhost/template/assets/image/uploads/1606277961_gatepass.pdf', 'gatepass', '2020-11-25 12:19:21', 0, NULL, NULL, NULL, NULL, NULL),
+(28, 'TEST 1', 'TEST 3', 1, NULL, 'http://localhost/template/assets/image/uploads/1606277981_gatepass.pdf', 'gatepass', '2020-11-25 12:19:41', 0, NULL, NULL, NULL, NULL, NULL),
+(29, 'TEST 1', 'TEST 2', 1, 3, 'http://localhost/template/assets/image/uploads/1606278730_gatepass.pdf', 'gatepass', '2020-11-25 12:32:10', 0, NULL, NULL, NULL, NULL, NULL),
+(30, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606278835_transmital.pdf', 'transmittal', '2020-11-25 12:33:55', 0, 15, NULL, 1, NULL, NULL),
+(31, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606278885_transmital.pdf', 'transmittal', '2020-11-25 12:34:45', 0, 15, NULL, 1, NULL, NULL),
+(32, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606279236_transmital.pdf', 'transmittal', '2020-11-25 12:40:36', 0, 15, NULL, 1, NULL, NULL),
+(33, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606279533_transmital.pdf', 'transmittal', '2020-11-25 12:45:33', 0, 15, NULL, 1, NULL, NULL),
+(34, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606279552_transmital.pdf', 'transmittal', '2020-11-25 12:45:52', 0, 15, NULL, 1, NULL, NULL),
+(35, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606279568_transmital.pdf', 'transmittal', '2020-11-25 12:46:08', 0, 15, NULL, 1, NULL, NULL),
+(36, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606237378_transmital.pdf', 'transmittal', '2020-11-25 01:02:58', 0, 15, NULL, 1, NULL, NULL),
+(37, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606237750_transmital.pdf', 'transmittal', '2020-11-25 01:09:10', 0, 15, NULL, 1, NULL, NULL),
+(38, 'test 1', '51241', 1, 3, 'http://localhost/template/assets/image/uploads/1606279919_gatepass.pdf', 'gatepass', '2020-11-25 12:51:59', 0, NULL, NULL, NULL, NULL, NULL),
+(39, 'TEST 1', '611251216', 1, 3, 'http://localhost/template/assets/image/uploads/1606280193_gatepass.pdf', 'gatepass', '2020-11-25 12:56:33', 0, NULL, NULL, NULL, NULL, '1970-01-01 08:00:00'),
+(40, 'TEST 1', '611251216', 1, 3, 'http://localhost/template/assets/image/uploads/1606280225_gatepass.pdf', 'gatepass', '2020-11-25 12:57:05', 0, NULL, NULL, NULL, NULL, '1970-01-01 08:00:00'),
+(41, 'TEST 1', '1512515', 1, 3, 'http://localhost/template/assets/image/uploads/1606280331_gatepass.pdf', 'gatepass', '2020-11-25 12:58:51', 0, NULL, NULL, NULL, NULL, '2020-11-30 00:00:00'),
+(42, 'test 1', '51241', 1, 3, 'http://localhost/template/assets/image/uploads/1606239163_gatepass.pdf', 'gatepass', '2020-11-25 01:32:43', 0, NULL, NULL, NULL, NULL, '2020-11-26 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1903,7 +1952,7 @@ CREATE TABLE `tbl_qrcodes_checklist` (
 --
 
 INSERT INTO `tbl_qrcodes_checklist` (`id`, `idno`, `qr_code`, `code`, `image`, `is_deleted`, `location_id`, `received_by`, `date_received`) VALUES
-(1, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/philsys.qrd.by\\/1d2fqb\",\"qr\":\"https:\\/\\/philsys.qrd.by\\/i\\/1d2fqb\",\"url\":\"http:\\/\\/localhost\\/template\\/scanned-checklist\\/S3dIb2g2S0hMSnNKVmRGZUdicmhFUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-11-05 03:40:35\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', '1d2fqb', NULL, 0, 3, NULL, NULL);
+(1, 0, '{\"result\":{\"error\":{\"message\":\"Maximum number of URLs for this account reached. (500\\/500)\",\"code\":6}}}', NULL, NULL, 0, 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2065,7 +2114,8 @@ INSERT INTO `users` (`users_id`, `screen_name`, `username`, `password`, `txt_pas
 (7, 'Mardyon', 'user4', '$2y$10$6373IZTPGcWskK/pY3gBWOrW7C5SCzxURVc7XjIWjpc5icQv.ZDqy', '12345678', '2020-04-29', NULL, 1, 'Congzon', 'Mardyon', 'G', 0, 'mardyon@gmail.com', 'Programmer', NULL, 0),
 (8, 'Peter', 'peteAdmin', '$2y$10$D/gp043WINZDAHrdSQOryu8gUfGbYBlv/fDMdkthgmJs3BoTAyKM6', '!@#QWEASDZXC', '2020-08-15', NULL, 0, 'Mora', 'Peter', 'BIllones', 0, 'peterbillonesmora@gmail.com', 'Programmer', NULL, 0),
 (9, 'Dondon', 'pentavia6', '$2y$10$j73kucFVhisbDyQRW2llheGpPTo9I/J23Q6V.wMF6WqN/q14YRtRW', '123456', '2020-10-23', NULL, 0, 'Baisac', 'Andolino', 'Gallardo', 3, 'dpentavia@gmail.com', 'Administrator', NULL, 0),
-(10, 'Nonie', 'nonie', '$2y$10$msYIPfXgbQz7y/MtlQ9FOeOJMYCZxHfgMzMlMra17w8nK1fz9/GxG', '123456', '2020-10-24', NULL, 0, 'advincula', 'nonie', 'oowa', 2, 'mardyon.yongson1026@gmail.com', 'IT Dept.', NULL, 0);
+(10, 'Nonie', 'nonie', '$2y$10$msYIPfXgbQz7y/MtlQ9FOeOJMYCZxHfgMzMlMra17w8nK1fz9/GxG', '123456', '2020-10-24', NULL, 0, 'advincula', 'nonie', 'oowa', 2, 'mardyon.yongson1026@gmail.com', 'IT Dept.', NULL, 0),
+(11, 'Bino', 'bino', '$2y$10$bG7FiVoA2FgUTPw.OkPOD.Ki.rWfh6xLnaRaEr0kHvq5pMh18esXO', '123456', '2020-11-26', NULL, 0, 'Binondo', 'Kervin', 'G', 3, 'bino@gmail.com', 'TEst', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -2129,6 +2179,24 @@ CREATE TABLE `v_activity_logs` (
 ,`scanned_lat2` varchar(255)
 ,`scanned_lng2` varchar(255)
 ,`code` varchar(191)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_approver`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_approver` (
+`tbl_approver_id` int(11)
+,`location_id` varchar(255)
+,`first_approver` varchar(50)
+,`second_approver` varchar(50)
+,`is_deleted` tinyint(1)
+,`entry_date` date
+,`f_approver_name` mediumtext
+,`s_approver_name` mediumtext
+,`location_name` varchar(191)
 );
 
 -- --------------------------------------------------------
@@ -2816,6 +2884,7 @@ CREATE TABLE `v_print_logs` (
 ,`received_by` int(11)
 ,`date_received` datetime
 ,`contact_person` text
+,`gatepass_date` datetime
 );
 
 -- --------------------------------------------------------
@@ -2895,6 +2964,23 @@ CREATE TABLE `v_subsidiary` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_transmittal_summary`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_transmittal_summary` (
+`qty` bigint(21)
+,`deviceid` varchar(100)
+,`province` varchar(500)
+,`address` text
+,`asset` varchar(35)
+,`received_by` int(11)
+,`date_received` datetime
+,`screen_name` mediumtext
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_trial_balance`
 -- (See below for the actual view)
 --
@@ -2931,6 +3017,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `v_activity_logs`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_activity_logs`  AS  select `tal`.`id` AS `id`,`tal`.`user_id` AS `user_id`,`tal`.`action_type` AS `action_type`,`tal`.`target_id` AS `target_id`,`tal`.`target_child_id` AS `target_child_id`,`tal`.`target_type` AS `target_type`,`tal`.`location_id` AS `location_id`,`tal`.`note` AS `note`,`tal`.`filename` AS `filename`,`tal`.`item_type` AS `item_type`,`tal`.`item_id` AS `item_id`,`tal`.`expected_checkin` AS `expected_checkin`,`tal`.`accepted_id` AS `accepted_id`,`tal`.`created_at` AS `created_at`,`tal`.`updated_at` AS `updated_at`,`tal`.`deleted_at` AS `deleted_at`,`tal`.`thread_id` AS `thread_id`,`tal`.`company_id` AS `company_id`,`tal`.`accept_signature` AS `accept_signature`,`tal`.`log_meta` AS `log_meta`,`tal`.`is_deleted` AS `is_deleted`,`ta`.`name` AS `asset_name`,`tca`.`name` AS `asset_name2`,`u`.`screen_name` AS `screen_name`,`u2`.`screen_name` AS `target`,`u3`.`screen_name` AS `target2`,`tg`.`lat` AS `lat`,`tg`.`lng` AS `lng`,`tg`.`address` AS `address`,`tl`.`name` AS `default_location`,`tl`.`lat` AS `scanned_lat`,`tl`.`lng` AS `scanned_lng`,`tl2`.`name` AS `default_location2`,`tl2`.`lat` AS `scanned_lat2`,`tl2`.`lng` AS `scanned_lng2`,`tg`.`code` AS `code` from ((((((((`tbl_action_logs` `tal` left join `tbl_asset` `ta` on(`ta`.`id` = `tal`.`target_id`)) left join `tbl_child_asset` `tca` on(`tca`.`id` = `tal`.`target_child_id`)) left join `users` `u` on(`u`.`users_id` = `tal`.`user_id`)) left join `users` `u2` on(`u2`.`users_id` = `ta`.`checkout_user_id`)) left join `users` `u3` on(`u3`.`users_id` = `tca`.`checkout_user_id`)) left join `tbl_gps` `tg` on(`tg`.`asset_id` = `ta`.`id` or `tg`.`child_asset_id` = `tca`.`id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tca`.`location_id`)) where `ta`.`is_deleted` = 0 or `tca`.`is_deleted` = 0 group by `tal`.`id` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_approver`
+--
+DROP TABLE IF EXISTS `v_approver`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_approver`  AS  select `ta`.`tbl_approver_id` AS `tbl_approver_id`,`ta`.`location_id` AS `location_id`,`ta`.`first_approver` AS `first_approver`,`ta`.`second_approver` AS `second_approver`,`ta`.`is_deleted` AS `is_deleted`,`ta`.`entry_date` AS `entry_date`,concat(`u1`.`last_name`,', ',`u1`.`first_name`,' ',`u1`.`middle_name`) AS `f_approver_name`,concat(`u2`.`last_name`,', ',`u2`.`first_name`,' ',`u2`.`middle_name`) AS `s_approver_name`,`tl`.`name` AS `location_name` from (((`tbl_approver` `ta` left join `users` `u1` on(`u1`.`users_id` = `ta`.`first_approver`)) left join `users` `u2` on(`u2`.`users_id` = `ta`.`second_approver`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -3164,7 +3259,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_print_logs`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_print_logs`  AS  select `tpl`.`id` AS `id`,`tpl`.`name_of_personnel` AS `name_of_personnel`,`tpl`.`plate_no` AS `plate_no`,`tpl`.`users_id` AS `users_id`,`tpl`.`location_id` AS `location_id`,`tpl`.`file_dir` AS `file_dir`,`tpl`.`report_type` AS `report_type`,`tpl`.`entry_date` AS `entry_date`,`tpl`.`is_deleted` AS `is_deleted`,`tpl`.`qty` AS `qty`,`tpl`.`asset` AS `asset`,`u`.`screen_name` AS `print_by`,`tl`.`name` AS `location_name`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received`,`tl2`.`contact_person` AS `contact_person` from ((((`tbl_print_logs` `tpl` left join `users` `u` on(`tpl`.`users_id` = `u`.`users_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tpl`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`id` = `tpl`.`tbl_qrcodes_checklist_id`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tqc`.`received_by`)) where `tpl`.`is_deleted` = 0 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_print_logs`  AS  select `tpl`.`id` AS `id`,`tpl`.`name_of_personnel` AS `name_of_personnel`,`tpl`.`plate_no` AS `plate_no`,`tpl`.`users_id` AS `users_id`,`tpl`.`location_id` AS `location_id`,`tpl`.`file_dir` AS `file_dir`,`tpl`.`report_type` AS `report_type`,`tpl`.`entry_date` AS `entry_date`,`tpl`.`is_deleted` AS `is_deleted`,`tpl`.`qty` AS `qty`,`tpl`.`asset` AS `asset`,`u`.`screen_name` AS `print_by`,`tl`.`name` AS `location_name`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received`,`tl2`.`contact_person` AS `contact_person`,`tpl`.`gatepass_date` AS `gatepass_date` from ((((`tbl_print_logs` `tpl` left join `users` `u` on(`tpl`.`users_id` = `u`.`users_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tpl`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`id` = `tpl`.`tbl_qrcodes_checklist_id`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tqc`.`received_by`)) where `tpl`.`is_deleted` = 0 ;
 
 -- --------------------------------------------------------
 
@@ -3192,6 +3287,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `v_subsidiary`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_subsidiary`  AS  select `asb`.`account_subsidiary_id` AS `account_subsidiary_id`,`asb`.`code` AS `code`,`asb`.`employee_id` AS `employee_id`,`asb`.`name` AS `name`,`asb`.`users_id` AS `users_id`,`asb`.`is_deleted` AS `is_deleted`,`asb`.`entry_date` AS `entry_date`,`am`.`main_desc` AS `main_desc`,`asb`.`sub_code` AS `sub_code` from (`account_subsidiary` `asb` left join `account_main` `am` on(`asb`.`code` = `am`.`code`)) where `am`.`is_deleted` = 0 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_transmittal_summary`
+--
+DROP TABLE IF EXISTS `v_transmittal_summary`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_transmittal_summary`  AS  select count(`tac`.`province`) AS `qty`,`tac`.`deviceid` AS `deviceid`,`tac`.`province` AS `province`,`tl`.`address` AS `address`,'Registration Kits & Photobooth Kits' AS `asset`,`tqc`.`received_by` AS `received_by`,`tqc`.`date_received` AS `date_received`,concat(`u`.`last_name`,', ',`u`.`first_name`,' ',`u`.`middle_name`) AS `screen_name` from (((`tbl_asset_checklist` `tac` left join `tbl_locations` `tl` on(`tl`.`id` = `tac`.`location_id`)) left join `tbl_qrcodes_checklist` `tqc` on(`tqc`.`location_id` = `tac`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tqc`.`received_by`)) where `tqc`.`received_by` <> '' group by `tac`.`province` ;
 
 -- --------------------------------------------------------
 
@@ -3440,6 +3544,12 @@ ALTER TABLE `tbl_action_logs`
   ADD KEY `action_logs_created_at_index` (`created_at`),
   ADD KEY `action_logs_item_type_item_id_action_type_index` (`item_type`,`item_id`,`action_type`),
   ADD KEY `action_logs_target_type_target_id_action_type_index` (`target_type`,`target_id`,`action_type`);
+
+--
+-- Indexes for table `tbl_approver`
+--
+ALTER TABLE `tbl_approver`
+  ADD PRIMARY KEY (`tbl_approver_id`);
 
 --
 -- Indexes for table `tbl_asset`
@@ -3778,6 +3888,12 @@ ALTER TABLE `tbl_action_logs`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_approver`
+--
+ALTER TABLE `tbl_approver`
+  MODIFY `tbl_approver_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tbl_asset`
 --
 ALTER TABLE `tbl_asset`
@@ -3793,13 +3909,13 @@ ALTER TABLE `tbl_asset_checklist`
 -- AUTO_INCREMENT for table `tbl_asset_repair_request`
 --
 ALTER TABLE `tbl_asset_repair_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbl_asset_request`
 --
 ALTER TABLE `tbl_asset_request`
-  MODIFY `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `tbl_child_asset`
@@ -3853,7 +3969,7 @@ ALTER TABLE `tbl_models`
 -- AUTO_INCREMENT for table `tbl_print_logs`
 --
 ALTER TABLE `tbl_print_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `tbl_qrcodes`
@@ -3895,7 +4011,7 @@ ALTER TABLE `uploads`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
