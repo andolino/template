@@ -1237,6 +1237,7 @@ class Admin extends MY_Controller {
 			'remarks'            => $this->input->post('remarks'),
 			'requestor' 				 => $this->input->post('requestor'), 
 			'serial' 						 => $this->input->post('serial'),
+			'location_id' 			 => $this->input->post('location_id'),
 			'tbl_child_asset_id' => is_array($this->input->post('tbl_child_asset_id')) ? implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))) : '', //implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
 			'entry_date'				 => date('Y-m-d H:i:s'),
 			'file_upload' 			 => $this->input->post('file_upload') ? $uploadedFile['file_name'] : '',

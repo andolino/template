@@ -130,6 +130,15 @@
       <div class="modal-body">
         <form id="frm-repair-request">
           <div class="form-group">
+            <label for="location_id" class="font-12">Location</label>
+            <select id="location_id" onchange="revealAssetTagRepair(this)" class="location_id" name="location_id" required>
+              <option value=""></option>
+              <?php foreach($location as $row): ?>
+                <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="asset_category_id" class="font-12">Asset Category</label>
             <select id="asset_category_id" class="asset_category_id" name="asset_category_id" required>
               <option value=""></option>

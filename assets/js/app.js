@@ -898,6 +898,7 @@ $(document).ready(function() {
             $('#modal-portal-add-request').modal('hide');
             // window.location.reload();
             $('#frm-repair-request').trigger('reset');
+            $("#multiple-child-select").val([]).change();
           }
         });
       }, function(){
@@ -2049,6 +2050,16 @@ function readUrlImg(input) {
   }
 }
 
+function revealAssetTagRepair(e){
+  $.ajax({
+    type: "POST",
+    url: "get-asset-category-select",
+    data: {'id': $(e).find('option').attr('data-select2-id')},
+    success: function (res) {
+      $('.cont-asset-category').html(res);
+    }
+  });
+}
 
 
 

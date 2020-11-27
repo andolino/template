@@ -891,6 +891,12 @@ class Settings extends MY_Controller {
 		$this->load->view('admin/settings/view-office', $params);
 	}
 
+	public function get_asset_category(){
+		$id = $this->input->post('id');
+		$params['assetCategory'] = $this->db->get_where('asset_category', array('asset_category' => $id, 'is_deleted' => 0))->result();
+		$this->load->view('admin/crud2/get-select-asset-category-select', $params);
+	}
+
 	// public function getJson(){
 	// 	header("Access-Control-Allow-Origin: *");
 	// 	header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
