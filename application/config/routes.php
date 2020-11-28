@@ -170,6 +170,8 @@ $route['cancel-portal-request'] 	= 'Admin/cancelPortalRequest';
 $route['get-select-asset-rep'] 	= 'Settings/getSelectAssetRepair';
 $route['get-tbl-asset-row'] 	= 'Settings/getTblAssetRow';
 $route['save-tech-notes'] 	= 'Settings/saveTechNotes';
+$route['get-asset-category-select'] 	= 'Settings/getAssetCategorySelect';
+$route['get-edit-repair-request'] 	= 'Settings/getEditRepairRequest';
 
 
 

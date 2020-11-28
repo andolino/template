@@ -131,7 +131,7 @@
         <form id="frm-repair-request">
           <div class="form-group">
             <label for="location_id" class="font-12">Location</label>
-            <select id="location_id" onchange="revealAssetTagRepair(this)" class="location_id" name="location_id" required>
+            <select id="location_id" class="location_id" onchange="resetFrmRepairRequest(this)" name="location_id" required>
               <option value=""></option>
               <?php foreach($location as $row): ?>
                 <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
@@ -172,11 +172,20 @@
           <div class="form-group">
             <label for="file_upload" class="font-12">Upload File of the Problem</label>
             <input type="file" class="form-control form-control-sm font-12" id="file_upload" value="" name="file_upload">
+            <div class="alert alert-primary repair-upload-docx none font-12 mt-2" role="alert"></div>
           </div>
           <div class="form-group">
             <label for="image_upload" class="font-12">Upload Screenshot of the Problem</label>
             <input type="file" class="form-control form-control-sm font-12" id="image_upload" value="" name="image_upload">
             <input type="hidden" name="requestor" value="<?php echo $this->session->users_id; ?>">
+            <input type="hidden" id="has_update">
+            <!-- <div class="alert alert-primary repair-upload-img none font-12 mt-2" role="alert"></div> -->
+            <div class="alert alert-warning alert-dismissible repair-upload-img none fade show mt-2" role="alert">
+              <span class="repair-upload-img-cont font-12 mt-1"></span>
+              <button type="button" class="close font-12 download-repair-request" aria-label="Close">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
           </div>
           <button type="submit" class="none" id="submit-frm"></button>
         </form>

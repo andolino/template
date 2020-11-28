@@ -806,6 +806,12 @@ $(document).ready(function() {
   
   $(document).on('click', '#add-portal-request', function(){
     $('#modal-portal-add-request').modal('show');
+    $('#modal-portal-add-request .modal-title').html('Add Request');
+    $('#frm-repair-request').trigger('reset');
+    $('#has_update').val('');
+    $('.repair-upload-docx').addClass('none');
+    $('.repair-upload-img').addClass('none');
+    $('#multiple-child-select').val([]).trigger('change');
     $('#office_management_id').select2({
       width: '100%',
       dropdownParent: $("#modal-portal-add-request")
@@ -823,16 +829,75 @@ $(document).ready(function() {
       dropdownParent: $("#modal-portal-add-request")
     });
   });
+  
+  $(document).on('click', '#edit-portal-request', function(){
+    $('#modal-portal-add-request').modal('show');
+    $('#modal-portal-add-request .modal-title').html('Edit Request');
+    var id = $(this).attr('data-id');
+    $.ajax({
+      type: "POST",
+      url: "get-edit-repair-request",
+      data: { 'id' : id },
+      dataType: "json",
+      success: function (res) {
+        $('#location_id').val(res.data.location_id).trigger('change');
+        $('#asset_category_id').val(res.data.asset_category_id).trigger('change');
+        $('#date_reported').val(res.data.date_reported);
+        $('#problem_desc').val(res.data.problem_desc);
+        $('#remarks').val(res.data.remarks);
+        $('#has_update').val(res.data.id);
+        animateSingleIn('.spinner-cont', 'fadeIn'); 
+        setTimeout(function(){
+        $('#asset_tag').val(res.data.asset_tag).trigger('change');
+          setTimeout(function(){
+            var child_ids = res.data.tbl_child_asset_id.split(',');
+            $('#multiple-child-select').val(child_ids).trigger('change');
+            $('#multiple-child-select').val(child_ids).trigger('change');
+            $('.repair-upload-docx').html(res.data.file_upload);
+            $('.repair-upload-img-cont').html(res.data.image_upload);
+            $('.download-repair-request').attr('onclick', 'window.open("'+baseURL + 'assets/image/uploads/' +res.data.file_upload+'")');
+            if (res.data.file_upload != null) {
+              animateSingleIn('.repair-upload-docx', 'fadeIn');  
+            }
+            if (res.data.image_upload != null) {
+              animateSingleIn('.repair-upload-img', 'fadeIn');
+            }
+            animateSingleOut('.spinner-cont', 'fadeOut'); 
+            console.log(res);
+          }, 500);
+        }, 1000);
+      }
+    });
+
+    $('#office_management_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#asset_category_id').select2({
+      width: '100%',  
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#serial').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#location_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    // $('#multiple-child-select').val([9, 11]).trigger('change');
+  });
 
   $(document).on('change', '.asset_category_id', function () {
     var asset_category_id = $(this).val();
+    var location_id = $('#location_id').val();
     $.ajax({
       type: "POST",
       url: "get-select-asset-rep",
-      data: { "asset_category_id": asset_category_id },
+      data: { "asset_category_id": asset_category_id, 'location_id': location_id },
       success: function (res) {
         $('.asset-details-container').html(res);
-        $('#serial').select2({
+        $('#asset_tag').select2({
           width: '100%',
         });
       }
@@ -840,11 +905,11 @@ $(document).ready(function() {
   });
   
   $(document).on('change', '.select-repair-asset-tag', function () {
-    var serial_no = $(this).val();
+    var asset_tag = $(this).val();
     $.ajax({
       type: "POST",
       url: "get-tbl-asset-row",
-      data: { "serial_no": serial_no },
+      data: { "asset_tag": asset_tag },
       dataType: 'json',
       success: function (res) {
         if (res.hasOwnProperty('html')) {
@@ -856,7 +921,7 @@ $(document).ready(function() {
         } else {
           $('.multiple-child-asset').html('<div class="alert alert-warning font-12" role="alert">No Child Asset</div>');
         }
-        $('#asset_tag').val(res.asset_tag);
+        $('#serial').val(res.serial);
         $('#property_tag').val(res.property_tag);
         $('#custodian').val(res.checkout_user_id);
 
@@ -867,6 +932,7 @@ $(document).ready(function() {
   $(document).on('submit', '#frm-repair-request', function (e) {
     e.preventDefault();
     var frm = new FormData(this);
+    frm.append('has_update', $('#has_update').val());
     customSwal(
       'btn btn-success', 
       'btn btn-danger mr-2', 
@@ -2050,15 +2116,17 @@ function readUrlImg(input) {
   }
 }
 
-function revealAssetTagRepair(e){
-  $.ajax({
-    type: "POST",
-    url: "get-asset-category-select",
-    data: {'id': $(e).find('option').attr('data-select2-id')},
-    success: function (res) {
-      $('.cont-asset-category').html(res);
-    }
-  });
+function resetFrmRepairRequest(e){
+  // $('#frm-repair-request').trigger('reset');
+  $('#asset_category_id').val('').trigger('change');
+  // $.ajax({
+  //   type: "POST",
+  //   url: "get-asset-category-select",
+  //   data: {'id': $(e).find('option').attr('data-select2-id')},
+  //   success: function (res) {
+  //     $('.cont-asset-category').html(res);
+  //   }
+  // });
 }
 
 

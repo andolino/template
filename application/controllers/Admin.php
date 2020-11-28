@@ -898,6 +898,10 @@ class Admin extends MY_Controller {
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
 				$data[] = '<button 
 										type="button" 
+										class="btn btn-xs font-12 btn-info" id="edit-portal-request" 
+										data-id="'.$row->id.'">Edit</button> | 
+									<button 
+										type="button" 
 										class="btn btn-xs font-12 btn-danger" id="cancel-portal-request" 
 										data-id="'.$row->id.'">Cancel</button>';
 			} elseif ($row->status==1) {
@@ -1240,9 +1244,15 @@ class Admin extends MY_Controller {
 			'location_id' 			 => $this->input->post('location_id'),
 			'tbl_child_asset_id' => is_array($this->input->post('tbl_child_asset_id')) ? implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))) : '', //implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
 			'entry_date'				 => date('Y-m-d H:i:s'),
-			'file_upload' 			 => $this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
-			'image_upload'			 => $this->input->post('image_upload') ? $uploadedImage['file_name'] : ''
+			// 'file_upload' 			 => $uploadedFile['success'] == false ? '' : $uploadedFile['file_name'],//$this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
+			// 'image_upload'			 => $uploadedImage['success'] == false ? '' : $uploadedImage['file_name']//$this->input->post('image_upload') ? $uploadedImage['file_name'] : ''
 		);
+		if ($uploadedFile['success'] == true) {
+			$dataToSave['file_upload'] = $uploadedFile['file_name'];
+		}
+		if ($uploadedFile['success'] == true) {
+			$dataToSave['image_upload'] = $uploadedImage['file_name'];
+		}
 		// echo json_encode(array('post'=>$_POST,'upload1'=>$res1,'upload2'=>$res2));
 		// foreach ($this->input->post() as $key => $value) {
 		// 	if ($key == 'date_need' || $key == 'date_return') {
@@ -1252,7 +1262,11 @@ class Admin extends MY_Controller {
 		// 	}
 		// }
 		// $dataToSave['entry_date'] = date('Y-m-d H:i:s');
-		$q = $this->db->insert('tbl_asset_repair_request', $dataToSave);
+		if($this->input->post('has_update') == ''){
+			$q = $this->db->insert('tbl_asset_repair_request', $dataToSave);
+		} else {
+			$q = $this->db->update('tbl_asset_repair_request', $dataToSave, array('id' => $this->input->post('has_update')));
+		}
 		$res = array();
 		if ($q) {
 			$res['param1'] = 'Success!';
