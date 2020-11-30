@@ -104,7 +104,7 @@ class Table extends CI_Model {
 		
 		if ($this->input->post('tbl_asset_id_dispatch')!='') {
 			$this->db->where('asset_category_id', $this->input->post('data_asset_category_id'));
-			$this->db->where('office_management_id', $this->input->post('data_office_management_id'));
+			// $this->db->where('office_management_id', $this->input->post('data_office_management_id'));
 		}
 		
 		if ($this->input->post('siblings_asset_listdown')!='') {

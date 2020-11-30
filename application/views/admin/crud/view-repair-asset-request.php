@@ -8,7 +8,6 @@
 						</div>
 					</div>
 					<div class="col-sm-8 mt-2">
-            
             <?php if(!empty($dataRequest)): ?>
             <div class="card">
 							<div class="card-body">
@@ -22,7 +21,8 @@
                         <ul style="list-style-type: none;padding-left:0">
                           <li>REQUEST NO. : <strong><?php echo str_pad($dataRequest->id, 8, '0', STR_PAD_LEFT); ?></strong></li>
                           <li>REQUESTER : <strong><?php echo $dataRequest->requestor_name; ?></strong></li>
-                          <li>OFFICE: <strong><?php echo $dataRequest->office_name; ?></strong></li>
+                          <li>LOCATION: <strong><?php echo $dataRequest->location_name; ?></strong></li>
+                          <li>ADDRESS: <strong><?php echo $dataRequest->address; ?></strong></li>
                           <li>REPAIR FILE: <?php echo $dataRequest->file_upload == '' ? '' : '[<a href="'.base_url().'assets/image/uploads/'.$dataRequest->file_upload.'" class="text-info" download> Download Attachment </a>]'; ?></li>
                         </ul>
                       </div>
@@ -63,23 +63,30 @@
                       <?php endif; ?>
 
                     <?php else: ?>
-                    <select class="custom-select form-control-sm font-12" name="tech_support_id" id="select-tech-support" required>
+                    <!-- <select class="custom-select form-control-sm font-12" name="tech_support_id" id="select-tech-support" required>
                       <option selected value="" hidden>Select Technician / Tech support</option>
                       <option value="" disabled></option>
-                      <?php foreach($techSup as $row): ?>
-                      <option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
-                      <?php endforeach; ?>
-                    </select>
+                      <?php //foreach($techSup as $row): ?>
+                      <option value="<?php //echo $row->users_id; ?>"><?php //echo $row->screen_name; ?></option>
+                      <?php //endforeach; ?>
+                    </select> -->
                     <?php endif; ?>
                   </div>
                   <div class="col-lg-12"></div>
-                  <div class="warranty_cont none">
+                  <div class="warranty_cont">
                     <?php if(strtotime($dataRequest->date_expire) >= strtotime(date('Y-m-d'))): ?>
                       <div class="col-lg-12">
                         <div class="alert alert-success font-12 mt-3">Coordinate with the Supplier: [<strong><?php echo ucfirst($dataRequest->supplier_name); ?></strong>] for the repair.</div>
                       </div>
                     <?php else: ?>
                       <div class="col-lg-12">
+                        <select class="custom-select form-control-sm font-12" name="tech_support_id" id="select-tech-support" required>
+                          <option selected value="" hidden>Select Technician / Tech support</option>
+                          <option value="" disabled></option>
+                          <?php foreach($techSup as $row): ?>
+                          <option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
+                          <?php endforeach; ?>
+                        </select>
                         <div class="alert alert-warning font-12 mt-3">This will be check and repair with the assigned technician</div>
                       </div>
                       <div class="col-lg-12"></div>
@@ -120,70 +127,77 @@
                   $status = [0 => 'Pending', 1 => 'For Repair', 2 => 'Disapproved', 3 =>'Cancelled', 4 => 'Closed'];
                 ?>
                 <h4>PARENT ASSET</h4>
-                <table class="table font-12 w-100"  id="" data-status="1">
-                  <thead>
-                    <tr>
-                      <th scope="col">ASSET NAME</th>
-                      <th scope="col">ASSET TAG </th>
-                      <th scope="col">PROPERTY TAG</th>
-                      <th scope="col">SERIAL NO</th>
-                      <th scope="col">OFFICE</th>
-                      <th scope="col">REMARKS</th>
-                      <th scope="col">STATUS</th>
-                      <th scope="col">ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><?php echo $dataRequest->asset_name; ?></td>
-                      <td><?php echo $dataRequest->asset_tag; ?></td>
-                      <td><?php echo $dataRequest->property_tag; ?></td>
-                      <td><?php echo $dataRequest->serial; ?></td>
-                      <td><?php echo $dataRequest->office_name; ?></td>
-                      <td><?php echo $dataRequest->remarks; ?></td>
-                      <td><?php echo $status[$dataRequest->status]; ?></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="row">
+                  <div class="col-12" style="overflow-x: scroll;">
+                    <table class="table font-12 w-100" id="" data-status="1">
+                    <thead>
+                      <tr>
+                        <th scope="col">ASSET NAME</th>
+                        <th scope="col">ASSET CATEGORY </th>
+                        <th scope="col">ASSET TAG </th>
+                        <th scope="col">PROPERTY TAG</th>
+                        <th scope="col">SERIAL NO</th>
+                        <th scope="col">REMARKS</th>
+                        <th scope="col">STATUS</th>
+                        <th scope="col">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><?php echo $dataRequest->asset_name; ?></td>
+                        <td><?php echo $dataRequest->asset_category; ?></td>
+                        <td><?php echo $dataRequest->asset_tag; ?></td>
+                        <td><?php echo $dataRequest->property_tag; ?></td>
+                        <td><?php echo $dataRequest->serial; ?></td>
+                        <td><?php echo $dataRequest->remarks; ?></td>
+                        <td><?php echo $status[$dataRequest->status]; ?></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
                 <h4>CHILD ASSET</h4>
                 <!-- <pre>
                     <?php //print_r($childAsset); ?>
                 </pre> -->
-                <table class="table font-12 w-100"  id="" data-status="1">
-                  <thead>
-                    <tr>
-                      <th scope="col">ASSET NAME</th>
-                      <th scope="col">ASSET TAG </th>
-                      <th scope="col">PROPERTY TAG</th>
-                      <th scope="col">SERIAL NO</th>
-                      <th scope="col">OFFICE</th>
-                      <th scope="col">REMARKS</th>
-                      <th scope="col">STATUS</th>
-                      <th scope="col">ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <?php foreach($childAsset as $row): ?>
-                    <tr>
-                      <td><?php echo $row->name; ?></td>
-                      <td><?php echo $row->asset_tag; ?></td>
-                      <td><?php echo $row->property_tag; ?></td>
-                      <td><?php echo $row->serial; ?></td>
-                      <td><?php echo $row->office_name; ?></td>
-                      <td><?php $dataRequest->remarks; ?></td>
-                      <td><?php echo $status[$dataRequest->status]; ?></td>
-                      <td><?php //echo $row-> ?></td>
-                      <td></td>
-                    </tr>
-                  <?php endforeach; ?>
-                  </tbody>
-                </table>
+                <div class="row">
+                  <div class="col-12" style="overflow-x: scroll;">
+                    <table class="table font-12 w-100"  id="" data-status="1">
+                      <thead>
+                        <tr>
+                          <th scope="col">ASSET NAME</th>
+                          <th scope="col">ASSET CATEGORY </th>
+                          <th scope="col">ASSET TAG </th>
+                          <th scope="col">PROPERTY TAG</th>
+                          <th scope="col">SERIAL NO</th>
+                          <th scope="col">REMARKS</th>
+                          <th scope="col">STATUS</th>
+                          <th scope="col">ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php foreach($childAsset as $row): ?>
+                        <tr>
+                          <td><?php echo $row->name; ?></td>
+                          <td><?php echo $row->asset_category_name; ?></td>
+                          <td><?php echo $row->asset_tag; ?></td>
+                          <td><?php echo $row->property_tag; ?></td>
+                          <td><?php echo $row->serial; ?></td>
+                          <td><?php $dataRequest->remarks; ?></td>
+                          <td><?php echo $status[$dataRequest->status]; ?></td>
+                          <td><?php //echo $row-> ?></td>
+                          <td></td>
+                        </tr>
+                      <?php endforeach; ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
             <?php endif; ?>
-
 					</div>
 					<!-- end -->
 			</div>	

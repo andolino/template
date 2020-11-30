@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 26, 2020 at 01:22 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.3.23
+-- Host: localhost
+-- Generation Time: Nov 30, 2020 at 05:52 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1497,21 +1497,27 @@ CREATE TABLE `tbl_asset_repair_request` (
   `repair_date` datetime DEFAULT NULL,
   `tech_notes` text DEFAULT NULL,
   `closed_by` int(11) DEFAULT NULL,
-  `closed_date` datetime DEFAULT NULL
+  `closed_date` datetime DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `cancelled_by` int(11) DEFAULT NULL,
+  `cancelled_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset_repair_request`
 --
 
-INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`, `tech_support_id`, `repair_date`, `tech_notes`, `closed_by`, `closed_date`) VALUES
-(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL),
-(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'MAY PROBLEMA DITO TAENA TANGA E', 0, '2020-10-31 20:01:41', 2, NULL, NULL, 1, '2020-11-04 01:45:40', 10, 10, NULL, NULL, NULL, NULL),
-(8, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'TEST 1', '', '', 'TEST 2', 0, '2020-11-26 19:34:48', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
-(9, 1, '116121251', 'GPU 100', '0022093', NULL, NULL, NULL, '2020-11-24 00:00:00', 'TEST 1', '', '', 'TESt 2', 0, '2020-11-26 19:44:00', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
-(10, 1, '116121251', 'GPU 100', '0022093', '', NULL, NULL, '2020-11-24 00:00:00', 'test 1', '', '', 'test 2', 0, '2020-11-26 19:50:02', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
-(11, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'test1', '', '', 'test2', 0, '2020-11-26 19:51:03', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL),
-(12, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-28 00:00:00', 'test 11', '', '', 'test 22', 0, '2020-11-26 19:52:09', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_asset_repair_request` (`id`, `asset_category_id`, `serial`, `asset_tag`, `property_tag`, `tbl_child_asset_id`, `regkits_no`, `custodian`, `date_reported`, `problem_desc`, `file_upload`, `image_upload`, `remarks`, `is_deleted`, `entry_date`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `requestor`, `tech_support_id`, `repair_date`, `tech_notes`, `closed_by`, `closed_date`, `location_id`, `cancelled_by`, `cancelled_date`) VALUES
+(6, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-10-01 00:00:00', 'TEST1', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'TEST2', 0, '2020-10-25 13:48:44', 3, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 1, '562WTWT', 'Motherboard', '', '9,12', NULL, NULL, '2020-11-27 00:00:00', 'test', 'Asset-Bug-and-Revision-in-Crud7.docx', 'Screen_Shot_2020-10-25_at_6.06.20_PM6.png', 'MAY PROBLEMA DITO TAENA TANGA E', 0, '2020-10-31 20:01:41', 2, NULL, NULL, 1, '2020-11-04 01:45:40', 10, 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'TEST 1', '', '', 'TEST 2', 0, '2020-11-26 19:34:48', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 1, '116121251', 'GPU 100', '0022093', NULL, NULL, NULL, '2020-11-24 00:00:00', 'TEST 1', '', '', 'TESt 2', 0, '2020-11-26 19:44:00', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 1, '116121251', 'GPU 100', '0022093', '', NULL, NULL, '2020-11-24 00:00:00', 'test 1', '', '', 'test 2', 0, '2020-11-26 19:50:02', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-30 00:00:00', 'test1', '', '', 'test2', 0, '2020-11-26 19:51:03', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-11-28 00:00:00', 'test 11', '', '', NULL, 0, '2020-11-26 19:52:09', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-12-04 00:00:00', 'test 1', '', '', 'this is a test remarks', 0, '2020-11-26 23:04:34', 2, NULL, NULL, 1, '2020-11-29 03:19:40', 11, NULL, NULL, NULL, NULL, NULL, NULL, 11, '2020-11-29 03:07:26'),
+(14, 1, '562WTWT', 'Motherboard', '', '11,12', NULL, NULL, '2020-12-03 00:00:00', 'test 1', '', '', 'test 2', 0, '2020-11-27 01:24:08', 1, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL),
+(15, 1, '562WTWT', 'Motherboard', '', '9,11', NULL, NULL, '2020-12-02 00:00:00', 'test1 ', 'Andolino_CV.docx', 'contact-us-2993000_1920.jpg', 'test2', 0, '2020-11-28 18:32:04', 0, NULL, NULL, NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1538,18 +1544,22 @@ CREATE TABLE `tbl_asset_request` (
   `approved_date` datetime DEFAULT NULL,
   `disapproved_by` int(11) DEFAULT NULL,
   `disapproved_date` datetime DEFAULT NULL,
-  `asset_request_ids` text DEFAULT NULL
+  `asset_request_ids` text DEFAULT NULL,
+  `dispatch_to` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset_request`
 --
 
-INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`) VALUES
-(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL),
-(12, 5, 1, 2, 4, '', 9, 'TEST1', 'TEST2', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 0, NULL, NULL, NULL, NULL, NULL),
-(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL),
-(14, 1, 1, 2, 2, 'TEST', 9, 'TEST 1', 'TEST 2', 0, '2020-11-26 19:33:24', '2020-12-01 00:00:00', '2020-12-04 00:00:00', 0, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`, `dispatch_to`) VALUES
+(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 5, 1, 2, 4, '', 9, 'TEST1', 'this is a test remakrs from admin', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 2, NULL, NULL, 1, '2020-11-29 03:12:08', NULL, NULL),
+(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(14, 1, 1, 2, 2, 'TEST', 9, 'TEST 1', 'TEST 2', 0, '2020-11-26 19:33:24', '2020-12-01 00:00:00', '2020-12-04 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(15, NULL, 1, 3, 2, NULL, 11, 'test 1', 'test 1 ghost recon', 0, '2020-11-29 15:58:38', '2020-12-22 00:00:00', '2020-12-24 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL),
+(16, NULL, 1, 3, 2, NULL, 11, 'TEST 11', 'TEST 22', 0, '2020-11-30 03:14:33', '2020-12-01 00:00:00', '2020-12-02 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(17, NULL, 1, 3, 2, NULL, 11, 'TEST 1', 'TESt 2', 0, '2020-11-30 10:08:38', '2020-12-23 00:00:00', '2020-12-31 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, 4);
 
 -- --------------------------------------------------------
 
@@ -2859,6 +2869,9 @@ CREATE TABLE `v_portal_request` (
 ,`category_name` varchar(50)
 ,`location_name` varchar(191)
 ,`screen_name` text
+,`address` text
+,`contact_person` text
+,`dispatch_addr` text
 );
 
 -- --------------------------------------------------------
@@ -2941,6 +2954,10 @@ CREATE TABLE `v_repair_request` (
 ,`tech_notes` text
 ,`closed_by` int(11)
 ,`closed_date` datetime
+,`cancelled_by` text
+,`cancelled_date` datetime
+,`address` text
+,`location_name` varchar(191)
 );
 
 -- --------------------------------------------------------
@@ -3250,7 +3267,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_portal_request`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name` from ((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name`,`tl`.`address` AS `address`,`tl`.`contact_person` AS `contact_person`,`tl2`.`address` AS `dispatch_addr` from (((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tr`.`dispatch_to`)) ;
 
 -- --------------------------------------------------------
 
@@ -3277,7 +3294,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_repair_request`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_repair_request`  AS  select `tar`.`id` AS `id`,`tar`.`serial` AS `serial`,`tar`.`asset_tag` AS `asset_tag`,`ac`.`name` AS `asset_category`,`ta`.`name` AS `asset_name`,`tar`.`property_tag` AS `property_tag`,`tar`.`tbl_child_asset_id` AS `tbl_child_asset_id`,`tar`.`regkits_no` AS `regkits_no`,`tar`.`custodian` AS `custodian`,`tar`.`date_reported` AS `date_reported`,`tar`.`problem_desc` AS `problem_desc`,`tar`.`file_upload` AS `file_upload`,`tar`.`image_upload` AS `image_upload`,`tar`.`remarks` AS `remarks`,`tar`.`is_deleted` AS `is_deleted`,`tar`.`entry_date` AS `entry_date`,`tar`.`status` AS `status`,`tar`.`approved_by` AS `approved_by`,`tar`.`approved_date` AS `approved_date`,`tar`.`disapproved_by` AS `disapproved_by`,`tar`.`disapproved_date` AS `disapproved_date`,`tar`.`requestor` AS `requestor`,`u1`.`screen_name` AS `custodian_name`,`u2`.`screen_name` AS `requestor_name`,`u3`.`screen_name` AS `approver_name`,`u3`.`screen_name` AS `disapprover_name`,`tbs`.`name` AS `supplier_name`,`om`.`office_name` AS `office_name`,`ta`.`warranty_months` AS `warranty_months`,`ta`.`purchase_date` + interval `ta`.`warranty_months` month AS `date_expire`,`tar`.`tech_support_id` AS `tech_support_id`,`tar`.`repair_date` AS `repair_date`,`tar`.`tech_notes` AS `tech_notes`,`tar`.`closed_by` AS `closed_by`,`tar`.`closed_date` AS `closed_date` from ((((((((`tbl_asset_repair_request` `tar` left join `tbl_asset` `ta` on(`ta`.`serial` = `tar`.`serial`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tar`.`asset_category_id`)) left join `tbl_suppliers` `tbs` on(`tbs`.`id` = `ta`.`supplier_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `users` `u1` on(`u1`.`users_id` = `tar`.`custodian`)) left join `users` `u2` on(`u2`.`users_id` = `tar`.`requestor`)) left join `users` `u3` on(`u3`.`users_id` = `tar`.`approved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tar`.`disapproved_by`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_repair_request`  AS  select `tar`.`id` AS `id`,`tar`.`serial` AS `serial`,`tar`.`asset_tag` AS `asset_tag`,`ac`.`name` AS `asset_category`,`ta`.`name` AS `asset_name`,`tar`.`property_tag` AS `property_tag`,`tar`.`tbl_child_asset_id` AS `tbl_child_asset_id`,`tar`.`regkits_no` AS `regkits_no`,`tar`.`custodian` AS `custodian`,`tar`.`date_reported` AS `date_reported`,`tar`.`problem_desc` AS `problem_desc`,`tar`.`file_upload` AS `file_upload`,`tar`.`image_upload` AS `image_upload`,`tar`.`remarks` AS `remarks`,`tar`.`is_deleted` AS `is_deleted`,`tar`.`entry_date` AS `entry_date`,`tar`.`status` AS `status`,`tar`.`approved_by` AS `approved_by`,`tar`.`approved_date` AS `approved_date`,`tar`.`disapproved_by` AS `disapproved_by`,`tar`.`disapproved_date` AS `disapproved_date`,`tar`.`requestor` AS `requestor`,`u1`.`screen_name` AS `custodian_name`,`u2`.`screen_name` AS `requestor_name`,`u3`.`screen_name` AS `approver_name`,`u3`.`screen_name` AS `disapprover_name`,`tbs`.`name` AS `supplier_name`,`om`.`office_name` AS `office_name`,`ta`.`warranty_months` AS `warranty_months`,`ta`.`purchase_date` + interval `ta`.`warranty_months` month AS `date_expire`,`tar`.`tech_support_id` AS `tech_support_id`,`tar`.`repair_date` AS `repair_date`,`tar`.`tech_notes` AS `tech_notes`,`tar`.`closed_by` AS `closed_by`,`tar`.`closed_date` AS `closed_date`,`u5`.`screen_name` AS `cancelled_by`,`tar`.`cancelled_date` AS `cancelled_date`,`tl`.`address` AS `address`,`tl`.`name` AS `location_name` from ((((((((((`tbl_asset_repair_request` `tar` left join `tbl_asset` `ta` on(`ta`.`serial` = `tar`.`serial` and `tar`.`asset_category_id` = `ta`.`asset_category_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tar`.`asset_category_id`)) left join `tbl_suppliers` `tbs` on(`tbs`.`id` = `ta`.`supplier_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `users` `u1` on(`u1`.`users_id` = `tar`.`custodian`)) left join `users` `u2` on(`u2`.`users_id` = `tar`.`requestor`)) left join `users` `u3` on(`u3`.`users_id` = `tar`.`approved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tar`.`disapproved_by`)) left join `users` `u5` on(`u5`.`users_id` = `tar`.`cancelled_by`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tar`.`location_id`)) where `tar`.`is_deleted` = 0 order by `tar`.`id` desc ;
 
 -- --------------------------------------------------------
 
@@ -3909,13 +3926,13 @@ ALTER TABLE `tbl_asset_checklist`
 -- AUTO_INCREMENT for table `tbl_asset_repair_request`
 --
 ALTER TABLE `tbl_asset_repair_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_asset_request`
 --
 ALTER TABLE `tbl_asset_request`
-  MODIFY `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `tbl_asset_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbl_child_asset`

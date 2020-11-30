@@ -324,6 +324,14 @@ class Admin extends MY_Controller {
 		$this->adminContainer('admin/asset-request', $params);	
 	}
 
+	public function getAssetCategoryGetQty(){
+		$readyToDeploy = $this->db->get_where('tbl_asset', array(
+			'asset_category_id' => $this->input->post('asset_category_id'),
+			'status_id' => 2
+		))->result();
+		echo json_encode(array('qty' => count($readyToDeploy)));
+	}
+
 	public function portal_repair_request(){
 		$params['heading'] = 'REPAIR REQUEST';
 		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
@@ -447,12 +455,14 @@ class Admin extends MY_Controller {
 	
 	public function viewRepairApprovalPending(){
 		$id = $this->input->get('id');
+		$id = $this->encdec($id, 'd');
 		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0 ))->row();
 		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
 		if ($params['dataRequest']) {
 			$dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
-			$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
+			$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name, ac.name as asset_category_name FROM tbl_child_asset tac
 																							LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
+																							LEFT JOIN asset_category ac on ac.asset_category_id = tac.asset_category_id
 																							WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
 		}
 		$this->customContainer('admin/crud/view-repair-asset-request', $params);
@@ -460,6 +470,7 @@ class Admin extends MY_Controller {
 	
 	public function viewDispatchRequestPending(){
 		$id = $this->input->get('id');
+		$id = $this->encdec($id, 'd');
 		$params['dataRequest'] = $this->db->get_where('v_portal_request', array('tbl_asset_request_id' => $id, 'is_deleted' => 0 ))->row();
 		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
 		if ($params['dataRequest']) {
@@ -475,26 +486,26 @@ class Admin extends MY_Controller {
 		if ($this->input->post('is_approved') == 'ap') {
 			$data = array(
 				'status' => 1, 
-				// 'tech_support_id' => $this->input->post('tech_support_id'),
+				'tech_support_id' => $this->input->post('tech_support_id'),
 				'approved_by' => $this->session->users_id,
 				'approved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
 			}
-			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
+			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
 		} else {
 			$data = array(
 				'status' => 2, 
 				'remarks' => $this->input->post('remarks'), 
-				// 'tech_support_id' => $this->input->post('tech_support_id'),
+				'tech_support_id' => $this->input->post('tech_support_id'),
 				'disapproved_by' => $this->session->users_id,
 				'disapproved_date' => date('Y-m-d h:i:s')
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
 			}
-			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
+			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
 		}
 		$res = array();
 		if ($q) {
@@ -757,7 +768,7 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = '';
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
-				$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+				$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$this->encdec($row->id, 'e').'" 
 									 target="_blank" class="text-dark" data-toggle="tooltip" 
 									 data-placement="top"><i class="fas fa-link"></i></a>';
 			} elseif ($row->status==1) {
@@ -830,9 +841,13 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
 				$data[] = '<button 
-										type="button" 
-										class="btn btn-xs font-12 btn-danger" id="cancel-portal-request" 
-										data-id="'.$row->tbl_asset_request_id.'">Cancel</button>';
+											type="button" 
+											class="btn btn-xs font-12 btn-info" id="edit-portal-dispatch-request" 
+											data-id="'.$row->tbl_asset_request_id.'">Edit</button> | <button 
+											type="button" 
+											class="btn btn-xs font-12 btn-danger" data-type="dispatch" onclick="showConfirm(this)" 
+											data-id="'.$row->tbl_asset_request_id.'">Cancel</button>';
+										// id="cancel-portal-request" 
 			} elseif ($row->status==1) {
 				$data[] = $row->tbl_asset_request_id;
 				$data[] = $row->category_name;
@@ -902,8 +917,9 @@ class Admin extends MY_Controller {
 										data-id="'.$row->id.'">Edit</button> | 
 									<button 
 										type="button" 
-										class="btn btn-xs font-12 btn-danger" id="cancel-portal-request" 
+										class="btn btn-xs font-12 btn-danger" data-type="repair" onclick="showConfirm(this)"  
 										data-id="'.$row->id.'">Cancel</button>';
+										// id="cancel-portal-request"
 			} elseif ($row->status==1) {
 				$data[] = $row->id;
 				$data[] = $row->asset_category;
@@ -932,9 +948,9 @@ class Admin extends MY_Controller {
 				$data[] = $row->asset_category;
 				$data[] = $row->serial;
 				$data[] = $status[$row->status];
-				$data[] = '';//cancelled by $row->disapproved_by;
-				$data[] = '';//cancelled date $row->disapproved_by;
-				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = $row->cancelled_by; //cancelled by
+				$data[] = $row->cancelled_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->cancelled_date)); //cancelled date
+				$data[] = $row->remarks;
 				$data[] = '';
 			} else {
 				$data[] = $row->id;
@@ -966,10 +982,23 @@ class Admin extends MY_Controller {
 	}
 
 	public function cancelPortalRequest(){
-	 	$tbl = $this->input->post('tbl');
-	 	$field = $this->input->post('field');
-		$id = $this->input->post('id');
-		return $this->db->update($tbl, array('status'=>3), array($field=>$id)); 
+		$tbl 		 = $this->input->post('tbl');
+		if ($tbl == 'tbl_asset_repair_request') {
+			$field 	 = $this->input->post('field');
+			$id 		 = $this->input->post('id');
+			$message = $this->input->post('message');
+			return $this->db->update($tbl, array('status'=>3, 
+																						'remarks' => $message, 
+																						'cancelled_by' => $this->session->users_id, 
+																						'cancelled_date' => date('Y-m-d H:i:s')), 
+																		array($field=>$id)); 
+		} else {
+			$field 	 = $this->input->post('field');
+			$id 		 = $this->input->post('id');
+			$message = $this->input->post('message');
+			return $this->db->update($tbl, array('status'=>3, 'remarks' => $message), array($field=>$id)); 
+		}
+	 	
 	}
 
 	public function add_asset(){
@@ -1203,12 +1232,17 @@ class Admin extends MY_Controller {
 		foreach ($this->input->post() as $key => $value) {
 			if ($key == 'date_need' || $key == 'date_return') {
 				$dataToSave[$key] = date('Y-m-d H:i:s', strtotime($value));	
-			} else {
+			} elseif($key == 'has_update'){} else {
 				$dataToSave[$key] = $value;
 			}
 		}
 		$dataToSave['entry_date'] = date('Y-m-d H:i:s');
-		$q = $this->db->insert('tbl_asset_request', $dataToSave);
+		$has_update = $this->input->post('has_update');
+		if ($has_update == '') {
+			$q = $this->db->insert('tbl_asset_request', $dataToSave);
+		} else {
+			$q = $this->db->update('tbl_asset_request', $dataToSave, array('tbl_asset_request_id' => $has_update));
+		}
 		$res = array();
 		if ($q) {
 			$res['param1'] = 'Success!';
@@ -1780,6 +1814,13 @@ class Admin extends MY_Controller {
 		echo json_encode(array('data'=> $this->encdec(json_encode($arr_asset_id), 'e')));
 	}
 	
+	public function editDispatchRequest(){
+		$id 						= $this->input->post('id');
+		$q							= $this->db->get_where('tbl_asset_request', array('tbl_asset_request_id' => $id))->row();
+		$q->date_need 	= date('Y-m-d', strtotime($q->date_need));
+		$q->date_return = date('Y-m-d', strtotime($q->date_return));
+		echo json_encode($q);
+	}
 	
 	//dyon
 	

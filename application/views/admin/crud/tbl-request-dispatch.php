@@ -28,12 +28,12 @@
           <thead>
             <tr>
               <th scope="col">TICKET</th>
-              <th scope="col">REQUESTEE</th>
-              <th scope="col">OFFICE</th>
+              <th scope="col">LOCATION</th>
+              <th scope="col">DISPATCH TO</th>
               <th scope="col">ASSET CATEGORY</th>
               <th scope="col">QTY</th>
               <th scope="col">PURPOSE</th>
-              <th scope="col">LOCATION</th>
+              <th scope="col">REQUESTEE</th>
               <th scope="col">REQ DATE TIME</th>
               <th scope="col">ACTION</th>
             </tr>

@@ -502,17 +502,17 @@ class Settings extends MY_Controller {
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-   		$data[] = $row->tbl_asset_request_id;
-   		$data[] = $row->screen_name;
-   		$data[] = $row->office_name;
+			$data[] = $row->tbl_asset_request_id;
+   		$data[] = $row->location_name;
+			$data[] = $row->screen_name;
    		$data[] = $row->category_name;
+			$data[] = ''; //$row->office_name;
    		$data[] = $row->qty;
    		$data[] = $row->purpose;
-   		$data[] = $row->location_name;
    		$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
-			 $data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$row->tbl_asset_request_id).'" target="_blank"><i class="fas fa-search"></i></a> | 
-			 						<a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
-									<a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			 $data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+			 						// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+									// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
 			$res[] = $data;
 		}
 

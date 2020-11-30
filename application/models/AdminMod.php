@@ -46,7 +46,8 @@ class AdminMod extends CI_Model {
 	var $tblRepairRequestCollumn = array('id', 'serial', 'asset_category', 'asset_tag', 'property_tag', 'tbl_child_asset_id', 'regkits_no', 
 																				'custodian', 'date_reported', 'problem_desc', 'file_upload', 'image_upload', 'remarks', 'is_deleted', 
 																				'entry_date', 'status', 'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'requestor', 
-																				'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name', 'closed_by', 'closed_date');
+																				'custodian_name', 'requestor_name', 'approver_name', 'disapprover_name', 'asset_name', 'closed_by', 'closed_date',
+																				'cancelled_by', 'cancelled_date');
 	var $tblRepairRequestOrder = array('id' => 'desc');
 
 	// var $tblAssetLogs = 'v_asset_request';

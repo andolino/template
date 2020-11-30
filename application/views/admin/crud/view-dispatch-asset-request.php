@@ -21,17 +21,19 @@
                         <ul style="list-style-type: none;padding-left:0">
                           <li>TICKET NO. : <strong><?php echo str_pad($dataRequest->tbl_asset_request_id, 8, '0', STR_PAD_LEFT); ?></strong></li>
                           <li>REQUESTER : <strong><?php echo $dataRequest->screen_name; ?></strong></li>
-                          <li>OFFICE : <strong><?php echo $dataRequest->office_name; ?></strong></li>
+                          <li>ADDRESS : <strong><?php echo $dataRequest->address; ?></strong></li>
+                          <!-- <li>OFFICE : <strong><?php echo $dataRequest->office_name; ?></strong></li> -->
                           <li>ASSET CATEGORY : <?php echo $dataRequest->category_name; ?></li>
                           <li>QTY : <?php echo $dataRequest->qty; ?></li>
                         </ul>
                       </div>
                       <div class="col-lg-6">
                         <ul style="list-style-type: none;padding-left:0">
-                          <li>DATE NEEDED : <strong><?php echo date('Y-m-d h:i:s', strtotime($dataRequest->date_need)); ?> </strong></li>
-                          <li>RETURN DATE : <strong><?php echo date('Y-m-d h:i:s', strtotime($dataRequest->date_return)); ?> </strong> </li>
-                          <li>LOCATION : <strong><?php echo $dataRequest->location_name; ?> </strong></li>
+                          <li>DATE NEEDED : <strong><?php echo $dataRequest->date_need == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_need)); ?> </strong></li>
+                          <li>RETURN DATE : <strong><?php echo $dataRequest->date_return == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_return)); ?> </strong> </li>
+                          <li>DISPATCH LOCATION: <strong><?php echo $dataRequest->address; ?> </strong></li>
                           <li>PURPOSE : <?php echo $dataRequest->purpose; ?> </li>
+                          <li>CUSTODIAN : <?php echo $dataRequest->contact_person; ?> </li>
                           <li>REMARKS : <?php echo $dataRequest->remarks; ?></li>
                         </ul>
                       </div>
@@ -39,13 +41,13 @@
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="col-lg-6">
-                    <!-- <select class="custom-select form-control-sm font-12" name="tech_support_id" id="" required>
+                    <select class="custom-select form-control-sm font-12" name="tech_support_id" id="" required>
                       <option selected value="" hidden>Select Technician / Tech support</option>
                       <option value="" disabled></option>
-                      <?php //foreach($techSup as $row): ?>
-                      <option value="<?php //echo $row->users_id; ?>"><?php //echo $row->screen_name; ?></option>
-                      <?php //endforeach; ?>
-                    </select> -->
+                      <?php foreach($techSup as $row): ?>
+                      <option value="<?php echo $row->users_id; ?>"><?php echo $row->screen_name; ?></option>
+                      <?php endforeach; ?>
+                    </select>
                   </div>
                   <div class="col-lg-12"></div>
                   <div class="warranty_cont none">

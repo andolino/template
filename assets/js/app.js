@@ -548,7 +548,7 @@ $(document).ready(function() {
               $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
                 $('.cont-parent-child-repair').html(data);
               });
-              // window.location.reload();
+              window.location.reload();
             }
           });
         }, function(){
@@ -808,6 +808,9 @@ $(document).ready(function() {
     $('#modal-portal-add-request').modal('show');
     $('#modal-portal-add-request .modal-title').html('Add Request');
     $('#frm-repair-request').trigger('reset');
+    $('#frm-portal-request').trigger('reset');
+    $('#purpose').html('');
+    $('#remarks').html('');
     $('#has_update').val('');
     $('.repair-upload-docx').addClass('none');
     $('.repair-upload-img').addClass('none');
@@ -827,6 +830,72 @@ $(document).ready(function() {
     $('#location_id').select2({
       width: '100%',
       dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#dispatch_to').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+
+    $(".pickerDate").datepicker({
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel: true,
+      minDate: 'today',
+    });
+  });
+  
+  $(document).on('click', '#edit-portal-dispatch-request', function(){
+    $('#modal-portal-add-request').modal('show');
+    $('#modal-portal-add-request .modal-title').html('Edit Request');
+    $('#frm-portal-request').trigger('reset');
+    var id = $(this).attr('data-id');
+    $.ajax({
+      type: "POST",
+      url: "edit-dispatch-request",
+      data: { 'id' : id },
+      dataType: "json",
+      success: function (res) {
+        // console.log(res);
+        $('select[name="asset_category_id"]').val(res.asset_category_id).trigger('change');
+        $('input[name="qty"]').val(res.qty);
+        $('select[name="location_id"]').val(res.location_id).trigger('change');
+        $('input[name="date_need"]').val(res.date_need);
+        $('input[name="date_return"]').val(res.date_return);
+        $('textarea[name="purpose"]').html(res.purpose);
+        $('textarea[name="remarks"]').html(res.remarks);
+        $('#has_update').val(id);
+
+      }
+    });
+
+    $('#asset_category_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#location_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $(".pickerDate").datepicker({
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel: true,
+      minDate: 'today',
+    });
+  });
+
+  $(document).on('change', '.asset_category_get_qty', function () {
+    var asset_category_id = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: "get-asset-category-get-qty",
+      data: { 'asset_category_id' : asset_category_id },
+      dataType: 'JSON',
+      success: function (res) {
+        $('#qty').val(res.qty);
+      }
     });
   });
   
@@ -973,7 +1042,9 @@ $(document).ready(function() {
   });
 
   $(document).on('submit', '#frm-portal-request', function (e) {
-    var frm = $(this).serialize();
+    var frm = $(this).serializeArray();
+    frm.push({'name'  : 'has_update', 
+              'value' : $('#has_update').val()});
     e.preventDefault();
       customSwal(
           'btn btn-success', 
@@ -1395,11 +1466,11 @@ function initAdminRepairRequestDataTables(){
       //   $(row).attr(myObjKeyLguConst);
     }
   });
-  setInterval(function() {
-    tbl_request_repair_admin_pending.rows().invalidate().draw(); 
-    tbl_request_repair_admin_approved.rows().invalidate().draw(); 
-    tbl_request_repair_admin_disapproved.rows().invalidate().draw(); 
-  }, 1000 );
+  // setInterval(function() {
+  //   tbl_request_repair_admin_pending.rows().invalidate().draw(); 
+  //   tbl_request_repair_admin_approved.rows().invalidate().draw(); 
+  //   tbl_request_repair_admin_disapproved.rows().invalidate().draw(); 
+  // }, 1000 );
   
 }
 
@@ -2128,6 +2199,46 @@ function resetFrmRepairRequest(e){
   //   }
   // });
 }
-
-
-
+function showConfirm(e){
+  var id = $(e).attr('data-id');
+  var type = $(e).attr('data-type');
+  (async () => {
+    const { value: text } = await Swal.fire({
+      input: 'textarea',
+      inputLabel: 'Message',
+      inputPlaceholder: 'Type your message here...',
+      inputAttributes: {
+        'aria-label': 'Type your message here'
+      },
+      showCancelButton: true
+    });
+    var tbl = '';
+    var field = '';
+    if (type == 'repair') {
+      tbl = 'tbl_asset_repair_request';
+      field= 'id';
+    } else {
+      tbl = 'tbl_asset_request';
+      field = 'tbl_asset_request_id';
+    }
+    if (text) {
+      $.ajax({
+        url      : 'cancel-portal-request',
+        type     : 'POST',
+        context  : this,
+        data     : {
+          'tbl'     : tbl,
+          'field'   : field, 
+          'id'      : id,
+          'message' : text
+        },
+        success:function(res){
+          tbl_portal_asset_pending.ajax.reload();
+          tbl_repair_asset_pending.ajax.reload();
+        }
+      });
+    } else{
+      Swal.fire('Please input a message!')
+    }  
+  })()
+}

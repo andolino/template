@@ -129,17 +129,17 @@
       <div class="modal-body">
         <form id="frm-portal-request">
           <div class="form-group">
-            <label for="office_management_id" class="font-12">Office</label>
-            <select id="office_management_id" name="office_management_id" required>
+            <label for="location_id" class="font-12">Location</label>
+            <select id="location_id" name="location_id" required>
               <option value=""></option>
-              <?php foreach($offices as $row): ?>
-                <option value="<?php echo $row->office_management_id; ?>"><?php echo $row->office_name; ?></option>
+              <?php foreach($location as $row): ?>
+                <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
           <div class="form-group">
             <label for="asset_category_id" class="font-12">Asset Category</label>
-            <select id="asset_category_id" name="asset_category_id" required>
+            <select id="asset_category_id" class="asset_category_get_qty" name="asset_category_id" required>
               <option value=""></option>
               <?php foreach($asset_category as $row): ?>
                 <option value="<?php echo $row->asset_category_id; ?>"><?php echo $row->name; ?></option>
@@ -151,18 +151,18 @@
             <input type="text" class="form-control form-control-sm font-12" id="qty" name="qty" required>
           </div>
           <div class="form-group">
-            <label for="location_id" class="font-12">Location</label>
-            <select id="location_id" name="location_id" required>
+            <label for="dispatch_to" class="font-12">Dispatch To</label>
+            <select id="dispatch_to" name="dispatch_to" required>
               <option value=""></option>
               <?php foreach($location as $row): ?>
                 <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="other_location" class="font-12">Other Location</label>
             <input type="text" class="form-control form-control-sm font-12" id="other_location" name="other_location">
-          </div>
+          </div> -->
           <div class="form-group">
             <label for="" class="font-12">Borrower</label>
             <input type="text" class="form-control form-control-sm font-12" id="" value="<?php echo $this->session->username; ?>" name="" readonly="" required>
@@ -170,11 +170,11 @@
           </div>
           <div class="form-group">
             <label for="date_need" class="font-12">Date Need</label>
-            <input type="date" class="form-control form-control-sm font-12" id="date_need" value="" name="date_need">
+            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_need" value="" name="date_need">
           </div>
           <div class="form-group">
             <label for="date_return" class="font-12">Date Return</label>
-            <input type="date" class="form-control form-control-sm font-12" id="date_return" value="" name="date_return">
+            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_return" value="" name="date_return">
           </div>
           <div class="form-group">
             <label for="purpose" class="font-12">Purpose</label>
@@ -183,6 +183,7 @@
           <div class="form-group">
             <label for="remarks" class="font-12">Remarks</label>
             <textarea class="form-control form-control-sm font-12" id="remarks" name="remarks"></textarea>
+            <input type="hidden" id="has_update">
           </div>
           <button type="submit" class="none" id="submit-frm"></button>
         </form>
