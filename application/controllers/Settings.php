@@ -498,21 +498,87 @@ class Settings extends MY_Controller {
 
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
-
+		$status = $this->input->post('request_status');
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
-			$data[] = $row->tbl_asset_request_id;
-   		$data[] = $row->location_name;
-			$data[] = $row->screen_name;
-   		$data[] = $row->category_name;
-			$data[] = ''; //$row->office_name;
-   		$data[] = $row->qty;
-   		$data[] = $row->purpose;
-   		$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
-			 $data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
-			 						// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
-									// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			if ($status == 0) {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			} elseif ($status == 1) {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			} elseif ($status == 2){
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			} elseif ($status == 3){
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			} elseif ($status == 4){
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			} else {
+				$data[] = $row->tbl_asset_request_id;
+				$data[] = $row->location_name;
+				$data[] = $row->screen_name;
+				$data[] = $row->category_name;
+				$data[] = ''; //$row->office_name;
+				$data[] = $row->qty;
+				$data[] = $row->purpose;
+				$data[] = date('Y-m-d h:i:s', strtotime($row->entry_date));
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
+										// <a href="javascript:void(0);" id="approveDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-edit"></i></a>
+										// <a href="javascript:void(0);" id="disapprovedDispatchRequest" data-id="'.$row->tbl_asset_request_id.'"><i class="fas fa-times"></i></a>';
+			}
+			
+
+
+
 			$res[] = $data;
 		}
 
@@ -531,12 +597,15 @@ class Settings extends MY_Controller {
 																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
 																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
 																															'sibling_count', 'property_tag', 'asset_category_name', 'status_id'], ['id' => 'desc']);
+
+		// $this->output->enable_profiler(true);																											
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 
 		foreach ($result as $row) {
 			$data = array();
 			$no++;
+   		$data[] = '<input class="float-right chk-asset-listdown" name="chk-asset-listdown[]" type="checkbox" value="'.$row->id.'">';
    		$data[] = $row->name;
    		$data[] = $row->asset_tag;
    		$data[] = $row->property_tag;
@@ -545,8 +614,7 @@ class Settings extends MY_Controller {
    		$data[] = '<strong>' . $row->end_user . '</strong>';
 			
 			 $data[] = ($row->child_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewChild" data-type="childs">childs('.$row->child_count.')</a> ':'') . 
-								($row->sibling_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewSib" data-type="siblings">siblings('.$row->sibling_count.')</a>':'') . 
-								'"<input class="float-right" name="chk-asset-listdown" type="checkbox" value="'.$row->id.'">';
+								($row->sibling_count>0?'<a href="javascript:void(0);" class="text-primary" data-id="'.$row->id.'" id="viewSib" data-type="siblings">siblings('.$row->sibling_count.')</a>':'');
 			$res[] = $data;
 		}
 

@@ -147,8 +147,8 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="qty" class="font-12">Quantity</label>
-            <input type="text" class="form-control form-control-sm font-12" id="qty" name="qty" required>
+            <label for="qty" class="font-12">Quantity | Available : <span class="asset_available_lbl"></span> </label>
+            <input type="text" class="form-control form-control-sm font-12" onchange="setDdispatchQuantity(this)" id="qty" name="qty" required>
           </div>
           <div class="form-group">
             <label for="dispatch_to" class="font-12">Dispatch To</label>

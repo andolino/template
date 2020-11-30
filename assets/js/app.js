@@ -484,6 +484,14 @@ $(document).ready(function() {
   $(document).on('click', '#btnApproveDispatchRequest', function (e) {
     e.preventDefault();
     var frm = $('#frm-request-dispatch-approval').serializeArray();
+    var chkVal = [];
+    $.each($("input.chk-asset-listdown"), function (i, v) { 
+       if ($(this).is(':checked')) {
+        chkVal.push($(this).val());
+       }
+    });
+    chkVal.join(',', chkVal);
+    frm.push({ name : 'chk_asset', value : chkVal });
     customSwal(
       'btn btn-success', 
       'btn btn-danger mr-2', 
@@ -494,18 +502,63 @@ $(document).ready(function() {
         frm.push({name: 'is_approved', value: 'ap'});
         $.ajax({
           type: "POST",
-          url: "submit-approval-repair-request",
+          url: "submit-approval-dispatch-request",
           data: frm,
           dataType: "json",
           success: function (res) {
+            // console.log(res);
             Swal.fire(
               res.msg.param1,
               res.msg.param2,
               res.msg.param3
             );
-            $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
-              $('.cont-parent-child-repair').html(data);
-            });
+            tbl_asset_dtables.ajax.reload();
+            // $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+            //   $('.cont-parent-child-repair').html(data);
+            // });
+            // window.location.reload();
+          }
+        });
+      }, function(){
+        // console.log('Fail');
+    });
+  });
+
+  $(document).on('click', '#btnDisapproveDispatchRequest', function (e) {
+    e.preventDefault();
+    var frm = $('#frm-request-dispatch-approval').serializeArray();
+    var chkVal = [];
+    $.each($("input.chk-asset-listdown"), function (i, v) { 
+       if ($(this).is(':checked')) {
+        chkVal.push($(this).val());
+       }
+    });
+    chkVal.join(',', chkVal);
+    frm.push({ name : 'chk_asset', value : chkVal });
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Disapprove Request?', 'question'], 
+      function(){
+        frm.push({name: 'is_approved', value: 'dp'});
+        $.ajax({
+          type: "POST",
+          url: "submit-approval-dispatch-request",
+          data: frm,
+          dataType: "json",
+          success: function (res) {
+            // console.log(res);
+            Swal.fire(
+              res.msg.param1,
+              res.msg.param2,
+              res.msg.param3
+            );
+            tbl_asset_dtables.ajax.reload();
+            // $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+            //   $('.cont-parent-child-repair').html(data);
+            // });
             // window.location.reload();
           }
         });
@@ -857,7 +910,7 @@ $(document).ready(function() {
       dataType: "json",
       success: function (res) {
         // console.log(res);
-        $('select[name="asset_category_id"]').val(res.asset_category_id).trigger('change');
+        $('select[name="asset_category_id"]').val(res.asset_category_id);//.trigger('change');
         $('input[name="qty"]').val(res.qty);
         $('select[name="location_id"]').val(res.location_id).trigger('change');
         $('input[name="date_need"]').val(res.date_need);
@@ -888,13 +941,16 @@ $(document).ready(function() {
 
   $(document).on('change', '.asset_category_get_qty', function () {
     var asset_category_id = $(this).val();
+    var location_id = $('#location_id').val();
     $.ajax({
       type: "POST",
       url: "get-asset-category-get-qty",
-      data: { 'asset_category_id' : asset_category_id },
+      data: { 'asset_category_id' : asset_category_id, 'location_id' : location_id },
       dataType: 'JSON',
       success: function (res) {
         $('#qty').val(res.qty);
+        $('#qty').attr('data-quantity', res.qty);
+        $('.asset_available_lbl').html(res.qty);
       }
     });
   });
@@ -2241,4 +2297,16 @@ function showConfirm(e){
       Swal.fire('Please input a message!')
     }  
   })()
+}
+
+
+function setDdispatchQuantity(e){
+  var qty = $(e).attr('data-quantity');
+  if (parseInt($(e).val()) > parseInt(qty)) {
+    Swal.fire(  
+      'Opps!',
+      'Invalid Quanty! Please input lower or equal to ' + qty,
+      'info'
+    );
+  }
 }

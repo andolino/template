@@ -28,7 +28,7 @@ class AdminMod extends CI_Model {
 	var $tblPortalRequestCollumn = array('tbl_asset_request_id', 'office_management_id', 'asset_category_id', 'qty', 'location_id', 
 																				'other_location', 'users_id', 'purpose', 'remarks', 'is_deleted', 'entry_date', 'date_need', 
 																				'date_return', 'status', 'office_name', 'category_name', 'location_name', 'screen_name', 
-																				'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date');
+																				'approved_by', 'approved_date', 'disapproved_by', 'disapproved_date', 'cancelled_by', 'cancelled_date');
 	var $tblPortalRequestOrder = array('tbl_asset_request_id' => 'desc');
 
 	//ADMIN REPAIR REQUEST

@@ -31,7 +31,7 @@
                         <ul style="list-style-type: none;padding-left:0">
                           <li>DATE NEEDED : <strong><?php echo $dataRequest->date_need == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_need)); ?> </strong></li>
                           <li>RETURN DATE : <strong><?php echo $dataRequest->date_return == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_return)); ?> </strong> </li>
-                          <li>DISPATCH LOCATION: <strong><?php echo $dataRequest->address; ?> </strong></li>
+                          <li>DISPATCH LOCATION: <strong><?php echo $dataRequest->dispatch_addr; ?> </strong></li>
                           <li>PURPOSE : <?php echo $dataRequest->purpose; ?> </li>
                           <li>CUSTODIAN : <?php echo $dataRequest->contact_person; ?> </li>
                           <li>REMARKS : <?php echo $dataRequest->remarks; ?></li>
@@ -100,10 +100,12 @@
                 <table class="table font-12 w-100" id="tbl-asset-listdown" 
                         data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
                         data-man="<?php echo $dataRequest->office_management_id; ?>" 
-                        data-id="<?php echo $this->input->get('id'); ?>"
-                        data-qty="<?php echo $dataRequest->qty; ?>">
+                        data-id="<?php echo $distId; ?>"
+                        data-qty="<?php echo $dataRequest->qty; ?>"
+                        data-location="<?php echo $dataRequest->location_id; ?>">
                   <thead>
                     <tr>
+                      <th scope="col"></th>
                       <th scope="col">ASSET NAME</th>
                       <th scope="col">ASSET TAG </th>
                       <th scope="col">PROPERTY TAG</th>

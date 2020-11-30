@@ -327,8 +327,10 @@ class Admin extends MY_Controller {
 	public function getAssetCategoryGetQty(){
 		$readyToDeploy = $this->db->get_where('tbl_asset', array(
 			'asset_category_id' => $this->input->post('asset_category_id'),
-			'status_id' => 2
+			'status_id' 				=> 1,
+			'location_id' 			=> $this->input->post('location_id')
 		))->result();
+		// $this->output->enable_profiler(true);
 		echo json_encode(array('qty' => count($readyToDeploy)));
 	}
 
@@ -473,6 +475,7 @@ class Admin extends MY_Controller {
 		$id = $this->encdec($id, 'd');
 		$params['dataRequest'] = $this->db->get_where('v_portal_request', array('tbl_asset_request_id' => $id, 'is_deleted' => 0 ))->row();
 		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
+		$params['distId'] = $id;
 		if ($params['dataRequest']) {
 			// $dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
 			// $params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
@@ -521,6 +524,50 @@ class Admin extends MY_Controller {
 		// $q = $this->db->insert('tbl_asset_request', $dataToSave);
 	}
 	
+	public function submitApprovalDispatchRequest(){
+		// echo json_encode($_POST);
+		if ($this->input->post('is_approved') == 'ap') {
+			$data = array(
+				'status' => 1, 
+				'tech_support_id' => $this->input->post('tech_support_id'),
+				'approved_by' => $this->session->users_id,
+				'approved_date' => date('Y-m-d h:i:s')
+			);
+			if ($this->input->post('repair_date')) {
+				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			}
+			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
+		} else {
+			$data = array(
+				'status' => 2, 
+				'remarks' => $this->input->post('remarks'), 
+				'tech_support_id' => $this->input->post('tech_support_id'),
+				'disapproved_by' => $this->session->users_id,
+				'disapproved_date' => date('Y-m-d h:i:s')
+			);
+			if ($this->input->post('repair_date')) {
+				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			}
+			
+			// $this->db->update('tbl_asset', $data, array('id'=>$this->input->post('id')));
+			$q = $this->db->update('tbl_asset_request', $data, array('tbl_asset_request_id'=>$this->input->post('id')));
+		}
+		$res = array();
+		if ($q) {
+			$chk_asset = $this->input->post('chk_asset');
+			$this->db->query("UPDATE tbl_asset set status_id = 2 WHERE id in (".$chk_asset.")");
+
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode(array('msg'=>$res,'repair_request_id'=>$this->input->post('id')));
+	}
+	
 	public function submitCloseRepairRequest(){
 		$data = array(
 			'status'      => 4, 
@@ -545,10 +592,12 @@ class Admin extends MY_Controller {
 	public function getRepairParentChildAsset(){
 		$id = $this->input->get('id');
 		$params['dataRequest'] = $this->db->get_where('v_repair_request', array( 'id' => $id, 'is_deleted' => 0))->row();
-		$dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
-		$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
+		$dataChildAsset = !empty($params['dataRequest']) ? explode(',', $params['dataRequest']->tbl_child_asset_id) : [];
+		if (!empty($dataChildAsset)) {
+			$params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name FROM tbl_child_asset tac
 																							LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
 																							WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
+		}
 		$this->load->view('admin/crud/view-parent-child-repair-asset', $params);
 	}
 
@@ -869,9 +918,9 @@ class Admin extends MY_Controller {
 				$data[] = $row->category_name;
 				$data[] = $row->qty;
 				$data[] = $status[$row->status];
-				$data[] = '';//$row->disapproved_by;
-				$data[] = '';//$row->disapproved_by;
-				$data[] = '';//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = $row->cancelled_by;
+				$data[] = $row->cancelled_date;//$row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = $row->remarks;
 				$data[] = '';
 			} else {
 				$data[] = $row->tbl_asset_request_id;
@@ -996,7 +1045,10 @@ class Admin extends MY_Controller {
 			$field 	 = $this->input->post('field');
 			$id 		 = $this->input->post('id');
 			$message = $this->input->post('message');
-			return $this->db->update($tbl, array('status'=>3, 'remarks' => $message), array($field=>$id)); 
+			return $this->db->update($tbl, array('status'=>3, 
+																						'remarks' => $message,
+																						'cancelled_by' => $this->session->users_id, 
+																						'cancelled_date' => date('Y-m-d H:i:s')), array($field=>$id)); 
 		}
 	 	
 	}

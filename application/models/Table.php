@@ -104,7 +104,8 @@ class Table extends CI_Model {
 		
 		if ($this->input->post('tbl_asset_id_dispatch')!='') {
 			$this->db->where('asset_category_id', $this->input->post('data_asset_category_id'));
-			// $this->db->where('office_management_id', $this->input->post('data_office_management_id'));
+			$this->db->where('status_id', 1);
+			$this->db->where('location_id', $this->input->post('data_location'));
 		}
 		
 		if ($this->input->post('siblings_asset_listdown')!='') {
@@ -154,11 +155,11 @@ class Table extends CI_Model {
 		$this->_que_tbl();
 		if (!empty($_POST['length']))
 			if ($_POST['length'] < 0) {} else {
-				if ($this->input->post('data_qty') && $this->input->post('data_qty')!='') {
-					$this->db->limit($this->input->post('data_qty'));
-				} else {
+				// if ($this->input->post('data_qty') && $this->input->post('data_qty')!='') {
+				// 	$this->db->limit($this->input->post('data_qty'));
+				// } else {
 					$this->db->limit($_POST['length'], $_POST['start']);
-				}
+				// }
 				
 			}
 		$query = $this->db->get();
@@ -168,11 +169,21 @@ class Table extends CI_Model {
 	public function countAllTbl(){
 		$this->db->where('is_deleted', '0');
 		$this->db->from($this->tbl);
+		// if ($this->input->post('data_qty') && $this->input->post('data_qty')!='') {
+		// 	$this->db->limit($this->input->post('data_qty'));
+		// } else {
+		// 	$this->db->limit($_POST['length'], $_POST['start']);
+		// }
 		return $this->db->count_all_results();
 	}
 
 	public function countFilterTbl(){
 		$this->_que_tbl();
+		// if ($this->input->post('data_qty') && $this->input->post('data_qty')!='') {
+		// 	$this->db->limit($this->input->post('data_qty'));
+		// } else {
+		// 	$this->db->limit($_POST['length'], $_POST['start']);
+		// }
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
