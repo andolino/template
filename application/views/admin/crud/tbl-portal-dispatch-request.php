@@ -15,6 +15,7 @@
     <a class="nav-link active font-12" id="nav-home-tab" onclick="setTimeout(function(){ tbl_portal_asset_pending.draw(); },300)" data-toggle="tab" href="#portal-pending" role="tab" aria-controls="portal-pending" aria-selected="true">Pending</a>
     <a class="nav-link font-12" id="nav-profile-tab" onclick="setTimeout(function(){ tbl_portal_asset_approved.draw(); },300)" data-toggle="tab" href="#portal-approved" role="tab" aria-controls="portal-approved" aria-selected="false">Approved</a>
     <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_portal_asset_disapproved.draw(); },300)" data-toggle="tab" href="#portal-disapproved" role="tab" aria-controls="portal-disapproved" aria-selected="false">Disapproved</a>
+    <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_portal_asset_incident.draw(); },300)" data-toggle="tab" href="#portal-incident" role="tab" aria-controls="portal-incident" aria-selected="false">Incident</a>
     <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_portal_asset_cancelled.draw(); },300)" data-toggle="tab" href="#portal-cancelled" role="tab" aria-controls="portal-cancelled" aria-selected="false">Cancelled</a>
     <a class="nav-link font-12" id="nav-contact-tab" onclick="setTimeout(function(){ tbl_portal_asset_closed.draw(); },300)" data-toggle="tab" href="#portal-closed" role="tab" aria-controls="portal-closed" aria-selected="false">Closed</a>
   </div>
@@ -93,8 +94,26 @@
       </tbody>
     </table>
   </div>
+  <div class="tab-pane fade pt-3" id="portal-incident" role="tabpanel" aria-labelledby="repair-incident-tab">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-incident" data-status="4">
+      <thead>
+        <tr>
+          <th scope="col">REQUEST #</th>
+          <th scope="col">ASSET CATEGORY </th>
+          <th scope="col">QTY</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">APPROVED BY</th>
+          <th scope="col">APPROVED BY</th>
+          <th scope="col">APPROVED DATE</th>
+          <th scope="col">ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
   <div class="tab-pane fade pt-3" id="portal-closed" role="tabpanel" aria-labelledby="repair-closed-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-closed" data-status="4">
+    <table class="table font-12 w-100 nowrap condensed" id="tbl-portal-closed" data-status="5">
       <thead>
         <tr>
           <th scope="col">REQUEST #</th>
@@ -170,11 +189,11 @@
           </div>
           <div class="form-group">
             <label for="date_need" class="font-12">Date Need</label>
-            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_need" value="" name="date_need">
+            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_need" value="" name="date_need" required>
           </div>
           <div class="form-group">
             <label for="date_return" class="font-12">Date Return</label>
-            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_return" value="" name="date_return">
+            <input type="text" class="form-control form-control-sm font-12 pickerDate" id="date_return" value="" name="date_return" required>
           </div>
           <div class="form-group">
             <label for="purpose" class="font-12">Purpose</label>

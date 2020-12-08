@@ -28,11 +28,14 @@ var tbl_portal_asset_pending = [];
 var tbl_portal_asset_approved = [];
 var tbl_portal_asset_disapproved = [];
 var tbl_portal_asset_cancelled = [];
+var tbl_portal_asset_incident = [];
 var tbl_portal_asset_closed = [];
 var tbl_repair_asset_pending = [];
+var tbl_reimbursement_asset_pending = [];
 var tbl_repair_asset_approved = [];
 var tbl_repair_asset_disapproved = [];
 var tbl_repair_asset_cancelled = [];
+var tbl_reimbursement_asset_cancelled = [];
 var tbl_repair_asset_closed = [];
 var tbl_print_logs_transmittal = [];
 var tbl_print_logs_gatepass = [];
@@ -126,6 +129,7 @@ $(document).ready(function() {
       initOfficeDataTables();
       initPortalRequestDataTables();
       initRepairRequestDataTables();
+      initReimbursementRequestDataTables();
       initAdminRepairRequestDataTables();
       initPrintLogsDataTables();
       initDispatchRequestDataTables();
@@ -147,6 +151,7 @@ $(document).ready(function() {
   initHistoryLogsDataTables();
   initPortalRequestDataTables();
   initRepairRequestDataTables();
+  initReimbursementRequestDataTables();
   initAdminRepairRequestDataTables();
   initPrintLogsDataTables();
   initDispatchRequestDataTables();
@@ -248,6 +253,43 @@ $(document).ready(function() {
     }, function(){
       console.log('Fail');
     });
+  });
+  
+  $(document).on('submit', '#frm-reimbursement-request', function(e) {
+    e.preventDefault();
+    var frm = new FormData(this);
+    frm.append('has_update', $('#has_update').val());
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Are you sure you want to submit this request?', 'warning'], 
+      function(){
+        $.ajax({
+          url:'save-portal-reimbursement-request',
+          type:"post",
+          data: frm,
+          processData:false,
+          contentType:false,
+          cache:false,
+          async:false,
+          dataType: 'json',
+          success: function (res) {
+            Swal.fire(
+              res.param1,
+              res.param2,
+              res.param3
+            );
+            $('#modal-portal-add-request').modal('hide');
+            $('#frm-reimbursement-request').trigger('reset');
+
+            tbl_reimbursement_asset_pending.ajax.reload();
+          }
+        });
+      }, function(){
+        console.log('Fail');
+      });
   });
   
   $(document).on('click', '#remove-child-asset', function(e) {
@@ -439,6 +481,47 @@ $(document).ready(function() {
         dataType: "JSON",
         success: function (res) {
           window.open('print-transmital-summ-slip/'+res.data);//+res.data+'/'+$('#date_generated').val());
+        }
+      });
+    // }
+  });
+  
+  $(document).on('click', '#printDispatchTransmittal', function (e) {
+    // if ($('#custodian').val() == '') {
+      // Swal.fire(
+      //   'Oopps!',
+      //   'Please select custodian',
+      //   'info'
+      // );
+    // } else {
+      var locationId = $(this).attr('data-location');
+      var tbl_asset_id_dispatch = $("#tbl-asset-listdown").attr('data-id');
+      var data_asset_category_id = $("#tbl-asset-listdown").attr('data-cat');
+      var data_office_management_id = $("#tbl-asset-listdown").attr('data-man');
+      var data_qty = $("#tbl-asset-listdown").attr('data-qty');
+      var data_status = $("#tbl-asset-listdown").attr('data-status');
+      var data_approved_asset = $("#tbl-asset-listdown").attr('data-approved-asset');
+      var data_asset_request_id = $(this).attr('data-ar-id');
+
+      var status = ($('#ready-to-deploy').is(':checked') ? 1 : 0);
+      $.ajax({
+        type: "POST",
+        url: "get-print-disp-transmital-summ-report",
+        data: { 
+          'location_id' : locationId, 
+          'status': status,
+          'tbl_asset_id_dispatch' : tbl_asset_id_dispatch,
+          'data_asset_category_id' : data_asset_category_id,
+          'data_office_management_id' : data_office_management_id,
+          'data_qty' : data_qty,
+          'data_status' : data_status,
+          'data_approved_asset' : data_approved_asset,
+          'data_asset_request_id' : data_asset_request_id
+        },
+        dataType: "JSON",
+        success: function (res) {
+          // console.log(res);
+          window.open('print-disp-transmital-summ-slip/'+res.data+'/'+res.tbl_asset_request_id);//+res.data+'/'+$('#date_generated').val());
         }
       });
     // }
@@ -862,6 +945,8 @@ $(document).ready(function() {
     $('#modal-portal-add-request .modal-title').html('Add Request');
     $('#frm-repair-request').trigger('reset');
     $('#frm-portal-request').trigger('reset');
+    $('#frm-reimbursement-request').trigger('reset');
+    $('.cont-request-id').html('').addClass('none');
     $('#purpose').html('');
     $('#remarks').html('');
     $('#has_update').val('');
@@ -991,6 +1076,104 @@ $(document).ready(function() {
             console.log(res);
           }, 500);
         }, 1000);
+      }
+    });
+
+    $('#office_management_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#asset_category_id').select2({
+      width: '100%',  
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#serial').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    $('#location_id').select2({
+      width: '100%',
+      dropdownParent: $("#modal-portal-add-request")
+    });
+    // $('#multiple-child-select').val([9, 11]).trigger('change');
+  });
+
+
+  $(document).on('click', '#edit-portal-reimbursement-request', function(){
+    $('#modal-portal-add-request').modal('show');
+    $('#modal-portal-add-request .modal-title').html('Edit Request');
+    var id = $(this).attr('data-id');
+    $.ajax({
+      type: "POST",
+      url: "get-edit-reimbursement-request",
+      data: { 'id' : id },
+      dataType: "json",
+      success: function (res) {
+        $('#has_update').val(res.id);
+        $('.office_management_id').val(res.office_management_id).trigger('change');
+        $('.pn_no').val(res.pn_no);
+        $('.date_filed').val(res.date_filed);
+        $('.reimbursement_type').val(res.reimbursement_type);
+        $('.reimbursement_type').val(res.reimbursement_type).trigger('change');
+        $('.select_unit').val(res.select_unit).trigger('change');
+        $('.item_description').val(res.item_description);
+        $('.qty').val(res.qty);
+        $('.unit_cost').val(res.unit_cost);
+        $('.total_cost').val(res.total_cost);
+        $('.purpose').val(res.purpose);
+        $('.link_ticket').val(res.link_ticket).trigger('change');
+        $('.repair-upload-img').removeClass('none');
+        setTimeout(function(){ 
+          $('.request_id').val(res.request_id).trigger('change');
+        }, 500);
+        
+        var f = res.file_upload;
+        var file = f.split(',');
+        var htf = '<ul>';
+        
+        for (let i1 = 0; i1 < file.length; i1++) {
+          htf += '<li><a href="'+baseURL + '/assets/image/uploads/' + file[i1] + '" download>Download File '+i1+'</a></li>';
+        }
+        htf += '</ul>';
+
+        var m = res.image_upload;
+        var img = m.split(',');
+        var htm = '<div class="row">';
+        for (let i2 = 0; i2 < img.length; i2++) {
+          htm += '<div class="col-4"><img src="'+baseURL + '/assets/image/uploads/' + img[i2] + '" class="img-thumbnail" alt="..."></div>'
+        }
+        htm += '</div>';
+
+        $('.image_upload').html(htm).removeClass('none');
+        $('.file_upload').html(htf).removeClass('none');
+        
+        // $('#location_id').val(res.data.location_id).trigger('change');
+        // $('#asset_category_id').val(res.data.asset_category_id).trigger('change');
+        // $('#date_reported').val(res.data.date_reported);
+        // $('#problem_desc').val(res.data.problem_desc);
+        // $('#remarks').val(res.data.remarks);
+        
+        // animateSingleIn('.spinner-cont', 'fadeIn'); 
+        // console.log(res);
+        // setTimeout(function(){
+        // $('#asset_tag').val(res.data.asset_tag).trigger('change');
+        //   setTimeout(function(){
+        //     var child_ids = res.data.tbl_child_asset_id.split(',');
+        //     $('#multiple-child-select').val(child_ids).trigger('change');
+        //     $('#multiple-child-select').val(child_ids).trigger('change');
+        //     $('.repair-upload-docx').html(res.data.file_upload);
+        //     $('.repair-upload-img-cont').html(res.data.image_upload);
+        //     $('.download-repair-request').attr('onclick', 'window.open("'+baseURL + 'assets/image/uploads/' +res.data.file_upload+'")');
+        //     if (res.data.file_upload != null) {
+        //       animateSingleIn('.repair-upload-docx', 'fadeIn');  
+        //     }
+        //     if (res.data.image_upload != null) {
+        //       animateSingleIn('.repair-upload-img', 'fadeIn');
+        //     }
+        //     animateSingleOut('.spinner-cont', 'fadeOut'); 
+        //     console.log(res);
+        //   }, 500);
+        // }, 1000);
       }
     });
 
@@ -1302,12 +1485,12 @@ function initMembersDataTables(){
     columnDefs                 : [
       { 
         orderable            : false, 
-        targets              : [ 0, 13 ]
+        targets              : [ 0, 8 ]
       },
-      { 
-        visible              : false, 
-        targets              : [ 9, 10, 11, 12 ]
-      },
+      // { 
+      //   visible              : false, 
+      //   targets              : [ 5, 6, 7, 8 ]
+      // },
     ],
     "serverSide"               : true,
     // "processing"               : true,
@@ -1680,6 +1863,43 @@ function initPortalRequestDataTables(){
       //   $(row).attr(myObjKeyLguConst);
     }
   });
+  
+  $('#tbl-portal-incident').DataTable().clear().destroy();
+  tbl_portal_asset_incident  = $("#tbl-portal-incident").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-portal-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-incident").attr('data-status')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
 
   $('#tbl-portal-closed').DataTable().clear().destroy();
   tbl_portal_asset_closed  = $("#tbl-portal-closed").DataTable({
@@ -1785,7 +2005,7 @@ function initRepairRequestDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "status" : $("#tbl-portal-repair-approved").attr('data-status'),
-                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
+                                "is_tech" : $("#tbl-portal-repair-approved").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1823,7 +2043,7 @@ function initRepairRequestDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "status" : $("#tbl-portal-repair-disapproved").attr('data-status'),
-                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
+                                "is_tech" : $("#tbl-portal-repair-disapproved").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1861,7 +2081,7 @@ function initRepairRequestDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "status" : $("#tbl-portal-repair-cancelled").attr('data-status'),
-                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
+                                "is_tech" : $("#tbl-portal-repair-cancelled").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1899,7 +2119,7 @@ function initRepairRequestDataTables(){
         "type"                 : 'POST',
         "data"                 : { 
                                 "status" : $("#tbl-portal-repair-closed").attr('data-status'),
-                                "is_tech" : $("#tbl-portal-repair-pending").attr('data-is-tech')
+                                "is_tech" : $("#tbl-portal-repair-closed").attr('data-is-tech')
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {
@@ -1911,6 +2131,201 @@ function initRepairRequestDataTables(){
       //   $(row).attr(myObjKeyLguConst);
     }
   });
+}
+
+
+//REIMBURSEMENT
+function initReimbursementRequestDataTables(){
+  var myObjKeyLguConst = {};
+  $('#tbl-portal-reimbursement-pending').DataTable().clear().destroy();
+  tbl_reimbursement_asset_pending  = $("#tbl-portal-reimbursement-pending").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-reimbursement-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-reimbursement-pending").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-reimbursement-pending").attr('data-is-tech')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-reimbursement-approved').DataTable().clear().destroy();
+  tbl_repair_asset_approved  = $("#tbl-portal-reimbursement-approved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-reimbursement-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-reimbursement-approved").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-reimbursement-approved").attr('data-is-tech')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+  
+  $('#tbl-portal-reimbursement-disapproved').DataTable().clear().destroy();
+  tbl_repair_asset_disapproved  = $("#tbl-portal-reimbursement-disapproved").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-reimbursement-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-reimbursement-disapproved").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-reimbursement-disapproved").attr('data-is-tech')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  $('#tbl-portal-reimbursement-cancelled').DataTable().clear().destroy();
+  tbl_reimbursement_asset_cancelled  = $("#tbl-portal-reimbursement-cancelled").DataTable({
+    searchHighlight : true,
+    lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+    language: {
+        search                 : '_INPUT_',
+        searchPlaceholder      : 'Search...',
+        lengthMenu             : '_MENU_'       
+    },
+    "order": [[0, 'desc']],
+    columnDefs                 : [
+      { 
+        orderable            : false, 
+        targets              : [1,2,3,4,5,6,7,8] 
+      }
+    ],
+    "scrollX": true,
+    "bInfo": false,
+    "serverSide"               : true,
+    "processing"               : true,
+    "ajax"                     : {
+        "url"                  : 'server-tbl-reimbursement-request',
+        "type"                 : 'POST',
+        "data"                 : { 
+                                "status" : $("#tbl-portal-reimbursement-cancelled").attr('data-status'),
+                                "is_tech" : $("#tbl-portal-reimbursement-cancelled").attr('data-is-tech')
+                              }
+    },
+    'createdRow'            : function(row, data, dataIndex) {
+      // var dataRowAttrIndex = ['data-lgu-const-id'];
+      // var dataRowAttrValue = [0];
+      //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+      //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+      //   }
+      //   $(row).attr(myObjKeyLguConst);
+    }
+  });
+
+  // $('#tbl-portal-repair-closed').DataTable().clear().destroy();
+  // tbl_repair_asset_closed  = $("#tbl-portal-repair-closed").DataTable({
+  //   searchHighlight : true,
+  //   lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
+  //   language: {
+  //       search                 : '_INPUT_',
+  //       searchPlaceholder      : 'Search...',
+  //       lengthMenu             : '_MENU_'       
+  //   },
+  //   "order": [[0, 'desc']],
+  //   columnDefs                 : [
+  //     { 
+  //       orderable            : false, 
+  //       targets              : [1,2,3,4,5] 
+  //     }
+  //   ],
+  //   "scrollX": true,
+  //   "bInfo": false,
+  //   "serverSide"               : true,
+  //   "processing"               : true,
+  //   "ajax"                     : {
+  //       "url"                  : 'server-tbl-reimbursement-request',
+  //       "type"                 : 'POST',
+  //       "data"                 : { 
+  //                               "status" : $("#tbl-portal-repair-closed").attr('data-status'),
+  //                               "is_tech" : $("#tbl-portal-repair-closed").attr('data-is-tech')
+  //                             }
+  //   },
+  //   'createdRow'            : function(row, data, dataIndex) {
+  //     // var dataRowAttrIndex = ['data-lgu-const-id'];
+  //     // var dataRowAttrValue = [0];
+  //     //   for (var i = 0; i < dataRowAttrIndex.length; i++) {
+  //     //     myObjKeyLguConst[dataRowAttrIndex[i]] = data[dataRowAttrValue[i]];
+  //     //   }
+  //     //   $(row).attr(myObjKeyLguConst);
+  //   }
+  // });
 }
 
 
@@ -2273,6 +2688,9 @@ function showConfirm(e){
     if (type == 'repair') {
       tbl = 'tbl_asset_repair_request';
       field= 'id';
+    } else if(type == 'reimbursement'){
+      tbl = 'tbl_reimbursement_request';
+      field= 'id';
     } else {
       tbl = 'tbl_asset_request';
       field = 'tbl_asset_request_id';
@@ -2309,4 +2727,39 @@ function setDdispatchQuantity(e){
       'info'
     );
   }
+}
+
+function computeTotalCost(e){
+  var qty = (strToFloat($('#qty').val())||0) <= 0 ? 1 : (strToFloat($('#qty').val())||0);
+  var totalCost = (strToFloat($(e).val())||0) * qty;
+  $('input[name="total_cost"]').val(number_format(totalCost));
+  console.log(qty, strToFloat($(e).val())||0);
+}
+
+function getRequestMods(e){
+  var mod_type = $(e).val();
+  $.ajax({
+    type: "POST",
+    url: "get-requesti-module",
+    data: { 'mod_type' : mod_type },
+    dataType: "JSON",
+    success: function (res) {
+      var h = '<label for="file_upload" class="font-12">'+res.type+'</label>';
+      h += '<select id="request_id" class="request_id custom-select custom-select-sm font-12" name="request_id" required>';
+      h+='<option value="" selected hidden></option>';
+      $.each(res.data, function(i, v){
+        if (mod_type == 'DISPATCH_REQUEST') {
+          h+='<option value="'+v.tbl_asset_request_id+'">'+v.purpose+'</option>';
+        } else if(mod_type == 'REPAIR_REQUEST') {
+          h+='<option value="'+v.id+'">'+v.asset_tag+'</option>';
+        } else {
+          $('.cont-request-id').html('');
+          animateSingleOut('.cont-request-id', 'fadeOut');
+        }
+      });
+      $('.cont-request-id').html(h);
+      animateSingleIn('.cont-request-id', 'fadeIn');
+      // console.log(res);
+    }
+  });
 }

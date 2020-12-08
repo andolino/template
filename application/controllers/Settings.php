@@ -597,7 +597,7 @@ class Settings extends MY_Controller {
 																															'office_name', 'end_user', 'location_id', 'users_id', 'is_deleted', 'counter', 'last_name', 
 																															'first_name', 'middle_name', 'designation', 'short', 'sibling', 'child_count', 
 																															'sibling_count', 'property_tag', 'asset_category_name', 'status_id'], ['id' => 'desc']);
-
+		// $this->output->enable_profiler(true);
 		// $this->output->enable_profiler(true);																											
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
@@ -799,6 +799,15 @@ class Settings extends MY_Controller {
 		$q = $this->db->get_where('tbl_asset_repair_request', array('id'=>$id))->row();
 		$q->date_reported = date('Y-m-d', strtotime($q->date_reported));
 		echo json_encode(array('data'=>$q));
+	}
+
+	public function getEditReimbursementRequest(){
+		$id							 = $this->input->post('id');
+		$q 							 = $this->db->get_where('tbl_reimbursement_request', array('id'=>$id))->row();
+		$q->date_filed 	 = date('Y-m-d', strtotime($q->date_filed));
+		// $q->image_upload = explode(',', $q->image_upload);
+		// $q->file_upload  = explode(',', $q->file_upload);
+		echo json_encode($q);
 	}
 
 	public function getOfficeFrm(){

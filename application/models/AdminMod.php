@@ -50,6 +50,14 @@ class AdminMod extends CI_Model {
 																				'cancelled_by', 'cancelled_date');
 	var $tblRepairRequestOrder = array('id' => 'desc');
 
+	//REIMBURSEMENT REQUEST
+	var $tblReimbursementRequest = 'v_portal_reimbursement';
+	var $tblReimbursementRequestCollumn = array('id', 'office_management_id', 'pn_no', 'date_filed', 'reimbursement_type', 'select_unit', 'item_description', 
+																				'qty', 'unit_cost', 'total_cost', 'purpose', 'link_ticket', 'file_upload', 'image_upload', 
+																				'request_id', 'is_deleted', 'entry_date', 'status', 'users_id', 'office_name', 'dispatch_to', 
+																				'asset_tag', 'screen_name', 'request_by', 'cancelled_by_name', 'approved_by_name', 'disapproved_by_name', 'closed_by_name');
+	var $tblReimbursementRequestOrder = array('id' => 'desc');
+
 	// var $tblAssetLogs = 'v_asset_request';
 	// var $tblAssetLogsCollumn = array('asset_name', 'timestamp', 'device', 'os', 'country', 'lng', 'lat', 'user', 'email', 'mobile', 'type', 'is_deleted');
 	// var $tblAssetLogsOrder = array('timestamp' => 'desc');
@@ -405,6 +413,67 @@ class AdminMod extends CI_Model {
 
 	public function count_filter_repair_request(){
 		$this->_que_tbl_repair_request();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+
+	//REIMBURSEMENT REQUEST
+	private function _que_tbl_reimbursement_request(){
+		$this->db->from($this->tblReimbursementRequest);
+		$status = $this->input->post('status');
+		$this->db->where('status', $status);
+		$this->db->where('is_deleted', '0');
+		// $this->db->where('requestor', $this->session->users_id);
+		if ($this->input->post('is_tech') == 'yes') {
+			$this->db->where('tech_support_id', $this->session->users_id);
+		}
+		$i = 0;
+		foreach ($this->tblReimbursementRequestCollumn as $item) {
+			if (!empty($_POST['search']['value'])) {
+				if ($i === 0) {
+					$this->db->where('is_deleted', '0');
+					$this->db->like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
+					// $this->db->where('requestor', $this->session->users_id);
+				} else {
+					$this->db->where('is_deleted', '0');
+					$this->db->or_like($item, strtolower($_POST['search']['value']));
+					$this->db->where('status', $status);
+					// $this->db->where('requestor', $this->session->users_id);
+				}
+				if ($this->input->post('is_tech') == 'yes') {
+					// $this->db->where('tech_support_id', $this->session->users_id);
+				}
+			}
+			$column[$i] = $item;
+			$i++;
+		}
+		if (isset($_POST['order'])) {
+			$this->db->order_by($column[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+		}elseif($this->tblReimbursementRequestOrder){
+			$order = $this->tblReimbursementRequestOrder;
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+		$this->db->order_by('id', 'DESC');
+	}
+
+	public function get_output_reimbursement_request(){
+		$this->_que_tbl_reimbursement_request();
+		if (!empty($_POST['length']))
+		$this->db->limit(($_POST['length'] < 0 ? 0 : $_POST['length']), $_POST['start']);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function count_all_reimbursement_request(){
+		$this->db->where('is_deleted', '0');
+		$this->db->from($this->tblReimbursementRequest);
+		return $this->db->count_all_results();
+	}
+
+	public function count_filter_reimbursement_request(){
+		$this->_que_tbl_reimbursement_request();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}

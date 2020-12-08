@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 30, 2020 at 05:52 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.2.33
+-- Host: 127.0.0.1
+-- Generation Time: Dec 08, 2020 at 08:28 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1545,21 +1545,25 @@ CREATE TABLE `tbl_asset_request` (
   `disapproved_by` int(11) DEFAULT NULL,
   `disapproved_date` datetime DEFAULT NULL,
   `asset_request_ids` text DEFAULT NULL,
-  `dispatch_to` int(11) DEFAULT NULL
+  `dispatch_to` int(11) DEFAULT NULL,
+  `tech_support_id` int(11) DEFAULT NULL,
+  `cancelled_by` int(11) DEFAULT NULL,
+  `cancelled_date` datetime DEFAULT NULL,
+  `tbl_asset_ids` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_asset_request`
 --
 
-INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`, `dispatch_to`) VALUES
-(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL),
-(12, 5, 1, 2, 4, '', 9, 'TEST1', 'this is a test remakrs from admin', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 2, NULL, NULL, 1, '2020-11-29 03:12:08', NULL, NULL),
-(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(14, 1, 1, 2, 2, 'TEST', 9, 'TEST 1', 'TEST 2', 0, '2020-11-26 19:33:24', '2020-12-01 00:00:00', '2020-12-04 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(15, NULL, 1, 3, 2, NULL, 11, 'test 1', 'test 1 ghost recon', 0, '2020-11-29 15:58:38', '2020-12-22 00:00:00', '2020-12-24 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL),
-(16, NULL, 1, 3, 2, NULL, 11, 'TEST 11', 'TEST 22', 0, '2020-11-30 03:14:33', '2020-12-01 00:00:00', '2020-12-02 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(17, NULL, 1, 3, 2, NULL, 11, 'TEST 1', 'TESt 2', 0, '2020-11-30 10:08:38', '2020-12-23 00:00:00', '2020-12-31 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, 4);
+INSERT INTO `tbl_asset_request` (`tbl_asset_request_id`, `office_management_id`, `asset_category_id`, `qty`, `location_id`, `other_location`, `users_id`, `purpose`, `remarks`, `is_deleted`, `entry_date`, `date_need`, `date_return`, `status`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `asset_request_ids`, `dispatch_to`, `tech_support_id`, `cancelled_by`, `cancelled_date`, `tbl_asset_ids`) VALUES
+(11, 1, 1, 2, 4, 'TEST1', 9, 'TEST1', 'TEST2', 0, '2020-10-25 06:41:27', '2020-10-16 00:00:00', '2020-10-28 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 5, 1, 2, 4, '', 9, 'TEST1', 'this is a test remakrs from admin', 0, '2020-10-25 08:45:29', '2020-10-02 00:00:00', '2020-10-17 00:00:00', 2, NULL, NULL, 1, '2020-11-29 03:12:08', NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 1, 1, 2, 4, '2', 9, 'TEST', 'TEST2', 0, '2020-10-25 16:51:44', '2020-10-13 00:00:00', '2020-11-06 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(14, 1, 1, 2, 2, 'TEST', 9, 'TEST 1', 'TEST 2', 0, '2020-11-26 19:33:24', '2020-12-01 00:00:00', '2020-12-04 00:00:00', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(15, NULL, 1, 3, 2, NULL, 11, 'test 1', 'test 1 ghost recon', 0, '2020-11-29 15:58:38', '2020-12-22 00:00:00', '2020-12-24 00:00:00', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(16, NULL, 1, 3, 2, NULL, 11, 'TEST 11', 'TEST 22', 0, '2020-11-30 03:14:33', '2020-12-01 00:00:00', '2020-12-02 00:00:00', 1, 1, '2020-12-02 01:47:36', NULL, NULL, NULL, NULL, 0, NULL, NULL, ''),
+(17, NULL, 1, 3, 2, NULL, 11, 'TEST 1', 'TEST OOWA', 0, '2020-11-30 10:08:38', '2020-12-23 00:00:00', '2020-12-31 00:00:00', 2, NULL, NULL, 1, '2020-12-01 11:22:39', NULL, 4, 10, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1785,6 +1789,22 @@ INSERT INTO `tbl_history` (`id`, `asset_id`, `current_custodian_id`, `previous_c
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_incident`
+--
+
+CREATE TABLE `tbl_incident` (
+  `id` int(11) NOT NULL,
+  `dispatch_id` int(11) DEFAULT NULL,
+  `repair_id` int(11) DEFAULT NULL,
+  `reimburse_id` int(11) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_locations`
 --
 
@@ -1910,7 +1930,9 @@ INSERT INTO `tbl_print_logs` (`id`, `name_of_personnel`, `plate_no`, `users_id`,
 (39, 'TEST 1', '611251216', 1, 3, 'http://localhost/template/assets/image/uploads/1606280193_gatepass.pdf', 'gatepass', '2020-11-25 12:56:33', 0, NULL, NULL, NULL, NULL, '1970-01-01 08:00:00'),
 (40, 'TEST 1', '611251216', 1, 3, 'http://localhost/template/assets/image/uploads/1606280225_gatepass.pdf', 'gatepass', '2020-11-25 12:57:05', 0, NULL, NULL, NULL, NULL, '1970-01-01 08:00:00'),
 (41, 'TEST 1', '1512515', 1, 3, 'http://localhost/template/assets/image/uploads/1606280331_gatepass.pdf', 'gatepass', '2020-11-25 12:58:51', 0, NULL, NULL, NULL, NULL, '2020-11-30 00:00:00'),
-(42, 'test 1', '51241', 1, 3, 'http://localhost/template/assets/image/uploads/1606239163_gatepass.pdf', 'gatepass', '2020-11-25 01:32:43', 0, NULL, NULL, NULL, NULL, '2020-11-26 00:00:00');
+(42, 'test 1', '51241', 1, 3, 'http://localhost/template/assets/image/uploads/1606239163_gatepass.pdf', 'gatepass', '2020-11-25 01:32:43', 0, NULL, NULL, NULL, NULL, '2020-11-26 00:00:00'),
+(43, NULL, NULL, 1, 3, 'http://localhost/template/assets/image/uploads/1606844564_transmital.pdf', 'transmittal', '2020-12-02 01:42:44', 0, 15, NULL, 1, NULL, NULL),
+(44, NULL, NULL, 1, 2, 'http://localhost/template/assets/image/uploads/1606844861_transmital.pdf', 'transmittal', '2020-12-02 01:47:41', 0, 0, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1962,7 +1984,51 @@ CREATE TABLE `tbl_qrcodes_checklist` (
 --
 
 INSERT INTO `tbl_qrcodes_checklist` (`id`, `idno`, `qr_code`, `code`, `image`, `is_deleted`, `location_id`, `received_by`, `date_received`) VALUES
-(1, 0, '{\"result\":{\"error\":{\"message\":\"Maximum number of URLs for this account reached. (500\\/500)\",\"code\":6}}}', NULL, NULL, 0, 3, NULL, NULL);
+(1, 0, '{\"result\":{\"shorturl\":\"https:\\/\\/philsys.qrd.by\\/g6ympc\",\"qr\":\"https:\\/\\/philsys.qrd.by\\/i\\/g6ympc\",\"url\":\"http:\\/\\/localhost\\/template\\/scanned-checklist\\/S3dIb2g2S0hMSnNKVmRGZUdicmhFUT09\",\"title\":\"\",\"description\":\"\",\"creationdate\":\"2020-12-02 06:42:40\",\"image\":\"\",\"gps\":\"1\",\"sms\":\"0\",\"notify\":\"\",\"medium\":\"\",\"folder\":\"\",\"color\":\"\",\"bgcolor\":\"\",\"location\":{\"address\":\"\",\"lng\":\"\",\"lat\":\"\"}}}', 'g6ympc', NULL, 0, 3, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_reimbursement_request`
+--
+
+CREATE TABLE `tbl_reimbursement_request` (
+  `id` int(11) NOT NULL,
+  `office_management_id` int(11) DEFAULT NULL,
+  `pn_no` text DEFAULT NULL,
+  `date_filed` datetime DEFAULT NULL,
+  `reimbursement_type` text DEFAULT NULL,
+  `select_unit` text DEFAULT NULL,
+  `item_description` text DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
+  `unit_cost` decimal(12,2) DEFAULT NULL,
+  `total_cost` decimal(12,2) DEFAULT NULL,
+  `purpose` text DEFAULT NULL,
+  `link_ticket` text DEFAULT NULL,
+  `file_upload` text DEFAULT NULL,
+  `image_upload` text DEFAULT NULL,
+  `request_id` int(11) DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `entry_date` date DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 0 COMMENT '0=pending, 1=approved, 2=disapproved, 3=cancelled,4=closed',
+  `users_id` int(11) NOT NULL,
+  `cancelled_by` int(11) DEFAULT NULL,
+  `cancelled_date` datetime DEFAULT NULL,
+  `approved_by` int(11) DEFAULT NULL,
+  `approved_date` datetime DEFAULT NULL,
+  `disapproved_by` int(11) DEFAULT NULL,
+  `disapproved_date` datetime DEFAULT NULL,
+  `closed_by` int(11) DEFAULT NULL,
+  `closed_date` datetime DEFAULT NULL,
+  `remarks` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_reimbursement_request`
+--
+
+INSERT INTO `tbl_reimbursement_request` (`id`, `office_management_id`, `pn_no`, `date_filed`, `reimbursement_type`, `select_unit`, `item_description`, `qty`, `unit_cost`, `total_cost`, `purpose`, `link_ticket`, `file_upload`, `image_upload`, `request_id`, `is_deleted`, `entry_date`, `status`, `users_id`, `cancelled_by`, `cancelled_date`, `approved_by`, `approved_date`, `disapproved_by`, `disapproved_date`, `closed_by`, `closed_date`, `remarks`) VALUES
+(17, 5, '51215234', '2020-12-10 00:00:00', 'MEAL_EXPENSE', 'PAX', 'TEST 1 DESC', 3, '1500.00', '4500.00', 'TEST 2', 'DISPATCH_REQUEST', 'reimbursement1607401175Reimbursement-Approval.docx,reimbursement1607401175Reimbursement-Form-Request.docx,reimbursement1607401175REPAIR_Bugs-Approver-DataTable.docx', 'reimbursement1607401175slide2.jpg,reimbursement1607401175slide3.jpg,reimbursement1607401175slide4.jpg', 14, 0, '2020-12-08', 3, 11, 11, '2020-12-08 12:46:58', NULL, NULL, NULL, NULL, NULL, NULL, 'TEST 123 REMARKS');
 
 -- --------------------------------------------------------
 
@@ -1992,7 +2058,7 @@ CREATE TABLE `tbl_status_labels` (
 --
 
 INSERT INTO `tbl_status_labels` (`id`, `name`, `user_id`, `created_at`, `updated_at`, `deleted_at`, `deployable`, `pending`, `archived`, `notes`, `color`, `show_in_nav`, `default_label`, `is_deleted`) VALUES
-(1, 'Pending', 1, NULL, NULL, NULL, 0, 1, 0, 'These assets are not yet ready to be deployed, usually because of configuration or waiting on parts.', NULL, 0, 0, 0),
+(1, 'Available', 1, NULL, NULL, NULL, 0, 1, 0, 'These assets are not yet ready to be deployed, usually because of configuration or waiting on parts.', NULL, 0, 0, 0),
 (2, 'Ready to Deploy', 1, NULL, NULL, NULL, 1, 0, 0, 'These assets are ready to deploy.', NULL, 0, 0, 0),
 (3, 'Dispatch', 1, NULL, NULL, NULL, 0, 0, 1, 'These assets are Dispatch By User', NULL, 0, 0, 0),
 (4, 'Deployed', 1, NULL, NULL, NULL, 1, 0, 0, 'These assets are Deployed By User', NULL, 0, 0, 0);
@@ -2238,6 +2304,7 @@ CREATE TABLE `v_asset` (
 ,`office_name` text
 ,`region` varchar(255)
 ,`property_tag` varchar(191)
+,`asset_category` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -2300,6 +2367,7 @@ CREATE TABLE `v_asset_parent_sibling_child` (
 ,`sibling_count` bigint(21)
 ,`office_management_id` int(11)
 ,`asset_category_id` int(11)
+,`status_id` int(11)
 );
 
 -- --------------------------------------------------------
@@ -2843,6 +2911,52 @@ CREATE TABLE `v_pacs` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `v_portal_reimbursement`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_portal_reimbursement` (
+`id` int(11)
+,`office_management_id` int(11)
+,`pn_no` text
+,`date_filed` datetime
+,`reimbursement_type` text
+,`select_unit` text
+,`item_description` text
+,`qty` int(11)
+,`unit_cost` decimal(12,2)
+,`total_cost` decimal(12,2)
+,`purpose` text
+,`link_ticket` text
+,`file_upload` text
+,`image_upload` text
+,`request_id` int(11)
+,`is_deleted` tinyint(1)
+,`entry_date` date
+,`status` tinyint(1)
+,`users_id` int(11)
+,`cancelled_by` int(11)
+,`cancelled_date` datetime
+,`approved_by` int(11)
+,`approved_date` datetime
+,`disapproved_by` int(11)
+,`disapproved_date` datetime
+,`closed_by` int(11)
+,`closed_date` datetime
+,`remarks` text
+,`office_name` text
+,`dispatch_to` int(11)
+,`asset_tag` text
+,`screen_name` text
+,`request_by` mediumtext
+,`cancelled_by_name` mediumtext
+,`approved_by_name` mediumtext
+,`disapproved_by_name` mediumtext
+,`closed_by_name` mediumtext
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_portal_request`
 -- (See below for the actual view)
 --
@@ -2872,6 +2986,11 @@ CREATE TABLE `v_portal_request` (
 ,`address` text
 ,`contact_person` text
 ,`dispatch_addr` text
+,`cancelled_by` text
+,`cancelled_date` datetime
+,`location_name_disp` varchar(191)
+,`tbl_asset_ids` text
+,`contact_person_disp` text
 );
 
 -- --------------------------------------------------------
@@ -3051,7 +3170,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_asset`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset`  AS  select `ta`.`id` AS `id`,`ta`.`name` AS `name`,`tc`.`name` AS `company`,`ta`.`asset_tag` AS `asset_tag`,`tm`.`name` AS `model`,`tsl`.`name` AS `status`,`ta`.`serial` AS `serial`,`ta`.`name` AS `asset_name`,`ta`.`purchase_date` AS `purchase_date`,`ts`.`name` AS `supplier`,`ta`.`order_number` AS `order_number`,`ta`.`purchase_cost` AS `purchase_cost`,`ta`.`warranty_months` AS `warranty_months`,`tl`.`name` AS `default_location`,`ta`.`notes` AS `notes`,`ta`.`requestable` AS `requestable`,`ta`.`is_deleted` AS `is_deleted`,`ta`.`status_id` AS `status_id`,`u`.`screen_name` AS `screen_name`,`om`.`office_name` AS `office_name`,`d`.`region` AS `region`,`ta`.`property_tag` AS `property_tag` from ((((((((`tbl_asset` `ta` left join `tbl_companies` `tc` on(`tc`.`id` = `ta`.`company_id`)) left join `tbl_models` `tm` on(`tm`.`id` = `ta`.`model_id`)) left join `tbl_status_labels` `tsl` on(`tsl`.`id` = `ta`.`status_id`)) left join `tbl_suppliers` `ts` on(`ts`.`id` = `ta`.`supplier_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `ta`.`checkout_user_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d` on(`d`.`departments_id` = `ta`.`departments_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset`  AS  select `ta`.`id` AS `id`,`ta`.`name` AS `name`,`tc`.`name` AS `company`,`ta`.`asset_tag` AS `asset_tag`,`tm`.`name` AS `model`,`tsl`.`name` AS `status`,`ta`.`serial` AS `serial`,`ta`.`name` AS `asset_name`,`ta`.`purchase_date` AS `purchase_date`,`ts`.`name` AS `supplier`,`ta`.`order_number` AS `order_number`,`ta`.`purchase_cost` AS `purchase_cost`,`ta`.`warranty_months` AS `warranty_months`,`tl`.`name` AS `default_location`,`ta`.`notes` AS `notes`,`ta`.`requestable` AS `requestable`,`ta`.`is_deleted` AS `is_deleted`,`ta`.`status_id` AS `status_id`,`u`.`screen_name` AS `screen_name`,`om`.`office_name` AS `office_name`,`d`.`region` AS `region`,`ta`.`property_tag` AS `property_tag`,`act`.`name` AS `asset_category` from (((((((((`tbl_asset` `ta` left join `tbl_companies` `tc` on(`tc`.`id` = `ta`.`company_id`)) left join `tbl_models` `tm` on(`tm`.`id` = `ta`.`model_id`)) left join `tbl_status_labels` `tsl` on(`tsl`.`id` = `ta`.`status_id`)) left join `tbl_suppliers` `ts` on(`ts`.`id` = `ta`.`supplier_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `ta`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `ta`.`checkout_user_id`)) left join `office_management` `om` on(`om`.`office_management_id` = `ta`.`office_management_id`)) left join `departments` `d` on(`d`.`departments_id` = `ta`.`departments_id`)) left join `asset_category` `act` on(`act`.`asset_category_id` = `ta`.`asset_category_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -3069,7 +3188,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_asset_parent_sibling_child`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset_parent_sibling_child`  AS  select `v`.`id` AS `id`,`v`.`parent` AS `parent`,`v`.`name` AS `name`,`v`.`serial` AS `serial`,`v`.`asset_tag` AS `asset_tag`,`v`.`office_name` AS `office_name`,`v`.`end_user` AS `end_user`,`v`.`location_id` AS `location_id`,`v`.`users_id` AS `users_id`,`v`.`is_deleted` AS `is_deleted`,`v`.`counter` AS `counter`,`v`.`last_name` AS `last_name`,`v`.`first_name` AS `first_name`,`v`.`middle_name` AS `middle_name`,`v`.`designation` AS `designation`,`v`.`short` AS `short`,`v`.`sibling` AS `sibling`,`v`.`property_tag` AS `property_tag`,(select count(0) AS `child` from `v_asset_report` `i` where `i`.`parent` is null and `i`.`id` = `v`.`id`) AS `child_count`,(select count(0) AS `sibling` from `v_asset_report` `i2` where `i2`.`sibling` = `v`.`id`) AS `sibling_count`,`v`.`office_management_id` AS `office_management_id`,`v`.`asset_category_id` AS `asset_category_id` from `v_asset_report` `v` where `v`.`parent` is not null and `v`.`status_id` = 2 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_asset_parent_sibling_child`  AS  select `v`.`id` AS `id`,`v`.`parent` AS `parent`,`v`.`name` AS `name`,`v`.`serial` AS `serial`,`v`.`asset_tag` AS `asset_tag`,`v`.`office_name` AS `office_name`,`v`.`end_user` AS `end_user`,`v`.`location_id` AS `location_id`,`v`.`users_id` AS `users_id`,`v`.`is_deleted` AS `is_deleted`,`v`.`counter` AS `counter`,`v`.`last_name` AS `last_name`,`v`.`first_name` AS `first_name`,`v`.`middle_name` AS `middle_name`,`v`.`designation` AS `designation`,`v`.`short` AS `short`,`v`.`sibling` AS `sibling`,`v`.`property_tag` AS `property_tag`,(select count(0) AS `child` from `v_asset_report` `i` where `i`.`parent` is null and `i`.`id` = `v`.`id`) AS `child_count`,(select count(0) AS `sibling` from `v_asset_report` `i2` where `i2`.`sibling` = `v`.`id`) AS `sibling_count`,`v`.`office_management_id` AS `office_management_id`,`v`.`asset_category_id` AS `asset_category_id`,`v`.`status_id` AS `status_id` from `v_asset_report` `v` where `v`.`parent` is not null ;
 
 -- --------------------------------------------------------
 
@@ -3263,11 +3382,20 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `v_portal_reimbursement`
+--
+DROP TABLE IF EXISTS `v_portal_reimbursement`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_reimbursement`  AS  select `trr`.`id` AS `id`,`trr`.`office_management_id` AS `office_management_id`,`trr`.`pn_no` AS `pn_no`,`trr`.`date_filed` AS `date_filed`,`trr`.`reimbursement_type` AS `reimbursement_type`,`trr`.`select_unit` AS `select_unit`,`trr`.`item_description` AS `item_description`,`trr`.`qty` AS `qty`,`trr`.`unit_cost` AS `unit_cost`,`trr`.`total_cost` AS `total_cost`,`trr`.`purpose` AS `purpose`,`trr`.`link_ticket` AS `link_ticket`,`trr`.`file_upload` AS `file_upload`,`trr`.`image_upload` AS `image_upload`,`trr`.`request_id` AS `request_id`,`trr`.`is_deleted` AS `is_deleted`,`trr`.`entry_date` AS `entry_date`,`trr`.`status` AS `status`,`trr`.`users_id` AS `users_id`,`trr`.`cancelled_by` AS `cancelled_by`,`trr`.`cancelled_date` AS `cancelled_date`,`trr`.`approved_by` AS `approved_by`,`trr`.`approved_date` AS `approved_date`,`trr`.`disapproved_by` AS `disapproved_by`,`trr`.`disapproved_date` AS `disapproved_date`,`trr`.`closed_by` AS `closed_by`,`trr`.`closed_date` AS `closed_date`,`trr`.`remarks` AS `remarks`,`om`.`office_name` AS `office_name`,`tar`.`dispatch_to` AS `dispatch_to`,`tar2`.`asset_tag` AS `asset_tag`,`u`.`screen_name` AS `screen_name`,concat(`u`.`last_name`,', ',`u`.`first_name`) AS `request_by`,concat(`cancelled`.`last_name`,', ',`cancelled`.`first_name`) AS `cancelled_by_name`,concat(`approved`.`last_name`,', ',`approved`.`first_name`) AS `approved_by_name`,concat(`disapproved`.`last_name`,', ',`disapproved`.`first_name`) AS `disapproved_by_name`,concat(`closed`.`last_name`,', ',`closed`.`first_name`) AS `closed_by_name` from ((((((((`tbl_reimbursement_request` `trr` left join `office_management` `om` on(`om`.`office_management_id` = `trr`.`office_management_id`)) left join `tbl_asset_request` `tar` on(`trr`.`request_id` = `tar`.`tbl_asset_request_id`)) left join `tbl_asset_repair_request` `tar2` on(`trr`.`request_id` = `tar2`.`id`)) left join `users` `u` on(`u`.`users_id` = `trr`.`users_id`)) left join `users` `cancelled` on(`cancelled`.`users_id` = `trr`.`cancelled_by`)) left join `users` `approved` on(`approved`.`users_id` = `trr`.`approved_by`)) left join `users` `disapproved` on(`disapproved`.`users_id` = `trr`.`disapproved_by`)) left join `users` `closed` on(`closed`.`users_id` = `trr`.`closed_by`)) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `v_portal_request`
 --
 DROP TABLE IF EXISTS `v_portal_request`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name`,`tl`.`address` AS `address`,`tl`.`contact_person` AS `contact_person`,`tl2`.`address` AS `dispatch_addr` from (((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tr`.`dispatch_to`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_portal_request`  AS  select `tr`.`tbl_asset_request_id` AS `tbl_asset_request_id`,`tr`.`office_management_id` AS `office_management_id`,`tr`.`asset_category_id` AS `asset_category_id`,`tr`.`qty` AS `qty`,`tr`.`location_id` AS `location_id`,`tr`.`other_location` AS `other_location`,`tr`.`users_id` AS `users_id`,`tr`.`purpose` AS `purpose`,`tr`.`remarks` AS `remarks`,`tr`.`is_deleted` AS `is_deleted`,`tr`.`entry_date` AS `entry_date`,`tr`.`date_need` AS `date_need`,`tr`.`date_return` AS `date_return`,`tr`.`status` AS `status`,`u2`.`screen_name` AS `approved_by`,`tr`.`approved_date` AS `approved_date`,`u3`.`screen_name` AS `disapproved_by`,`tr`.`disapproved_date` AS `disapproved_date`,`om`.`office_name` AS `office_name`,`ac`.`name` AS `category_name`,`tl`.`name` AS `location_name`,`u`.`screen_name` AS `screen_name`,`tl`.`address` AS `address`,`tl`.`contact_person` AS `contact_person`,`tl2`.`address` AS `dispatch_addr`,`u4`.`screen_name` AS `cancelled_by`,`tr`.`cancelled_date` AS `cancelled_date`,`tl2`.`name` AS `location_name_disp`,`tr`.`tbl_asset_ids` AS `tbl_asset_ids`,`tl2`.`contact_person` AS `contact_person_disp` from ((((((((`tbl_asset_request` `tr` left join `office_management` `om` on(`om`.`office_management_id` = `tr`.`office_management_id`)) left join `asset_category` `ac` on(`ac`.`asset_category_id` = `tr`.`asset_category_id`)) left join `tbl_locations` `tl` on(`tl`.`id` = `tr`.`location_id`)) left join `users` `u` on(`u`.`users_id` = `tr`.`users_id`)) left join `users` `u2` on(`u2`.`users_id` = `tr`.`approved_by`)) left join `users` `u3` on(`u3`.`users_id` = `tr`.`disapproved_by`)) left join `users` `u4` on(`u4`.`users_id` = `tr`.`cancelled_by`)) left join `tbl_locations` `tl2` on(`tl2`.`id` = `tr`.`dispatch_to`)) ;
 
 -- --------------------------------------------------------
 
@@ -3654,6 +3782,12 @@ ALTER TABLE `tbl_history`
   ADD KEY `history_asset_id_index` (`asset_id`);
 
 --
+-- Indexes for table `tbl_incident`
+--
+ALTER TABLE `tbl_incident`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_locations`
 --
 ALTER TABLE `tbl_locations`
@@ -3681,6 +3815,12 @@ ALTER TABLE `tbl_qrcodes`
 -- Indexes for table `tbl_qrcodes_checklist`
 --
 ALTER TABLE `tbl_qrcodes_checklist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_reimbursement_request`
+--
+ALTER TABLE `tbl_reimbursement_request`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3971,6 +4111,12 @@ ALTER TABLE `tbl_history`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
+-- AUTO_INCREMENT for table `tbl_incident`
+--
+ALTER TABLE `tbl_incident`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_locations`
 --
 ALTER TABLE `tbl_locations`
@@ -3986,7 +4132,7 @@ ALTER TABLE `tbl_models`
 -- AUTO_INCREMENT for table `tbl_print_logs`
 --
 ALTER TABLE `tbl_print_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `tbl_qrcodes`
@@ -3999,6 +4145,12 @@ ALTER TABLE `tbl_qrcodes`
 --
 ALTER TABLE `tbl_qrcodes_checklist`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `tbl_reimbursement_request`
+--
+ALTER TABLE `tbl_reimbursement_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbl_status_labels`

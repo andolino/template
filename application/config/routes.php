@@ -64,6 +64,7 @@ $route['reimbursement-request'] 	= 'Admin/reimbursement_request';
 $route['portal-dispatch-request'] 	= 'Admin/portal_dispatch_request';
 $route['get-asset-category-get-qty'] 	= 'Admin/getAssetCategoryGetQty';
 $route['portal-repair-request'] 	= 'Admin/portal_repair_request';
+$route['portal-reimburse-request'] 	= 'Admin/portal_reimburse_request';
 $route['portal-repair-request-tech'] 	= 'Admin/portal_repair_request_tech';
 $route['settings'] 								 		= 'Admin/show_settings';
 $route['add-asset'] 							= 'Admin/add_asset';
@@ -89,6 +90,7 @@ $route['edit-dispatch-request'] = 'Admin/editDispatchRequest';
 $route['submit-close-repair-request'] = 'Admin/submitCloseRepairRequest';
 $route['server-tbl-portal-request'] = 'Admin/server_tbl_portal_request';
 $route['server-tbl-repair-request'] = 'Admin/server_tbl_repair_request';
+$route['server-tbl-reimbursement-request'] = 'Admin/server_tbl_reimbursement_request';
 $route['server-tbl-activity-logs'] 			= 'Settings/server_tbl_activity_logs';
 $route['server-tbl-print-logs-transmittal'] 			= 'Settings/server_tbl_print_logs_transmittal';
 $route['server-tbl-print-logs-gatepass'] 			= 'Settings/server_tbl_print_logs_gatepass';
@@ -104,6 +106,9 @@ $route['save-created-qr-checklist'] 			= 'Admin/saveCreatedQrChecklist';
 $route['save-asset'] 						= 'Admin/save_asset';
 $route['save-portal-request'] 						= 'Admin/save_portal_request';
 $route['save-repair-request'] 						= 'Admin/saveRepairRequest';
+$route['save-portal-dispatch-request'] 						= 'Admin/savePortalDispatchRequest';
+$route['save-portal-reimbursement-request'] 						= 'Admin/savePortalReimbursementRequest';
+$route['get-requesti-module'] 						= 'Admin/getRequestiModule';
 $route['view-companies'] 				= 'Settings/view_companies';
 $route['view-models'] 				= 'Settings/view_models';
 $route['view-supplier'] 				= 'Settings/view_suppliers';
@@ -159,21 +164,30 @@ $route['get-transmittal-summary-print-frm'] 	= 'Admin/getTransmittalSummaryPrint
 $route['get-print-asset-report'] 	= 'Admin/getPrintAssetReport';
 $route['get-print-checklist-report'] 	= 'Admin/getPrintChecklistReport';
 $route['get-print-transmital-summ-report'] 	= 'Admin/getPrintTransmitalSummReport';
+$route['get-print-disp-transmital-summ-report'] 	= 'Admin/getPrintDispTransmitalSummReport';
 $route['print-asset-report/(:any)'] 	= 'Admin/printAssetReport';
 $route['print-transmital-slip/(:any)'] 	= 'Admin/printTransmitalSlip';
 $route['print-transmital-slip/(:any)/(:any)'] 	= 'Admin/printTransmitalSlip';
 $route['print-checklist-slip'] 	= 'Admin/printChecklist';
 $route['print-checklist-slip/(:any)'] 	= 'Admin/printChecklist';
 $route['print-checklist-slip/(:any)/(:any)'] 	= 'Admin/printChecklist';
+
 $route['print-transmital-summ-slip'] 	= 'Admin/printTransmitalSummary';
 $route['print-transmital-summ-slip/(:any)'] 	= 'Admin/printTransmitalSummary';
 $route['print-transmital-summ-slip/(:any)/(:any)'] 	= 'Admin/printTransmitalSummary';
+
+$route['print-disp-transmital-summ-slip'] 	= 'Admin/printDispatchTransmitalSummary';
+$route['print-disp-transmital-summ-slip/(:any)'] 	= 'Admin/printDispatchTransmitalSummary';
+$route['print-disp-transmital-summ-slip/(:any)/(:any)'] 	= 'Admin/printDispatchTransmitalSummary';
+
+
 $route['cancel-portal-request'] 	= 'Admin/cancelPortalRequest';
 $route['get-select-asset-rep'] 	= 'Settings/getSelectAssetRepair';
 $route['get-tbl-asset-row'] 	= 'Settings/getTblAssetRow';
 $route['save-tech-notes'] 	= 'Settings/saveTechNotes';
 $route['get-asset-category-select'] 	= 'Settings/getAssetCategorySelect';
 $route['get-edit-repair-request'] 	= 'Settings/getEditRepairRequest';
+$route['get-edit-reimbursement-request'] 	= 'Settings/getEditReimbursementRequest';
 
 
 

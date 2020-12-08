@@ -104,8 +104,13 @@ class Table extends CI_Model {
 		
 		if ($this->input->post('tbl_asset_id_dispatch')!='') {
 			$this->db->where('asset_category_id', $this->input->post('data_asset_category_id'));
-			$this->db->where('status_id', 1);
 			$this->db->where('location_id', $this->input->post('data_location'));
+			if ($this->input->post('data_approved_asset')!='') {
+				$assetIds = explode(',', $this->input->post('data_approved_asset'));
+				$this->db->where_in('id', $assetIds);	
+			} else {
+				$this->db->where('status_id', 1);	
+			}
 		}
 		
 		if ($this->input->post('siblings_asset_listdown')!='') {

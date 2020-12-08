@@ -451,6 +451,69 @@ class MY_Controller extends CI_Controller{
 			
 		}
 
+		public function createPdfDispatchTransmitalSummary($data, $param = array()){
+			ini_set('memory_limit', '1024M');
+			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+			$fontDirs = $defaultConfig['fontDir'];
+			$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+			$fontData = $defaultFontConfig['fontdata'];
+			$mpdf = new \Mpdf\Mpdf([
+								'fontDir' => array_merge($fontDirs, [
+									__DIR__ . '/fonts',
+							]),
+							'setAutoTopMargin' 		=> 'stretch', 
+							'setAutoBottomMargin' => 'stretch',
+							'fontdata' => $fontData + [
+								'quicksand' => [
+										'R' => 'Quicksand-Regular.ttf',
+										'I' => 'Quicksand-Bold.ttf'
+								],
+								'serif' => [
+									'R' => 'OpenSans-Regular.ttf',
+									'I' => 'OpenSans-Semibold.ttf'
+								],
+								'arial' => [
+									'R' => 'ArialCE.ttf',
+									'I' => 'ArialCEItalic.ttf'
+								]
+							],
+							'default_font' => 'arial',
+							'useSubstitutions' => true
+						]);
+			$mpdf->SetTitle('Checklist');
+			$logoFileName1 = base_url() . "/assets/image/misc/psa-logo.png";	
+			$logoFileName2 = base_url() . "/assets/image/misc/footer-trans.png";
+			// $param['page_no'] = '{PAGENO} of {nbpg}';
+			// {nbpg} which prints the total number of pages considering page 
+			$param['intToWords'] = function($int){ return $this->convertNumberWithourCurrency($int); };
+			$ht = $this->load->view($data, $param, TRUE);
+			$ht2 = $this->load->view('admin/crud/regkits-summary-dispatch', $param, TRUE);
+			// $header = $this->load->view('partials/checkListHeader', $param, TRUE);
+			$mpdf->defaultheaderline = 0;
+			$mpdf->defaultfooterline = 0;
+			// $mpdf->SetHeader($header);
+			// $mpdf->SetHeader('<img src="'.$logoFileName1.'" width="580" style="float:left;margin-bottom:20px;">');
+			$mpdf->WriteHTML($ht);
+			$mpdf->SetFooter('<img src="'.$logoFileName2.'" width="320" style="float:left;margin-top:20px;">');	
+
+			$mpdf->AddPage('L','','1','i','on');
+			$mpdf->WriteHTML($ht2);
+			$mpdf->SetFooter();	
+			$last_insert_id = strtotime(date('Y-m-d h:i:s'));
+			$this->db->insert('tbl_print_logs', array(
+				'users_id' => $this->session->users_id,
+				'location_id' => $param['tbl_locations']->id,
+				'file_dir' => base_url() . 'assets/image/uploads/' . $last_insert_id.'_transmital.pdf',
+				'report_type' => 'transmittal',
+				'entry_date' => date('Y-m-d h:i:s'),
+				'tbl_qrcodes_checklist_id' => $param['last_insert_id'],
+				'qty' => count($param['dataChkList'])
+			));
+			$mpdf->Output('./assets/image/uploads/'.$last_insert_id.'_transmital.pdf','F');
+			$mpdf->Output();
+			
+		}
+
 		public function createPdfWOHeadFoot($data, $param = array()){
 			$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
 			$fontDirs = $defaultConfig['fontDir'];
@@ -589,6 +652,118 @@ class MY_Controller extends CI_Controller{
 				$data['success'] = true;
 			}
 			return $data;
+		}
+
+		public function upload_multiple_image(){
+			if(!empty($_FILES['image_upload']['name']) && count(array_filter($_FILES['image_upload']['name'])) > 0){ 
+				$filesCount = count($_FILES['image_upload']['name']); 
+				$response = array();
+				for($i = 0; $i < $filesCount; $i++){ 
+						$_FILES['file']['name']     = $_FILES['image_upload']['name'][$i]; 
+						$_FILES['file']['type']     = $_FILES['image_upload']['type'][$i]; 
+						$_FILES['file']['tmp_name'] = $_FILES['image_upload']['tmp_name'][$i]; 
+						$_FILES['file']['error']     = $_FILES['image_upload']['error'][$i]; 
+						$_FILES['file']['size']     = $_FILES['image_upload']['size'][$i]; 
+						 
+						// File upload configuration 
+						$uploadPath = './assets/image/uploads/'; 
+						$config['upload_path'] = $uploadPath; 
+						$config['allowed_types'] = 'jpg|jpeg|png|gif'; 
+						//$config['max_size']    = '100'; 
+						//$config['max_width'] = '1024'; 
+						//$config['max_height'] = '768'; 
+						 
+						// Load and initialize upload library 
+						$this->load->library('upload', $config); 
+						$config['file_name'] = 'reimbursement' . time() . $_FILES['file']['name'];
+						$this->upload->initialize($config); 
+						 
+						// Upload file to server 
+						if($this->upload->do_upload('file')){ 
+								// Uploaded file data 
+								$fileData = $this->upload->data(); 
+								$uploadData[$i]['file_name'] = $fileData['file_name']; 
+								$uploadData[$i]['uploaded_on'] = date("Y-m-d H:i:s"); 
+								//rename a file
+						}else{  
+								$errorUploadType .= $_FILES['file']['name'].' | ';  
+						} 
+				} 
+				 
+				$errorUploadType = !empty($errorUploadType)?'<br/>File Type Error: '.trim($errorUploadType, ' | '):''; 
+				if(!empty($uploadData)){ 
+						// Upload status message 
+						return array('bool'=>true, 'res'=>$uploadData); 
+				}else{ 
+						return array('bool'=>false, 'res'=>''); 
+				} 
+		}else{ 
+			return array('bool'=>false, 'res'=>''); 
+		} 
+			// if (!$this->upload->do_upload($name)) {
+			// 	$data['error']	 = array('error' => $this->upload->display_errors());
+			// 	$data['success'] = false;
+			// } else {
+			// 	$dImg = $this->upload->data();
+			// 	$data['file_name'] = $dImg['file_name'];
+			// 	$data['success'] = true;
+			// }
+			return $statusMsg;
+		}
+
+		public function upload_multiple_docx(){
+			if(!empty($_FILES['file_upload']['name']) && count(array_filter($_FILES['file_upload']['name'])) > 0){ 
+				$filesCount = count($_FILES['file_upload']['name']); 
+				$response = array();
+				$uploadData = [];
+				for($i = 0; $i < $filesCount; $i++){ 
+						$_FILES['file']['name']     = $_FILES['file_upload']['name'][$i]; 
+						$_FILES['file']['type']     = $_FILES['file_upload']['type'][$i]; 
+						$_FILES['file']['tmp_name'] = $_FILES['file_upload']['tmp_name'][$i]; 
+						$_FILES['file']['error']     = $_FILES['file_upload']['error'][$i]; 
+						$_FILES['file']['size']     = $_FILES['file_upload']['size'][$i]; 
+						 
+						// File upload configuration 
+						$uploadPath = './assets/image/uploads/'; 
+						$config['upload_path'] = $uploadPath; 
+						$config['allowed_types'] = '*'; 
+						//$config['max_size']    = '100'; 
+						//$config['max_width'] = '1024'; 
+						//$config['max_height'] = '768'; 
+						 
+						// Load and initialize upload library 
+						$this->load->library('upload', $config); 
+						$config['file_name'] = 'reimbursement' . time() . $_FILES['file']['name'];
+						$this->upload->initialize($config); 
+						 
+						// Upload file to server 
+						if($this->upload->do_upload('file')){ 
+								// Uploaded file data 
+								$fileData = $this->upload->data(); 
+								$uploadData[$i]['file_name'] = $fileData['file_name']; 
+								$uploadData[$i]['uploaded_on'] = date("Y-m-d H:i:s"); 
+								//rename a file
+						}else{  
+								$errorUploadType .= $_FILES['file']['name'].' | ';  
+						} 
+				} 
+				if(!empty($uploadData)){ 
+						// Upload status message 
+						return array('bool'=>true, 'res'=>$uploadData); 
+				}else{ 
+					return array('bool'=>false, 'res'=>''); 
+				} 
+		}else{ 
+			return array('bool'=>false, 'res'=>''); 
+		} 
+			// if (!$this->upload->do_upload($name)) {
+			// 	$data['error']	 = array('error' => $this->upload->display_errors());
+			// 	$data['success'] = false;
+			// } else {
+			// 	$dImg = $this->upload->data();
+			// 	$data['file_name'] = $dImg['file_name'];
+			// 	$data['success'] = true;
+			// }
 		}
 
 		public function upload_file($name){

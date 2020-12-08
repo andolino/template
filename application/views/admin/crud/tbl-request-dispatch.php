@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row w-100">
-<div class="col-sm-8">
+<div class="col-sm-12">
 
 <nav class="pb-3">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -22,7 +22,7 @@
 
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="disp-pending" role="tabpanel" aria-labelledby="disp-pending-tab">
-    <table class="table font-12 w-100 nowrap condensed" id="tbl-request-dispatch-pending" data-status="0">
+    <table class="table font-12 w-100" id="tbl-request-dispatch-pending" data-status="0">
       <thead>
         <tr>
           <th scope="col">TICKET</th>

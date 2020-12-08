@@ -31,7 +31,8 @@
                         <ul style="list-style-type: none;padding-left:0">
                           <li>DATE NEEDED : <strong><?php echo $dataRequest->date_need == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_need)); ?> </strong></li>
                           <li>RETURN DATE : <strong><?php echo $dataRequest->date_return == '' ? '' : date('Y-m-d h:i:s', strtotime($dataRequest->date_return)); ?> </strong> </li>
-                          <li>DISPATCH LOCATION: <strong><?php echo $dataRequest->dispatch_addr; ?> </strong></li>
+                          <li>ADDRESS: <strong><?php echo $dataRequest->dispatch_addr; ?> </strong></li>
+                          <li>DISPATCH TO: <strong><?php echo $dataRequest->location_name_disp; ?> </strong></li>
                           <li>PURPOSE : <?php echo $dataRequest->purpose; ?> </li>
                           <li>CUSTODIAN : <?php echo $dataRequest->contact_person; ?> </li>
                           <li>REMARKS : <?php echo $dataRequest->remarks; ?></li>
@@ -40,7 +41,7 @@
                     </div>
                   </div>
                   <div class="col-lg-12"></div>
-                  <div class="col-lg-6">
+                  <div class="col-lg-6 mb-3">
                     <select class="custom-select form-control-sm font-12" name="tech_support_id" id="" required>
                       <option selected value="" hidden>Select Technician / Tech support</option>
                       <option value="" disabled></option>
@@ -65,8 +66,8 @@
                       </div>
                     <?php endif; ?>
                   </div>
-                  <div class="col-lg-5">
-                    <textarea name="remarks" id="remarks" cols="30" rows="5" class="form-control form-control-sm font-12" placeholder="Remarks "></textarea>
+                  <div class="col-lg-6">
+                    <textarea name="remarks" id="remarks" cols="30" rows="5" class="form-control form-control-sm font-12" placeholder="Remarks" <?php echo $dataRequest->status == 2 ? 'readonly' : ''; ?>><?php echo !empty($dataRequest) ? $dataRequest->remarks : ''; ?></textarea>
                   </div>
                   <div class="col-lg-4 offset-lg-8">
                     <?php if($this->session->level == 2): ?>
@@ -76,7 +77,24 @@
                         <button type="button" id="btnDisapproveDispatchRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
                         <button type="button" id="btnApproveDispatchRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
                       <?php elseif($dataRequest->status == 1): ?>
-                        <div class="alert alert-success font-12 text-center">Approved For Repair</div>
+                        
+                        <button type="button" 
+                                id="printDispatchTransmittal"
+                                class="btn btn-info btn-md rounded-0 border float-right font-12" 
+                                data-location="<?php echo $dataRequest->location_id; ?>" 
+                                data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
+                                data-man="<?php echo $dataRequest->office_management_id; ?>" 
+                                data-id="<?php echo $distId; ?>"
+                                data-qty="<?php echo $dataRequest->qty; ?>"
+                                data-status="<?php echo $dataRequest->status; ?>"
+                                data-approved-asset="<?php echo $dataRequest->tbl_asset_ids; ?>"
+                                data-ar-id="<?php echo $dataRequest->tbl_asset_request_id; ?>"><i class="fas fa-print"></i> PRINT TRANSMITTAL</button>
+                        
+                        <button type="button" onclick="animateSingleIn('.incident-frm', 'fadeIn');" 
+                                class="btn btn-danger btn-md rounded-0 border float-right font-12" 
+                                data-dispatch-id="<?php echo $distId; ?>"><i class="fas fa-edit"></i> REPORT INCIDENT</button>
+                        
+                        <!-- <div class="alert alert-success font-12 text-center">Approved For Dispatch</div> -->
                       <?php elseif($dataRequest->status == 2): ?>
                         <div class="alert alert-danger font-12 text-center">Disapproved</div>
                       <?php endif; ?>
@@ -91,6 +109,20 @@
                 </form>
 							</div>
 						</div>
+            <div class="row incident-frm none">
+              <div class="col-7">
+              <div class="card mt-2">
+                <div class="card-body">
+                  <h6>REPORT INCIDENT</h6>
+                  <div class="form-group">
+                    <textarea name="incident_remarks" id="incident_remarks" cols="30" rows="5" class="form-control form-control-sm font-12"></textarea>
+                  </div>
+                  <button type="button" class="btn btn-danger btn-md rounded-0 border float-right font-12" onclick="animateSingleOut('.incident-frm', 'fadeOut');" ><i class="fas fa-times"></i> Cancel</button>
+                  <button type="button" class="btn btn-success btn-md rounded-0 border float-right font-12"><i class="fas fa-check"></i> Submit</button>
+                </div>
+              </div>
+              </div>
+            </div>
             <div class="card mt-2">
               <div class="card-body cont-parent-child-repair">
                 <?php 
@@ -102,7 +134,9 @@
                         data-man="<?php echo $dataRequest->office_management_id; ?>" 
                         data-id="<?php echo $distId; ?>"
                         data-qty="<?php echo $dataRequest->qty; ?>"
-                        data-location="<?php echo $dataRequest->location_id; ?>">
+                        data-location="<?php echo $dataRequest->location_id; ?>"
+                        data-status="<?php echo $dataRequest->status; ?>"
+                        data-approved-asset="<?php echo $dataRequest->tbl_asset_ids; ?>">
                   <thead>
                     <tr>
                       <th scope="col"></th>

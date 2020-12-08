@@ -1160,6 +1160,8 @@ function initTblAssetDataTables(){
                                 "data_office_management_id" : $("#tbl-asset-listdown").attr('data-man'),
                                 "data_qty" : $("#tbl-asset-listdown").attr('data-qty'),
                                 "data_location" : $("#tbl-asset-listdown").attr('data-location'),
+                                "data_status" : $("#tbl-asset-listdown").attr('data-status'),
+                                "data_approved_asset" : $("#tbl-asset-listdown").attr('data-approved-asset'),
                               }
     },
     'createdRow'            : function(row, data, dataIndex) {

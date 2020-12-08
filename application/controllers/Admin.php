@@ -344,6 +344,16 @@ class Admin extends MY_Controller {
 		$this->adminContainer('admin/asset-request', $params);	
 	}
 	
+	public function portal_reimburse_request(){
+		$params['heading'] = 'REIMBURSEMENT REQUEST';
+		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
+		$params['location'] = $this->db->get_where('tbl_locations', array('is_deleted' => 0))->result();
+		$params['asset'] = $this->db->get_where('tbl_asset', array('is_deleted' => 0))->result();
+		$params['asset_category'] = $this->db->get_where('asset_category', array('is_deleted' => 0))->result();
+		$params['tblMembers'] = $this->load->view('admin/crud/tbl-portal-reimbursement-request', $params, TRUE);
+		$this->adminContainer('admin/asset-request', $params);	
+	}
+	
 	public function portal_repair_request_tech(){
 		$params['heading'] = 'REPAIR REQUEST';
 		$params['offices'] = $this->db->get_where('office_management', array('is_deleted' => 0))->result();
@@ -526,12 +536,14 @@ class Admin extends MY_Controller {
 	
 	public function submitApprovalDispatchRequest(){
 		// echo json_encode($_POST);
+		$chk_asset = $this->input->post('chk_asset');
 		if ($this->input->post('is_approved') == 'ap') {
 			$data = array(
 				'status' => 1, 
 				'tech_support_id' => $this->input->post('tech_support_id'),
 				'approved_by' => $this->session->users_id,
-				'approved_date' => date('Y-m-d h:i:s')
+				'approved_date' => date('Y-m-d h:i:s'),
+				'tbl_asset_ids' => $chk_asset
 			);
 			if ($this->input->post('repair_date')) {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
@@ -554,9 +566,9 @@ class Admin extends MY_Controller {
 		}
 		$res = array();
 		if ($q) {
-			$chk_asset = $this->input->post('chk_asset');
-			$this->db->query("UPDATE tbl_asset set status_id = 2 WHERE id in (".$chk_asset.")");
-
+			if (!empty($chk_asset)) {
+				$this->db->query("UPDATE tbl_asset set status_id = 2 WHERE id in (".$chk_asset.")");
+			}
 			$res['param1'] = 'Success!';
 			$res['param2'] = 'Submitted!';
 			$res['param3'] = 'success';
@@ -609,6 +621,8 @@ class Admin extends MY_Controller {
 
 	public function server_tbl_asset(){
 		$result 	= $this->AdminMod->get_output_asset();
+		// $this->output->enable_profiler();
+		
 		$res 			= array();
 		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
 		$viewPage = $this->input->post('page');
@@ -618,18 +632,18 @@ class Admin extends MY_Controller {
 			$no++;
    		$data[] = '<input type="checkbox" class="chk-const-list-tbl" id="chk-const-list-tbl" value="'.$row->id.'" name="chk-const-list-tbl">';
    		$data[] = $row->asset_name; //
-   		$data[] = $row->asset_tag; //
-			$data[] = $row->property_tag; //
+   		$data[] = $row->asset_category; //
+			$data[] = $row->asset_tag; //
 			$data[] = $row->serial; //
 			$data[] = $row->screen_name; //custodian
-			$data[] =	$row->office_name; //office\
 			$data[] = $row->default_location;
+			// $data[] = $row->property_tag; //
+			// $data[] =	$row->office_name; //office\
 			$data[] = $row->status;
-   		$data[] = date('Y-m-d', strtotime($row->purchase_date));
-			$data[] = $row->supplier;
-			$data[] = number_format($row->purchase_cost, 2);
-			$data[] = $row->warranty_months;
-   		
+   		// $data[] = date('Y-m-d', strtotime($row->purchase_date));
+			// $data[] = $row->supplier;
+			// $data[] = number_format($row->purchase_cost, 2);
+			// $data[] = $row->warranty_months;
 			$data[] = '<a href="javascript:void(0);" 
 										id="loadPage" 
 										data-link="view-asset" 
@@ -904,7 +918,7 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = $row->approved_by;
 				$data[] = $row->approved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->approved_date));
-				$data[] = '';
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
 			} elseif($row->status==2) {
 				$data[] = $row->tbl_asset_request_id;
 				$data[] = $row->category_name;
@@ -912,7 +926,7 @@ class Admin extends MY_Controller {
 				$data[] = $status[$row->status];
 				$data[] = $row->disapproved_by;
 				$data[] = $row->disapproved_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->disapproved_date));
-				$data[] = '';
+				$data[] = '<a href="'.base_url('view-dispatch-request-pending?id='.$this->encdec($row->tbl_asset_request_id, 'e')).'" target="_blank"><i class="fas fa-link"></i></a>';
 			} elseif($row->status==3){
 				$data[] = $row->tbl_asset_request_id;
 				$data[] = $row->category_name;
@@ -1024,6 +1038,96 @@ class Admin extends MY_Controller {
 			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
 			'recordsTotal' 		=> $this->AdminMod->count_all_repair_request(),
 			'recordsFiltered' => $this->AdminMod->count_filter_repair_request(),
+			'data' 						=> $res
+		);
+
+		echo json_encode($output);
+	}
+
+	public function server_tbl_reimbursement_request(){
+		$result 	= $this->AdminMod->get_output_reimbursement_request();
+		$res 			= array();
+		$no 			= isset($_POST['start']) ? $_POST['start'] : 0;
+		$viewPage = $this->input->post('page');
+		$status = [0=> 'Pending', 1=> 'Approved', 2=> 'Disapproved', 3=> 'Cancelled', 4=> 'Closed'];
+		foreach ($result as $row) {
+			$data = array();
+			$no++;
+			if ($row->status==0) {
+				$data[] = $row->id;
+				$data[] = $row->pn_no;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
+				$data[] = str_replace('_', ' ', $row->reimbursement_type);
+				$data[] = $row->item_description;
+				$data[] = number_format($row->total_cost, 2);
+				$data[] = $row->request_by;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
+				$data[] = '<button 
+										type="button" 
+										class="btn btn-xs font-12 btn-info" id="edit-portal-reimbursement-request" 
+										data-id="'.$row->id.'">Edit</button> | 
+									<button 
+										type="button" 
+										class="btn btn-xs font-12 btn-danger" data-type="reimbursement" onclick="showConfirm(this)"  
+										data-id="'.$row->id.'">Cancel</button>';
+										// id="cancel-portal-request"
+			} elseif ($row->status==1) {
+				$data[] = $row->id;
+				$data[] = $row->pn_no;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
+				$data[] = str_replace('_', ' ', $row->reimbursement_type);
+				$data[] = $row->item_description;
+				$data[] = number_format($row->total_cost, 2);
+				$data[] = $row->approved_by_name;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->approved_date));
+				// $data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$this->encdec($row->id, 'e').'" 
+				// 						target="_blank" class="text-dark" data-toggle="tooltip" 
+				// 						data-placement="top"><i class="fas fa-link"></i></a>';
+			} elseif($row->status==2) {
+					$data[] = $row->id;
+					$data[] = $row->pn_no;
+					$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
+					$data[] = str_replace('_', ' ', $row->reimbursement_type);
+					$data[] = $row->item_description;
+					$data[] = number_format($row->total_cost, 2);
+					$data[] = $row->disapproved_by_name;
+					$data[] = date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+			} elseif($row->status==3) {
+					$data[] = $row->id;
+					$data[] = $row->pn_no;
+					$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
+					$data[] = str_replace('_', ' ', $row->reimbursement_type);
+					$data[] = $row->item_description;
+					$data[] = number_format($row->total_cost, 2);
+					$data[] = $row->cancelled_by_name;
+					$data[] = date('Y-m-d H:i:s', strtotime($row->cancelled_date));
+					$data[] = $row->remarks;
+					// $data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$this->encdec($row->id, 'e').'" 
+					// 						target="_blank" class="text-dark" data-toggle="tooltip" 
+					// 						data-placement="top"><i class="fas fa-link"></i></a>';
+			} else {
+				// $data[] = $row->id;
+				// $data[] = $row->asset_name;
+				// $data[] = $row->asset_tag;
+				// $data[] = $row->property_tag;
+				// $data[] = $row->serial;
+				// $data[] = $row->closed_by;
+				// $data[] = $row->closed_date == '' ? '' : date('Y-m-d H:i:s', strtotime($row->closed_date));
+				// if ($this->session->level == 	2) {
+				// 	$data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$row->id.'" 
+				// 							target="_blank" class="text-dark" data-toggle="tooltip" 
+				// 							data-placement="top"><i class="fas fa-link"></i></a>';
+				// } else {
+				// 	$data[] = '';
+				// }
+			}
+			$res[] = $data;
+		}
+
+		$output = array (
+			'draw' 						=> isset($_POST['draw']) ? $_POST['draw'] : null,
+			'recordsTotal' 		=> $this->AdminMod->count_all_reimbursement_request(),
+			'recordsFiltered' => $this->AdminMod->count_filter_reimbursement_request(),
 			'data' 						=> $res
 		);
 
@@ -1366,6 +1470,133 @@ class Admin extends MY_Controller {
 		echo json_encode($res);
 	}
 
+	public function savePortalDispatchRequest(){
+		$uploadedImage = $this->upload_image('image_upload');
+		$uploadedFile = $this->upload_file('file_upload');
+
+		$dataToSave = array(
+			'asset_category_id'  => $this->input->post('asset_category_id'),
+			'asset_tag' 			   => $this->input->post('asset_tag'),
+			'date_reported' 		 => date('Y-m-d H:i:s', strtotime($this->input->post('date_reported'))),
+			'problem_desc' 			 => $this->input->post('problem_desc'), 
+			'property_tag' 			 => $this->input->post('property_tag'),
+			'remarks'            => $this->input->post('remarks'),
+			'requestor' 				 => $this->input->post('requestor'), 
+			'serial' 						 => $this->input->post('serial'),
+			'location_id' 			 => $this->input->post('location_id'),
+			'tbl_child_asset_id' => is_array($this->input->post('tbl_child_asset_id')) ? implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))) : '', //implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
+			'entry_date'				 => date('Y-m-d H:i:s'),
+			// 'file_upload' 			 => $uploadedFile['success'] == false ? '' : $uploadedFile['file_name'],//$this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
+			// 'image_upload'			 => $uploadedImage['success'] == false ? '' : $uploadedImage['file_name']//$this->input->post('image_upload') ? $uploadedImage['file_name'] : ''
+		);
+		if ($uploadedFile['success'] == true) {
+			$dataToSave['file_upload'] = $uploadedFile['file_name'];
+		}
+		if ($uploadedFile['success'] == true) {
+			$dataToSave['image_upload'] = $uploadedImage['file_name'];
+		}
+		
+		if($this->input->post('has_update') == ''){
+			$q = $this->db->insert('tbl_asset_repair_request', $dataToSave);
+		} else {
+			$q = $this->db->update('tbl_asset_repair_request', $dataToSave, array('id' => $this->input->post('has_update')));
+		}
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
+	}
+
+	public function savePortalReimbursementRequest(){
+		// echo json_encode($_POST);
+		
+		
+		$uploadedImage = $this->upload_multiple_image();
+		$uploadedFile = $this->upload_multiple_docx();
+
+		$decImg = $uploadedImage['res'] == "" ? [] : $uploadedImage['res'];
+		$decFiles = $uploadedFile['res'] == "" ? [] : $uploadedFile['res'];
+
+		$imgName = [];
+		$fileName = [];
+
+		for ($i=0; $i < count($decImg); $i++) { 
+			$imgName[] = $decImg[$i]['file_name'];
+		}
+
+		for ($i=0; $i < count($decFiles); $i++) { 
+			$fileName[] = $decFiles[$i]['file_name'];
+		}
+		
+		// echo json_encode(array($uploadedImage['bool'], $uploadedFile['bool']));
+		$dataToSave = array(
+			'office_management_id'  => $this->input->post('office_management_id'),
+			'pn_no' 			   => $this->input->post('pn_no'),
+			'date_filed' 		 => date('Y-m-d H:i:s', strtotime($this->input->post('date_filed'))),
+			'reimbursement_type' 			 => $this->input->post('reimbursement_type'), 
+			'select_unit' 			 => $this->input->post('select_unit'),
+			'item_description'            => $this->input->post('item_description'),
+			'qty' 				 => $this->input->post('qty'), 
+			'unit_cost' 						 => str_replace(',', '', $this->input->post('unit_cost')),
+			'total_cost' 			 => str_replace(',', '', $this->input->post('total_cost')),
+			'purpose' => 				$this->input->post('purpose'), //implode(",", array_map(function($v){ return $v; }, $this->input->post('tbl_child_asset_id'))),
+			'link_ticket'				 => $this->input->post('link_ticket'),
+			'request_id'				 => $this->input->post('request_id'),
+			'entry_date'				 => date('Y-m-d H:i:s'),
+			// 'file_upload' 			 => $uploadedFile['bool'] == false ? '' : implode(',', $fileName),//$this->input->post('file_upload') ? $uploadedFile['file_name'] : '',
+			// 'image_upload'			 => $uploadedImage['bool'] == false ? '' : implode(',', $imgName),//$this->input->post('image_upload') ? $uploadedImage['file_name'] : ''
+			'users_id'				=> $this->session->users_id
+		);
+		if ($uploadedFile['bool'] == true) {
+			$dataToSave['file_upload'] = implode(',', $fileName);
+		}
+		if ($uploadedImage['bool'] == true) {
+			$dataToSave['image_upload'] = implode(',', $imgName);
+		}
+
+		
+		if($this->input->post('has_update') == ''){
+			$q = $this->db->insert('tbl_reimbursement_request', $dataToSave);
+		} else {
+			$q = $this->db->update('tbl_reimbursement_request', $dataToSave, array('id' => $this->input->post('has_update')));
+		}
+
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode($res);
+		// echo json_encode($dataToSave, JSON_PRETTY_PRINT);
+	}
+
+	public function getRequestiModule(){
+		$modType = $this->input->post('mod_type');
+		$type = '';
+		if ($modType == 'DISPATCH_REQUEST') {
+			// dispatch
+			$res = $this->db->get_where('tbl_asset_request', array('is_deleted' => 0))->result();
+			$type = 'Dispatch Request';
+		} else {
+			// repair
+			$res = $this->db->get_where('tbl_asset_repair_request', array('is_deleted' => 0))->result();
+			$type = 'Repair Request';
+		}
+		echo json_encode(['data'=>$res,'type'=>$type]);
+	}
+
 	public function getAssetPrintFrm(){
 		$params['locations'] = $this->db->get_where('tbl_locations', array('is_deleted'=>0))->result();
 		$params['custodian'] = $this->db->get_where('users', array('is_deleted'=>0, 'level <>'=>'0'))->result();
@@ -1428,6 +1659,30 @@ class Admin extends MY_Controller {
 		echo json_encode(array('data'=> $this->encdec($where, 'e')));	
 	}
 	
+	public function getPrintDispTransmitalSummReport(){
+		$where = 'is_deleted = 0';
+		// $where .= " AND asset_category_id = " . $this->input->post('data_asset_category_id');
+		$where .= " AND location_id = " . $this->input->post('location_id');
+
+		if ($this->input->post('data_approved_asset')!='') {
+			$assetIds = explode(',', $this->input->post('data_approved_asset'));
+			// $asset_tag = [];
+			// $tbl_asset = $this->db->query("SELECT * FROM tbl_asset WHERE id IN (" . implode(',',$assetIds) . ")")->result();	
+			// foreach ($tbl_asset as $row) {
+			// 	array_push($asset_tag, "'" . $row->asset_tag . "'");
+			// }
+			$where .= " AND id IN (" . implode(',', $assetIds) . ")";
+		} else {
+			// $where .= " AND status_id = 1";	
+		}
+		// $this->generateQRChecklist($this->input->post('location_id'));
+		echo json_encode(array(
+			'data'=> $this->encdec($where, 'e'),
+			'tbl_asset_request_id'=> $this->encdec($this->input->post('data_asset_request_id'), 'e')
+		));	
+		// echo json_encode(array('data'=> $where));	
+	}
+	
 	public function printAssetReport(){
 		$where = $this->encdec($this->uri->segment(2), 'd');
 		$res = $this->db->query("SELECT * FROM v_asset_report " . $where)->result();
@@ -1487,6 +1742,28 @@ class Admin extends MY_Controller {
 		$params['received_by'] 		= !empty($users) ? $users->screen_name : '';
 		$params['date_received'] = !empty($url) ? $url->date_received : '';
 		$this->createPdfTransmitalSummary('admin/crud/print-transmital-summary', $params);
+	}
+
+	public function printDispatchTransmitalSummary(){
+		$where 										= $this->encdec($this->uri->segment(2), 'd');
+		$locationsWhere 					= explode('AND', $where)[1];
+		$location_id 							= explode(' = ', $locationsWhere)[1];
+		$tbl_asset_request_id 		= $this->encdec($this->uri->segment(3), 'd');
+		$params['dataChkList'] 		= $this->db->get_where('tbl_asset', $where)->result();
+		$params['tbl_locations'] 	= $this->db->get_where('tbl_locations', array('id'=>$location_id))->row();
+		$params['vPortalRequest'] = $this->db->get_where('v_portal_request', array('tbl_asset_request_id' => $tbl_asset_request_id, 'is_deleted' => 0 ))->row();
+		
+		//QR Code
+		$url 							 				= $this->db->query("SELECT * FROM tbl_qrcodes_checklist WHERE location_id = $location_id ORDER BY id desc LIMIT 1")->row();
+		$jsonQrData 			 				= json_decode($url->qr_code);
+		$params['qrcode']  				= $jsonQrData->result->qr;
+		$params['last_insert_id'] = $url->id;
+		$users = $this->db->get_where('users', array('users_id' => $url->received_by))->row();
+		$params['received_by'] 		= !empty($users) ? $users->screen_name : '';
+		$params['date_received'] = !empty($url) ? $url->date_received : '';
+
+		
+		$this->createPdfDispatchTransmitalSummary('admin/crud/print-dispatch-transmittal-summary', $params);
 	}
 
 	public function upload_const_dp($id){

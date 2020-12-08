@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row w-100">
-<div class="col-sm-8">
+<div class="col-sm-12">
 
 <nav class="pb-3">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
