@@ -67,5 +67,12 @@ class Reports extends MY_Controller {
 		$params['dataTransmittal'] = $this->db->get('v_transmittal_summary')->result();
 		$this->createPdfAlone('admin/crud/print-summary-slip-list', $params);
 	}
+	
+	public function printDisbursementRequest(){
+		$id = $this->uri->segment(2);
+		$id = $this->encdec($id, 'd');
+		$params['dataReimbursement'] = $this->db->get_where('v_portal_reimbursement', array('id' => $id))->result();
+		$this->createDynamicPdf('admin/reports/print-reimbursement-request', $params);
+	}
 
 }

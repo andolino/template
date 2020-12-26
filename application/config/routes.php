@@ -82,9 +82,11 @@ $route['server-tbl-asset-child'] 			= 'Admin/server_tbl_asset_child';
 $route['server-tbl-asset-request'] 			= 'Admin/server_tbl_asset_request';
 $route['server-tbl-admin-repair-pending-request'] = 'Admin/server_tbl_admin_pending_repair_request';
 $route['view-repair-approval-pending'] = 'Admin/viewRepairApprovalPending';
+$route['view-reimbursement-approval-pending'] = 'Admin/viewReimbursementApprovalPending';
 $route['view-dispatch-request-pending'] = 'Admin/viewDispatchRequestPending';
 $route['get-repair-parent-child-asset'] = 'Admin/getRepairParentChildAsset';
 $route['submit-approval-repair-request'] = 'Admin/submitApprovalRepairRequest';
+$route['submit-approval-reimbursement-request'] = 'Admin/submitApprovalReimbursementRequest';
 $route['submit-approval-dispatch-request'] = 'Admin/submitApprovalDispatchRequest';
 $route['edit-dispatch-request'] = 'Admin/editDispatchRequest';
 $route['submit-close-repair-request'] = 'Admin/submitCloseRepairRequest';
@@ -188,6 +190,11 @@ $route['save-tech-notes'] 	= 'Settings/saveTechNotes';
 $route['get-asset-category-select'] 	= 'Settings/getAssetCategorySelect';
 $route['get-edit-repair-request'] 	= 'Settings/getEditRepairRequest';
 $route['get-edit-reimbursement-request'] 	= 'Settings/getEditReimbursementRequest';
+
+
+$route['print-disbursement-request/(:any)'] 	= 'Reports/printDisbursementRequest';
+
+
 
 
 

@@ -480,6 +480,32 @@ class Admin extends MY_Controller {
 		$this->customContainer('admin/crud/view-repair-asset-request', $params);
 	}
 	
+	public function viewReimbursementApprovalPending(){
+		$id = $this->input->get('id');
+		$id = $this->encdec($id, 'd');
+		$params['dataRequest'] = $this->db->get_where('v_portal_reimbursement', array( 'id' => $id, 'is_deleted' => 0 ))->row();
+		$params['techSup'] = $this->db->get_where('users', array('level' => 2, 'is_deleted' => 0))->result();
+		$res = [];
+		if ($params['dataRequest']) {
+			// $dataChildAsset = explode(',', $params['dataRequest']->tbl_child_asset_id);
+			// $params['childAsset'] = $this->db->query("SELECT tac.*, om.office_name, ac.name as asset_category_name FROM tbl_child_asset tac
+			// 																				LEFT JOIN office_management om on om.office_management_id = tac.office_management_id 
+			// 																				LEFT JOIN asset_category ac on ac.asset_category_id = tac.asset_category_id
+			// 																				WHERE tac.id IN (".implode(',', $dataChildAsset).")")->result();
+			if ($params['dataRequest']->link_ticket == 'DISPATCH_REQUEST') {
+				//dispatch
+				$params['dispatchDetails'] = $this->db->get_where('tbl_asset_request', array('is_deleted' => 0))->result();
+			} else {
+				//repair
+				$params['repairDetails'] = $this->db->get_where('tbl_asset_repair_request', array('is_deleted' => 0))->result();
+			}
+		}
+		$params['requestDetails'] = $res;
+		$params['reqID'] = $this->encdec($id, 'e');
+
+		$this->customContainer('admin/crud/view-reimbursement-asset-request', $params);
+	}
+	
 	public function viewDispatchRequestPending(){
 		$id = $this->input->get('id');
 		$id = $this->encdec($id, 'd');
@@ -519,6 +545,45 @@ class Admin extends MY_Controller {
 				$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
 			}
 			$q = $this->db->update('tbl_asset_repair_request', $data, array('id'=>$this->input->post('id')));
+		}
+		$res = array();
+		if ($q) {
+			$res['param1'] = 'Success!';
+			$res['param2'] = 'Submitted!';
+			$res['param3'] = 'success';
+		} else {
+			$res['param1'] = 'Opps!';
+			$res['param2'] = 'Error Encountered Saved';
+			$res['param3'] = 'warning';
+		}
+		echo json_encode(array('msg'=>$res,'repair_request_id'=>$this->input->post('id')));
+		// $q = $this->db->insert('tbl_asset_request', $dataToSave);
+	}
+
+	public function submitApprovalReimbursementRequest(){
+		if ($this->input->post('is_approved') == 'ap') {
+			$data = array(
+				'status' => 1, 
+				// 'tech_support_id' => $this->input->post('tech_support_id'),
+				'approved_by' => $this->session->users_id,
+				'approved_date' => date('Y-m-d h:i:s')
+			);
+			// if ($this->input->post('repair_date')) {
+			// 	$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			// }
+			$q = $this->db->update('tbl_reimbursement_request', $data, array('id'=>$this->input->post('id')));
+		} else {
+			$data = array(
+				'status' => 2, 
+				// 'remarks' => $this->input->post('remarks'), 
+				// 'tech_support_id' => $this->input->post('tech_support_id'),
+				'disapproved_by' => $this->session->users_id,
+				'disapproved_date' => date('Y-m-d h:i:s')
+			);
+			// if ($this->input->post('repair_date')) {
+			// 	$data['repair_date'] = date('Y-m-d', strtotime($this->input->post('repair_date')));
+			// }
+			$q = $this->db->update('tbl_reimbursement_request', $data, array('id'=>$this->input->post('id')));
 		}
 		$res = array();
 		if ($q) {
@@ -1062,14 +1127,24 @@ class Admin extends MY_Controller {
 				$data[] = number_format($row->total_cost, 2);
 				$data[] = $row->request_by;
 				$data[] = date('Y-m-d H:i:s', strtotime($row->entry_date));
-				$data[] = '<button 
-										type="button" 
-										class="btn btn-xs font-12 btn-info" id="edit-portal-reimbursement-request" 
-										data-id="'.$row->id.'">Edit</button> | 
-									<button 
-										type="button" 
-										class="btn btn-xs font-12 btn-danger" data-type="reimbursement" onclick="showConfirm(this)"  
-										data-id="'.$row->id.'">Cancel</button>';
+				if ($this->session->level == 0 || $this->session->level == 1) {
+					$data[] = '<a href="'.base_url() . 'view-reimbursement-approval-pending'.'?id='.$this->encdec($row->id, 'e').'"
+												target="_blank"
+												class="text-dark"
+												data-toggle="tooltip"
+												data-placement="top"><i class="fas fa-link"></i></a>';
+				} else {
+					$data[] = '<button 
+											type="button" 
+											class="btn btn-xs font-12 btn-info" id="edit-portal-reimbursement-request" 
+											data-id="'.$row->id.'">Edit</button> | 
+											<button 
+											type="button" 
+											class="btn btn-xs font-12 btn-danger" data-type="reimbursement" onclick="showConfirm(this)"  
+											data-id="'.$row->id.'">Cancel</button>';
+					
+				}
+
 										// id="cancel-portal-request"
 			} elseif ($row->status==1) {
 				$data[] = $row->id;
@@ -1080,18 +1155,33 @@ class Admin extends MY_Controller {
 				$data[] = number_format($row->total_cost, 2);
 				$data[] = $row->approved_by_name;
 				$data[] = date('Y-m-d H:i:s', strtotime($row->approved_date));
-				// $data[] = '<a href="'.base_url() . 'view-repair-approval-pending'.'?id='.$this->encdec($row->id, 'e').'" 
-				// 						target="_blank" class="text-dark" data-toggle="tooltip" 
-				// 						data-placement="top"><i class="fas fa-link"></i></a>';
+				if ($this->session->level == 0 || $this->session->level == 1) {
+					$data[] = '<a href="'.base_url() . 'view-reimbursement-approval-pending'.'?id='.$this->encdec($row->id, 'e').'"
+												target="_blank"
+												class="text-dark"
+												data-toggle="tooltip"
+												data-placement="top"><i class="fas fa-link"></i></a>';
+				} else {
+					$data[] = '';
+				}
 			} elseif($row->status==2) {
-					$data[] = $row->id;
-					$data[] = $row->pn_no;
-					$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
-					$data[] = str_replace('_', ' ', $row->reimbursement_type);
-					$data[] = $row->item_description;
-					$data[] = number_format($row->total_cost, 2);
-					$data[] = $row->disapproved_by_name;
-					$data[] = date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				$data[] = $row->id;
+				$data[] = $row->pn_no;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->date_filed));
+				$data[] = str_replace('_', ' ', $row->reimbursement_type);
+				$data[] = $row->item_description;
+				$data[] = number_format($row->total_cost, 2);
+				$data[] = $row->disapproved_by_name;
+				$data[] = date('Y-m-d H:i:s', strtotime($row->disapproved_date));
+				if ($this->session->level == 0 || $this->session->level == 1) {
+					$data[] = '<a href="'.base_url() . 'view-reimbursement-approval-pending'.'?id='.$this->encdec($row->id, 'e').'"
+												target="_blank"
+												class="text-dark"
+												data-toggle="tooltip"
+												data-placement="top"><i class="fas fa-link"></i></a>';
+				} else {
+					$data[] = '';
+				}
 			} elseif($row->status==3) {
 					$data[] = $row->id;
 					$data[] = $row->pn_no;

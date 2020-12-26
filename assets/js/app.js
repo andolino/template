@@ -32,6 +32,8 @@ var tbl_portal_asset_incident = [];
 var tbl_portal_asset_closed = [];
 var tbl_repair_asset_pending = [];
 var tbl_reimbursement_asset_pending = [];
+var tbl_reimbursement_asset_approved = [];
+var tbl_reimbursement_asset_disapproved = [];
 var tbl_repair_asset_approved = [];
 var tbl_repair_asset_disapproved = [];
 var tbl_repair_asset_cancelled = [];
@@ -563,6 +565,40 @@ $(document).ready(function() {
         // console.log('Fail');
     });
   });
+
+
+  $(document).on('click', '#btnApproveReimbursemetRequest', function (e) {
+    e.preventDefault();
+    var frm = $('#frm-request-reimbursement-approval').serializeArray();
+    customSwal(
+      'btn btn-success', 
+      'btn btn-danger mr-2', 
+      'Yes', 
+      'Wait', 
+      ['', 'Approve Request?', 'question'], 
+      function(){
+        frm.push({name: 'is_approved', value: 'ap'});
+        $.ajax({
+          type: "POST",
+          url: "submit-approval-reimbursement-request",
+          data: frm,
+          dataType: "json",
+          success: function (res) {
+            Swal.fire(
+              res.msg.param1,
+              res.msg.param2,
+              res.msg.param3
+            );
+            // $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+            //   $('.cont-parent-child-repair').html(data);
+            // });
+            window.location.reload();
+          }
+        });
+      }, function(){
+        // console.log('Fail');
+    });
+  });
   
   $(document).on('click', '#btnApproveDispatchRequest', function (e) {
     e.preventDefault();
@@ -694,6 +730,50 @@ $(document).ready(function() {
     }
   });
   
+  $(document).on('click', '#btnDisapproveReimbursementRequest', function (e) {
+    e.preventDefault();
+    var remarks = $('#remarks').val();
+    // if (remarks == '') {
+    //   Swal.fire(
+    //     'Oopps!',
+    //     'Please input remarks!',
+    //     'warning'
+    //   );
+    // } else {
+      var frm = $('#frm-request-reimbursement-approval').serializeArray();
+      customSwal(
+        'btn btn-success', 
+        'btn btn-danger mr-2', 
+        'Yes', 
+        'Wait', 
+        ['', 'Approve Request?', 'question'], 
+        function(){
+          frm.push({name: 'is_approved', value: 'dp'});
+          $.ajax({
+            type: "POST",
+            url: "submit-approval-reimbursement-request",
+            data: frm,
+            dataType: "json",
+            success: function (res) {
+              // console.log(res);
+              Swal.fire(
+                res.msg.param1,
+                res.msg.param2,
+                res.msg.param3
+              );
+              // $.get("get-repair-parent-child-asset", { 'id': res.repair_request_id }, function (data, textStatus, jqXHR) {
+              //   $('.cont-parent-child-repair').html(data);
+              // });
+              window.location.reload();
+            }
+          });
+        }, function(){
+          // console.log('Fail');
+      });
+      
+    // }
+  });
+  
   $(document).on('click', '#btnCloseRepairRequest', function (e) {
     e.preventDefault();
     var remarks = $('#remarks').val();
@@ -740,6 +820,11 @@ $(document).ready(function() {
         $('#custom-modal .modal-content').html(res);
       }
     });
+  });
+
+  $(document).on('click', '#btnPrintReimbursementRequest', function (e) {
+    var id = $(this).attr('data-id');
+    window.open(baseURL + 'print-disbursement-request/' + id);
   });
 
   $(document).on('submit', '#frm-add-notes-tech', function (e) {
@@ -2176,7 +2261,7 @@ function initReimbursementRequestDataTables(){
   });
   
   $('#tbl-portal-reimbursement-approved').DataTable().clear().destroy();
-  tbl_repair_asset_approved  = $("#tbl-portal-reimbursement-approved").DataTable({
+  tbl_reimbursement_asset_approved  = $("#tbl-portal-reimbursement-approved").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {
@@ -2214,7 +2299,7 @@ function initReimbursementRequestDataTables(){
   });
   
   $('#tbl-portal-reimbursement-disapproved').DataTable().clear().destroy();
-  tbl_repair_asset_disapproved  = $("#tbl-portal-reimbursement-disapproved").DataTable({
+  tbl_reimbursement_asset_disapproved  = $("#tbl-portal-reimbursement-disapproved").DataTable({
     searchHighlight : true,
     lengthMenu      : [[5, 10, 20, 30, 50, -1], [5, 10, 20, 30, 50, 'All']],
     language: {

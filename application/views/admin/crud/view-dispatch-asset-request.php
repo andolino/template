@@ -77,19 +77,19 @@
                         <button type="button" id="btnDisapproveDispatchRequest" class="btn btn-sm btn-danger font-12 float-right">Disapproved</button>
                         <button type="button" id="btnApproveDispatchRequest" class="btn btn-sm btn-success font-12 float-right mr-1">Approved</button>
                       <?php elseif($dataRequest->status == 1): ?>
-                        
-                        <button type="button" 
-                                id="printDispatchTransmittal"
-                                class="btn btn-info btn-md rounded-0 border float-right font-12" 
-                                data-location="<?php echo $dataRequest->location_id; ?>" 
-                                data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
-                                data-man="<?php echo $dataRequest->office_management_id; ?>" 
-                                data-id="<?php echo $distId; ?>"
-                                data-qty="<?php echo $dataRequest->qty; ?>"
-                                data-status="<?php echo $dataRequest->status; ?>"
-                                data-approved-asset="<?php echo $dataRequest->tbl_asset_ids; ?>"
-                                data-ar-id="<?php echo $dataRequest->tbl_asset_request_id; ?>"><i class="fas fa-print"></i> PRINT TRANSMITTAL</button>
-                        
+                        <?php if($this->session->level == 0 || $this->session->level == 1): ?>
+                          <button type="button" 
+                                  id="printDispatchTransmittal"
+                                  class="btn btn-info btn-md rounded-0 border float-right font-12" 
+                                  data-location="<?php echo $dataRequest->location_id; ?>" 
+                                  data-cat="<?php echo $dataRequest->asset_category_id; ?>" 
+                                  data-man="<?php echo $dataRequest->office_management_id; ?>" 
+                                  data-id="<?php echo $distId; ?>"
+                                  data-qty="<?php echo $dataRequest->qty; ?>"
+                                  data-status="<?php echo $dataRequest->status; ?>"
+                                  data-approved-asset="<?php echo $dataRequest->tbl_asset_ids; ?>"
+                                  data-ar-id="<?php echo $dataRequest->tbl_asset_request_id; ?>"><i class="fas fa-print"></i> PRINT TRANSMITTAL</button>
+                        <?php endif; ?>
                         <button type="button" onclick="animateSingleIn('.incident-frm', 'fadeIn');" 
                                 class="btn btn-danger btn-md rounded-0 border float-right font-12" 
                                 data-dispatch-id="<?php echo $distId; ?>"><i class="fas fa-edit"></i> REPORT INCIDENT</button>
